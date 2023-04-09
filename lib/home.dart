@@ -8,6 +8,51 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Map<String, dynamic>> DataPengungsian = [
+    {
+      "nama": "Lapangan",
+      "kapasitas": 100,
+      "kapasitasTersisa": 50,
+      "alamat": "Kampung",
+      "jarak": 1500
+    },
+    {
+      "nama": "Rumah Pak RT",
+      "kapasitas": 50,
+      "kapasitasTersisa": 10,
+      "alamat": "Kampung",
+      "jarak": 200
+    },
+    {
+      "nama": "Lapangan",
+      "kapasitas": 100,
+      "kapasitasTersisa": 50,
+      "alamat": "Kampung",
+      "jarak": 300
+    },
+    {
+      "nama": "Lapangan",
+      "kapasitas": 100,
+      "kapasitasTersisa": 50,
+      "alamat": "Kampung",
+      "jarak": 2300
+    },
+    {
+      "nama": "Lapangan",
+      "kapasitas": 100,
+      "kapasitasTersisa": 50,
+      "alamat": "Kampung",
+      "jarak": 150
+    },
+    {
+      "nama": "Lapangan",
+      "kapasitas": 100,
+      "kapasitasTersisa": 50,
+      "alamat": "Kampung",
+      "jarak": 150
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                  Wrap(
+                  Row(
                     children: [
                       IconButton(
                         splashRadius: 20,
@@ -102,53 +147,77 @@ class _HomePageState extends State<HomePage> {
               ),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: 5,
+                itemCount: DataPengungsian.length,
                 itemBuilder: (context, index) {
-                  return (Card(
-                    elevation: 0,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16))),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Wrap(
-                            spacing: 10,
-                            direction: Axis.vertical,
-                            // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Lapangan",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 20),
+                  String jarak;
+                  if (DataPengungsian[index]["jarak"] > 1000) {
+                    jarak = "${DataPengungsian[index]["jarak"] / 1000} KM";
+                  } else {
+                    jarak = "${DataPengungsian[index]["jarak"]} M";
+                  }
+                  return GestureDetector(
+                    onTap: () {
+                      print("as");
+                    },
+                    child: (Card(
+                      elevation: 0,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16))),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Wrap(
+                              spacing: 10,
+                              direction: Axis.vertical,
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  DataPengungsian[index]["nama"],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20),
+                                ),
+                                Text(
+                                  "${DataPengungsian[index]["kapasitasTersisa"]} / ${DataPengungsian[index]["kapasitas"]}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      color: Colors.grey),
+                                ),
+                                Text(
+                                  DataPengungsian[index]["alamat"],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500),
+                                )
+                              ],
+                            ),
+                            Column(children: [
+                              FloatingActionButton(
+                                onPressed: () {},
+                                backgroundColor: Colors.indigoAccent,
+                                elevation: 5,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12))),
+                                child: const Icon(Icons.input),
+                              ),
+                              const SizedBox(
+                                height: 10,
                               ),
                               Text(
-                                "50 / 100",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    color: Colors.grey),
-                              ),
-                              Text(
-                                "Kampung Durian Runtuh",
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                "${jarak}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blueGrey),
                               )
-                            ],
-                          ),
-                          FloatingActionButton(
-                            onPressed: () {},
-                            backgroundColor: Colors.indigoAccent,
-                            elevation: 5,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12))),
-                            child: const Icon(Icons.input),
-                          )
-                        ],
+                            ]),
+                          ],
+                        ),
                       ),
-                    ),
-                  ));
+                    )),
+                  );
                 },
               )
             ],
