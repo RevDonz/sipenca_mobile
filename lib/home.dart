@@ -59,17 +59,21 @@ class _HomePageState extends State<HomePage> {
         // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.grey.shade50,
-              Colors.grey.shade100,
-            ],
-          )),
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        // child: Container(
+        //   decoration: BoxDecoration(
+        //       gradient: LinearGradient(
+        //     begin: Alignment.topRight,
+        //     end: Alignment.bottomLeft,
+        //     colors: [
+        //       Colors.grey.shade50,
+        //       Colors.grey.shade100,
+        //     ],
+        //   )),
+        //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        //   child: ,
+        // ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Row(
@@ -106,25 +110,14 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                  Row(
-                    children: [
-                      IconButton(
-                        splashRadius: 20,
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.notifications_none_rounded,
-                          size: 30,
-                        ),
-                      ),
-                      IconButton(
-                          onPressed: () {},
-                          splashRadius: 20,
-                          icon: const Icon(
-                            Icons.person_outline,
-                            size: 30,
-                          ))
-                    ],
-                  )
+                  IconButton(
+                    iconSize: 30,
+                    splashRadius: 25,
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.notifications_none_rounded,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(
@@ -163,57 +156,62 @@ class _HomePageState extends State<HomePage> {
                       elevation: 0,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(16))),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Wrap(
-                              spacing: 10,
-                              direction: Axis.vertical,
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                      child: InkWell(
+                        hoverColor: Colors.transparent,
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Wrap(
+                                spacing: 10,
+                                direction: Axis.vertical,
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    DataPengungsian[index]["nama"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
+                                  ),
+                                  Text(
+                                    "${DataPengungsian[index]["kapasitasTersisa"]} / ${DataPengungsian[index]["kapasitas"]}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Colors.grey),
+                                  ),
+                                  Text(
+                                    DataPengungsian[index]["alamat"],
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                ],
+                              ),
+                              Column(children: [
+                                FloatingActionButton(
+                                  onPressed: () {},
+                                  backgroundColor: Colors.indigoAccent,
+                                  elevation: 5,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(12))),
+                                  child: const Icon(Icons.input),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Text(
-                                  DataPengungsian[index]["nama"],
+                                  "${jarak}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 20),
-                                ),
-                                Text(
-                                  "${DataPengungsian[index]["kapasitasTersisa"]} / ${DataPengungsian[index]["kapasitas"]}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      color: Colors.grey),
-                                ),
-                                Text(
-                                  DataPengungsian[index]["alamat"],
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500),
+                                      color: Colors.blueGrey),
                                 )
-                              ],
-                            ),
-                            Column(children: [
-                              FloatingActionButton(
-                                onPressed: () {},
-                                backgroundColor: Colors.indigoAccent,
-                                elevation: 5,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12))),
-                                child: const Icon(Icons.input),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "${jarak}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.blueGrey),
-                              )
-                            ]),
-                          ],
+                              ]),
+                            ],
+                          ),
                         ),
                       ),
                     )),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/home.dart';
-import 'package:sipenca_mobile/register.dart';
 
 void main() {
-  runApp(const register());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -88,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Pengungsian',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.person_outline),
               label: 'Profile',
             ),
           ],
