@@ -14,14 +14,14 @@ class _HomePageState extends State<HomePage> {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
-      "alamat": "Kampung",
+      "alamat": "Kampung Durian Runtuh",
       "jarak": 1500
     },
     {
       "nama": "Rumah Pak RT",
       "kapasitas": 50,
       "kapasitasTersisa": 10,
-      "alamat": "Kampung",
+      "alamat": "Jl. in aja dulu",
       "jarak": 200
     },
     {
@@ -178,7 +178,14 @@ class _HomePageState extends State<HomePage> {
                       child: InkWell(
                         hoverColor: Colors.transparent,
                         borderRadius: BorderRadius.all(Radius.circular(16)),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                              return DetailPengungsian(
+                                  data: DataPengungsian[index]);
+                            },
+                          ));
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(20),
                           child: Row(
@@ -223,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 10,
                                 ),
                                 Text(
-                                  "${jarak}",
+                                  jarak,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       color: Colors.blueGrey),
@@ -242,5 +249,44 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     ));
+  }
+}
+
+class DetailPengungsian extends StatelessWidget {
+  const DetailPengungsian({super.key, required this.data});
+
+  final Map<String, dynamic> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text("Detail Pengungsian"),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+      ),
+      body: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Image.network(
+                  "https://picsum.photos/500/300",
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(data["nama"]),
+                  Text(data["alamat"]),
+                ],
+              )
+            ],
+          )),
+    );
+    ;
   }
 }
