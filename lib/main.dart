@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/home.dart';
+import 'package:sipenca_mobile/login.dart';
 import 'package:sipenca_mobile/register.dart';
 
 void main() {
-  runApp(const register());
+  runApp(const LoginPage());
 }
 
 class MyApp extends StatelessWidget {
