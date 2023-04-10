@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/screens/Auth/login.dart';
 
 class register extends StatefulWidget {
   const register({super.key});
@@ -130,21 +131,27 @@ class _registerState extends State<register> {
                         const Text(
                           'Sudah punya akun? ',
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            // Navigasi ke halaman registrasi
+                      GestureDetector(
+                        onTap: () {
+                          // Navigasi ke halaman registrasi
+                        },
+                        child: InkWell(
+                          onTap: () => {
+                            Navigator.push(context, MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                                return LoginPage();
+                              },
+                            ))
                           },
-                          child: InkWell(
-                            onTap: () => _launchURL,
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                color: Color(0xff51557E),
-                                fontWeight: FontWeight.bold,
-                              ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                              color: Color(0xff51557E),
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
+                      ),
                       ],
                     ),
                   ],
@@ -157,5 +164,3 @@ class _registerState extends State<register> {
     );
   }
 }
-
-class _launchURL {}
