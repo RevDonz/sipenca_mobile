@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/main.dart';
+import 'package:sipenca_mobile/screens/auth/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -23,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(
-                children: [
+                children: const [
                   Text(
                     'Login ke ',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -31,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               Row(
-                children: [
+                children: const [
                   Text(
                     'Akun Anda',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -70,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ]),
               const Padding(padding: EdgeInsets.only(top: 30)),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Column(
                 children: [
                   Row(
@@ -91,7 +93,13 @@ class _LoginPageState extends State<LoginPage> {
                     width: 400, // ukuran lebar button
                     height: 50, // ukuran tinggi button
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return const MyApp();
+                          },
+                        ));
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF51557E),
                           shape: RoundedRectangleBorder(
@@ -120,7 +128,13 @@ class _LoginPageState extends State<LoginPage> {
                             // Navigasi ke halaman registrasi
                           },
                           child: InkWell(
-                            onTap: () => _launchURL,
+                            onTap: () => {
+                              Navigator.push(context, MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                                  return const register();
+                                },
+                              ))
+                            },
                             child: const Text(
                               'Register',
                               style: TextStyle(
@@ -138,5 +152,3 @@ class _LoginPageState extends State<LoginPage> {
         )));
   }
 }
-
-class _launchURL {}

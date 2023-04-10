@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sipenca_mobile/screens/Auth/login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -110,14 +111,32 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                  IconButton(
-                    iconSize: 30,
-                    splashRadius: 25,
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.notifications_none_rounded,
-                    ),
-                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        iconSize: 30,
+                        splashRadius: 25,
+                        onPressed: () {},
+                        icon: const Icon(
+                            // Icons.notifications_none_rounded,
+                            Icons.notifications_none_rounded),
+                      ),
+                      IconButton(
+                        iconSize: 30,
+                        splashRadius: 25,
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                              return const LoginPage();
+                            },
+                          ));
+                        },
+                        icon: const Icon(
+                            // Icons.notifications_none_rounded,
+                            Icons.login),
+                      ),
+                    ],
+                  )
                 ],
               ),
               const SizedBox(

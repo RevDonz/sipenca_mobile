@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/screens/Auth/login.dart';
 
 class register extends StatefulWidget {
   const register({super.key});
@@ -107,7 +108,13 @@ class _registerState extends State<register> {
                     width: 400,
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return LoginPage();
+                          },
+                        ));
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xff51557E),
                           shape: RoundedRectangleBorder(
@@ -134,7 +141,13 @@ class _registerState extends State<register> {
                           // Navigasi ke halaman registrasi
                         },
                         child: InkWell(
-                          onTap: () => _launchURL,
+                          onTap: () => {
+                            Navigator.push(context, MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                                return LoginPage();
+                              },
+                            ))
+                          },
                           child: const Text(
                             'Login',
                             style: TextStyle(
@@ -155,5 +168,3 @@ class _registerState extends State<register> {
     );
   }
 }
-
-class _launchURL {}
