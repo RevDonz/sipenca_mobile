@@ -62,8 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Pengungsian',
+              icon: Icon(Icons.groups_outlined),
+              label: 'Keluarga',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
