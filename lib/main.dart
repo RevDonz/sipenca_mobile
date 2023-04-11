@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
+import 'package:sipenca_mobile/screens/warga/keluarga.dart';
 import 'package:sipenca_mobile/screens/petugas/list_pengungsi.dart';
 
 void main() {
@@ -17,7 +18,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: "Poppins"),
-      home: const RegisterPengungsian(),
+      home: const MyHomePage(
+        title: 'Nopal Ganteng',
+      ),
     );
   }
 }
@@ -37,10 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    KeluargaPage(),
     ProfilePage(),
   ];
   void _onItemTapped(int index) {
