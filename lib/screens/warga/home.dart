@@ -60,19 +60,6 @@ class _HomePageState extends State<HomePage> {
         // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
-        // child: Container(
-        //   decoration: BoxDecoration(
-        //       gradient: LinearGradient(
-        //     begin: Alignment.topRight,
-        //     end: Alignment.bottomLeft,
-        //     colors: [
-        //       Colors.grey.shade50,
-        //       Colors.grey.shade100,
-        //     ],
-        //   )),
-        //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        //   child: ,
-        // ),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -259,29 +246,88 @@ class DetailPengungsian extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String jarak;
+    if (data["jarak"] > 1000) {
+      jarak = "${data["jarak"] / 1000} KM";
+    } else {
+      jarak = "${data["jarak"]} M";
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Detail Pengungsian"),
+        title: const Text("Detail Pengungsian"),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
       ),
       body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
                 child: Image.network(
                   "https://picsum.photos/500/300",
                 ),
               ),
+              const SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(data["nama"]),
-                  Text(data["alamat"]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(data["nama"],
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500)),
+                          Text(data["alamat"],
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.grey)),
+                        ],
+                      ),
+                      IconButton(
+                        iconSize: 30,
+                        splashRadius: 25,
+                        onPressed: () {},
+                        icon: const Icon(
+                            // Icons.notifications_none_rounded,
+                            Icons.home_outlined,
+                            color: Colors.indigo),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Wrap(direction: Axis.horizontal, spacing: 10, children: [
+                    OutlinedButton.icon(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.indigoAccent,
+                            padding: const EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            side: const BorderSide(
+                                color: Colors.indigoAccent, width: 2)),
+                        icon: const Icon(Icons.pin_drop),
+                        label: Text(jarak)),
+                    OutlinedButton.icon(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.indigoAccent,
+                            padding: const EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            side: const BorderSide(
+                                color: Colors.indigoAccent, width: 2)),
+                        icon: const Icon(Icons.group_outlined),
+                        label: Text(
+                            "${data["kapasitasTersisa"]} / ${data["kapasitas"]}"))
+                  ]),
                 ],
               )
             ],
