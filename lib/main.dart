@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
+import 'package:sipenca_mobile/screens/warga/keluarga.dart';
 import 'package:sipenca_mobile/screens/petugas/register_pengungsian.dart';
 
 void main() {
@@ -37,10 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    KeluargaPage(),
     ProfilePage(),
   ];
   void _onItemTapped(int index) {
@@ -63,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.business),
-              label: 'Pengungsian',
+              label: 'Keluarga',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline),
