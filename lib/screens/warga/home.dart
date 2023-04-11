@@ -60,19 +60,6 @@ class _HomePageState extends State<HomePage> {
         // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
-        // child: Container(
-        //   decoration: BoxDecoration(
-        //       gradient: LinearGradient(
-        //     begin: Alignment.topRight,
-        //     end: Alignment.bottomLeft,
-        //     colors: [
-        //       Colors.grey.shade50,
-        //       Colors.grey.shade100,
-        //     ],
-        //   )),
-        //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        //   child: ,
-        // ),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
