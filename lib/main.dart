@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
-import 'package:sipenca_mobile/screens/petugas/list_pengungsi.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: "Poppins"),
-      home: const RegisterPengungsian(),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
