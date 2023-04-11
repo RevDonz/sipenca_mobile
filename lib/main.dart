@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
 import 'package:sipenca_mobile/screens/warga/keluarga.dart';
-import 'package:sipenca_mobile/screens/petugas/register_pengungsian.dart';
+import 'package:sipenca_mobile/screens/petugas/list_pengungsi.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: "Poppins"),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(
+        title: 'Nopal Ganteng',
+      ),
     );
   }
 }
@@ -60,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
+              icon: Icon(Icons.groups_outlined),
               label: 'Keluarga',
             ),
             BottomNavigationBarItem(

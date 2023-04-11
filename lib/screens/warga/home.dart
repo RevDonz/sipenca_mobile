@@ -14,49 +14,58 @@ class _HomePageState extends State<HomePage> {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
-      "alamat": "Kampung",
-      "jarak": 1500
+      "alamat": "Kampung Durian Runtuh",
+      "jarak": 1500,
+      "isBooking": false
     },
     {
       "nama": "Rumah Pak RT",
       "kapasitas": 50,
       "kapasitasTersisa": 10,
-      "alamat": "Kampung",
-      "jarak": 200
+      "alamat": "Jl. in aja dulu",
+      "jarak": 200,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 300
+      "jarak": 300,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 2300
+      "jarak": 2300,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 150
+      "jarak": 150,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 150
+      "jarak": 150,
+      "isBooking": false
     },
   ];
+
+  bool isBooking = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
         // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
@@ -165,7 +174,14 @@ class _HomePageState extends State<HomePage> {
                       child: InkWell(
                         hoverColor: Colors.transparent,
                         borderRadius: BorderRadius.all(Radius.circular(16)),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                              return DetailPengungsian(
+                                  data: DataPengungsian[index]);
+                            },
+                          ));
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(20),
                           child: Row(
@@ -198,19 +214,33 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Column(children: [
                                 FloatingActionButton(
-                                  onPressed: () {},
-                                  backgroundColor: Colors.indigoAccent,
+                                  onPressed: isBooking &&
+                                          !DataPengungsian[index]["isBooking"]
+                                      ? () {}
+                                      : () {
+                                          setState(() {
+                                            isBooking = true;
+                                            DataPengungsian[index]
+                                                ["isBooking"] = true;
+                                          });
+                                        },
+                                  backgroundColor: isBooking &&
+                                          !DataPengungsian[index]["isBooking"]
+                                      ? Colors.grey
+                                      : Colors.indigoAccent,
                                   elevation: 5,
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(12))),
-                                  child: const Icon(Icons.input),
+                                  child: DataPengungsian[index]["isBooking"]
+                                      ? Icon(Icons.hourglass_bottom)
+                                      : Icon(Icons.input),
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
-                                  "${jarak}",
+                                  jarak,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       color: Colors.blueGrey),
@@ -229,5 +259,108 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     ));
+  }
+}
+
+class DetailPengungsian extends StatelessWidget {
+  const DetailPengungsian({super.key, required this.data});
+
+  final Map<String, dynamic> data;
+
+  @override
+  Widget build(BuildContext context) {
+    String jarak;
+    if (data["jarak"] > 1000) {
+      jarak = "${data["jarak"] / 1000} KM";
+    } else {
+      jarak = "${data["jarak"]} M";
+    }
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text("Detail Pengungsian"),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+      ),
+      body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                child: Image.network(
+                  "https://picsum.photos/500/300",
+                ),
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(data["nama"],
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w500)),
+                          Text(data["alamat"],
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.grey)),
+                        ],
+                      ),
+                      IconButton(
+                        iconSize: 30,
+                        splashRadius: 25,
+                        onPressed: () {},
+                        icon: data["isBooking"]
+                            ? const Icon(
+                                // Icons.notifications_none_rounded,
+                                Icons.home,
+                                color: Colors.indigoAccent)
+                            : const Icon(
+                                // Icons.notifications_none_rounded,
+                                Icons.home_outlined,
+                                color: Colors.indigoAccent),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Wrap(direction: Axis.horizontal, spacing: 10, children: [
+                    OutlinedButton.icon(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.indigoAccent,
+                            padding: const EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            side: const BorderSide(
+                                color: Colors.indigoAccent, width: 2)),
+                        icon: const Icon(Icons.pin_drop),
+                        label: Text(jarak)),
+                    OutlinedButton.icon(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.indigoAccent,
+                            padding: const EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)),
+                            side: const BorderSide(
+                                color: Colors.indigoAccent, width: 2)),
+                        icon: const Icon(Icons.group_outlined),
+                        label: Text(
+                            "${data["kapasitasTersisa"]} / ${data["kapasitas"]}"))
+                  ]),
+                ],
+              )
+            ],
+          )),
+    );
+    ;
   }
 }
