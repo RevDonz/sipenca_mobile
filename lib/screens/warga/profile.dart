@@ -18,11 +18,21 @@ class ProfilePage extends StatefulWidget {
 
 TextEditingController nikController = TextEditingController();
 TextEditingController nikUpdateController = TextEditingController();
+
 TextEditingController namaController = TextEditingController();
+TextEditingController namaUpdateController = TextEditingController();
+
 TextEditingController jenisKelaminController = TextEditingController();
+TextEditingController jenisKelaminUpdateController = TextEditingController();
+
 TextEditingController tanggalLahirController = TextEditingController();
+TextEditingController tanggalLahirUpdateController = TextEditingController();
+
 TextEditingController alamatController = TextEditingController();
+TextEditingController alamatUpdateController = TextEditingController();
+
 TextEditingController nomorTeleponController = TextEditingController();
+TextEditingController nomorTeleponUpdateController = TextEditingController();
 
 class ProfilePageState extends State<ProfilePage> {
   @override
@@ -194,84 +204,97 @@ class ProfilePageState extends State<ProfilePage> {
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
                               title: const Text('Update Data'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: TextField(
-                                        controller: nikUpdateController
-                                          ..text = profile["nik"].toString(),
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'NIK',
-                                        ),
+                              content: Builder(
+                                builder: (context) {
+                                  var height = MediaQuery.of(context).size.height;
+                                  var width = MediaQuery.of(context).size.width;
+                                  return Container(
+                                    height: height - 200,
+                                    width: width - 200,
+                                    child: SingleChildScrollView(
+                                      child: ListBody(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: TextField(
+                                              controller: nikUpdateController
+                                                ..text = profile["nik"].toString(),
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'NIK',
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: TextField(
+                                              controller: namaUpdateController
+                                                ..text = profile["nama"],
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Nama',
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(vertical: 10),
+                                            child: DropdownMenu<String>(
+                                              dropdownMenuEntries: const [
+                                                DropdownMenuEntry(value: "Laki - laki", label: "Laki - laki"),
+                                                DropdownMenuEntry(value: "Perempuan", label: "Perempuan"),
+                                              ],
+                                              label: const Text("Jenis Kelamin"),
+                                              onSelected: (value) {
+                                                jenisKelaminUpdateController.text = value!;
+                                              },
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: TextField(
+                                              keyboardType: TextInputType.multiline,
+                                              maxLines: null,
+                                              controller: alamatUpdateController
+                                                ..text = profile["alamat"],
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Alamat',
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: TextField(
+                                              controller: nomorTeleponUpdateController
+                                                ..text = profile["nomorTelepon"]
+                                                    .toString(),
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Nomor Telepon',
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: TextField(
+                                              controller: tanggalLahirUpdateController
+                                                ..text = profile["tanggalLahir"],
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Tanggal Lahir',
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: TextField(
-                                        controller: namaController
-                                          ..text = profile["nama"],
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Nama',
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: TextField(
-                                        controller: jenisKelaminController
-                                          ..text = profile["jenisKelamin"],
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Jenis Kelamin',
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: TextField(
-                                        controller: alamatController
-                                          ..text = profile["alamat"],
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Alamat',
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: TextField(
-                                        controller: nomorTeleponController
-                                          ..text = profile["nomorTelepon"]
-                                              .toString(),
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Nomor Telepon',
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: TextField(
-                                        controller: tanggalLahirController
-                                          ..text = profile["tanggalLahir"],
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Tanggal Lahir',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  );
+                                }
                               ),
                               actions: <Widget>[
                                 TextButton(
@@ -284,14 +307,14 @@ class ProfilePageState extends State<ProfilePage> {
                                     setState(() {
                                       profile = {
                                         "nik": nikUpdateController.text,
-                                        "nama": namaController.text,
+                                        "nama": namaUpdateController.text,
                                         "jenisKelamin":
-                                            jenisKelaminController.text,
-                                        "alamat": alamatController.text,
+                                            jenisKelaminUpdateController.text,
+                                        "alamat": alamatUpdateController.text,
                                         "nomorTelepon":
-                                            nomorTeleponController.text,
+                                            nomorTeleponUpdateController.text,
                                         "tanggalLahir":
-                                            tanggalLahirController.text
+                                            tanggalLahirUpdateController.text
                                       };
                                     }),
                                     Navigator.pop(context, 'OK')
