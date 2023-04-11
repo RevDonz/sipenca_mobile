@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
+import 'package:sipenca_mobile/screens/admin/daftarpengungsian.dart';
 
 void main() {
   runApp(const MyApp());
