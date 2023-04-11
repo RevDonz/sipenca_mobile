@@ -15,48 +15,57 @@ class _HomePageState extends State<HomePage> {
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung Durian Runtuh",
-      "jarak": 1500
+      "jarak": 1500,
+      "isBooking": false
     },
     {
       "nama": "Rumah Pak RT",
       "kapasitas": 50,
       "kapasitasTersisa": 10,
       "alamat": "Jl. in aja dulu",
-      "jarak": 200
+      "jarak": 200,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 300
+      "jarak": 300,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 2300
+      "jarak": 2300,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 150
+      "jarak": 150,
+      "isBooking": false
     },
     {
       "nama": "Lapangan",
       "kapasitas": 100,
       "kapasitasTersisa": 50,
       "alamat": "Kampung",
-      "jarak": 150
+      "jarak": 150,
+      "isBooking": false
     },
   ];
+
+  bool isBooking = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
         // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
@@ -205,13 +214,27 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Column(children: [
                                 FloatingActionButton(
-                                  onPressed: () {},
-                                  backgroundColor: Colors.indigoAccent,
+                                  onPressed: isBooking &&
+                                          !DataPengungsian[index]["isBooking"]
+                                      ? () {}
+                                      : () {
+                                          setState(() {
+                                            isBooking = true;
+                                            DataPengungsian[index]
+                                                ["isBooking"] = true;
+                                          });
+                                        },
+                                  backgroundColor: isBooking &&
+                                          !DataPengungsian[index]["isBooking"]
+                                      ? Colors.grey
+                                      : Colors.indigoAccent,
                                   elevation: 5,
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(12))),
-                                  child: const Icon(Icons.input),
+                                  child: DataPengungsian[index]["isBooking"]
+                                      ? Icon(Icons.hourglass_bottom)
+                                      : Icon(Icons.input),
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -293,10 +316,15 @@ class DetailPengungsian extends StatelessWidget {
                         iconSize: 30,
                         splashRadius: 25,
                         onPressed: () {},
-                        icon: const Icon(
-                            // Icons.notifications_none_rounded,
-                            Icons.home_outlined,
-                            color: Colors.indigo),
+                        icon: data["isBooking"]
+                            ? const Icon(
+                                // Icons.notifications_none_rounded,
+                                Icons.home,
+                                color: Colors.indigoAccent)
+                            : const Icon(
+                                // Icons.notifications_none_rounded,
+                                Icons.home_outlined,
+                                color: Colors.indigoAccent),
                       ),
                     ],
                   ),
