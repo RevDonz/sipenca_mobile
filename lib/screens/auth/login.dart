@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
-                    width: 400, // ukuran lebar button
+                    width: 700, // ukuran lebar button
                     height: 50, // ukuran tinggi button
                     child: ElevatedButton(
                       onPressed: () {
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                         ));
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF51557E),
+                          backgroundColor: Colors.indigoAccent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))
                           //set warna background button
@@ -138,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               'Register',
                               style: TextStyle(
-                                color: Color(0xff254A75),
-                                fontWeight: FontWeight.normal,
+                                color: Colors.indigoAccent,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           )),

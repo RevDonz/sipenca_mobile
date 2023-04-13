@@ -55,7 +55,7 @@ class _registerState extends State<register> {
                         prefixIcon: Icon(Icons.email),
                         hintText: 'Email',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(17)),
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -64,63 +64,86 @@ class _registerState extends State<register> {
                         prefixIcon: Icon(Icons.lock),
                         hintText: 'Password',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(17)),
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
                     SizedBox(height: 20),
-                    // TextFormField(
-                    //   decoration: InputDecoration(
-                    //     prefixIcon: Icon(Icons.people),
-                    //     hintText: 'Role',
-                    //     border: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(17)),
-                    //   ),
-                    // ),
                     DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.people),
                         hintText: 'Role',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(17),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       items: [
+                        DropdownMenuItem<String>(
+                          value: 'Admin',
+                          child: Text('Admin'),
+                        ),
                         DropdownMenuItem<String>(
                           value: 'Warga',
                           child: Text('Warga'),
                         ),
                         DropdownMenuItem<String>(
-                          value: 'Pengelola',
-                          child: Text('Pengelola'),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: 'Sukarelawan',
-                          child: Text('Sukarelawan'),
+                          value: 'Petugas',
+                          child: Text('Petugas'),
                         ),
                       ],
                       onChanged: (String? value) {
+                        setState(() {
+                          DropdownMenuItem == value;
+                        });
                         // handling saat dropdown dipilih
                       },
-                      value: null, // value harus diatur sebagai nullable
                     ),
-
                     SizedBox(height: 20),
                     SizedBox(
-                      width: 400,
-                      height: 40,
+                      width: 700,
+                      height: 50,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (DropdownMenuItem == 'Petugas') {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Konfirmasi Pendaftaran'),
+                                  content: Text(
+                                      'Apakah anda ingin mendaftar jadi petugas? Jika iya, mohon lengkapi data yang dibutuhkan.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Batal'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        // Lakukan pendaftaran petugas
+                                      },
+                                      child: Text('Daftar'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            // Lakukan pendaftaran admin atau warga
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xff51557E),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ) //set warna background button
-                            ),
+                          backgroundColor: Colors.indigoAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         child: const Text(
                           'Register',
                           style: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontWeight: FontWeight.bold),
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -131,27 +154,27 @@ class _registerState extends State<register> {
                         const Text(
                           'Sudah punya akun? ',
                         ),
-                      GestureDetector(
-                        onTap: () {
-                          // Navigasi ke halaman registrasi
-                        },
-                        child: InkWell(
-                          onTap: () => {
-                            Navigator.push(context, MaterialPageRoute<void>(
-                              builder: (BuildContext context) {
-                                return LoginPage();
-                              },
-                            ))
+                        GestureDetector(
+                          onTap: () {
+                            // Navigasi ke halaman registrasi
                           },
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Color(0xff51557E),
-                              fontWeight: FontWeight.bold,
+                          child: InkWell(
+                            onTap: () => {
+                              Navigator.push(context, MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                                  return LoginPage();
+                                },
+                              ))
+                            },
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                color: Colors.indigoAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                       ],
                     ),
                   ],
