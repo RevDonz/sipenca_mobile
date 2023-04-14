@@ -95,6 +95,7 @@ class _KeluargaPageState extends State<KeluargaPage> {
                   height: 20,
                 ),
                 ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: DataPengungsian.length,
                   itemBuilder: (BuildContext context, int index) {
