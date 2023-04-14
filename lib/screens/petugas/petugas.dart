@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
-class RegisterPengungsian extends StatefulWidget {
-  const RegisterPengungsian({super.key});
+class ListPengungsi extends StatefulWidget {
+  const ListPengungsi({super.key});
 
   @override
-  State<RegisterPengungsian> createState() => _RegisterPengungsianState();
+  State<ListPengungsi> createState() => _ListPengungsiState();
 }
 
-class _RegisterPengungsianState extends State<RegisterPengungsian> {
+class _ListPengungsiState extends State<ListPengungsi> {
   List<Map<String, dynamic>> dataPengungsi = [
     {"nama": "Rama", "member": 4, "alamat": "Kampung A", "jarak": 500},
     {"nama": "Doni", "member": 2, "alamat": "Kampung B", "jarak": 1000},
