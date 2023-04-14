@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sipenca_mobile/screens/Auth/login.dart';
+import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
 
 class register extends StatefulWidget {
   const register({super.key});
@@ -10,6 +11,8 @@ class register extends StatefulWidget {
 }
 
 class _registerState extends State<register> {
+  String selectedRole = "";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -92,8 +95,9 @@ class _registerState extends State<register> {
                       ],
                       onChanged: (String? value) {
                         setState(() {
-                          DropdownMenuItem == value;
+                          selectedRole = value!;
                         });
+
                         // handling saat dropdown dipilih
                       },
                     ),
@@ -102,36 +106,40 @@ class _registerState extends State<register> {
                       width: 700,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (DropdownMenuItem == 'Petugas') {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Konfirmasi Pendaftaran'),
-                                  content: Text(
-                                      'Apakah anda ingin mendaftar jadi petugas? Jika iya, mohon lengkapi data yang dibutuhkan.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('Batal'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        // Lakukan pendaftaran petugas
-                                      },
-                                      child: Text('Daftar'),
-                                    ),
-                                  ],
+                        onPressed: selectedRole == "Petugas"
+                            ? () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Konfirmasi Pendaftaran'),
+                                      content: Text(
+                                          'Apakah anda ingin mendaftar jadi petugas? Jika iya, mohon lengkapi data yang dibutuhkan.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Batal'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            // Lakukan pendaftaran petugas
+                                            Navigator.push(context,
+                                                MaterialPageRoute<void>(
+                                              builder: (BuildContext context) {
+                                                return const RegisterPengungsian();
+                                              },
+                                            ));
+                                          },
+                                          child: Text('Daftar'),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          } else {
-                            // Lakukan pendaftaran admin atau warga
-                          }
-                        },
+                              }
+                            : () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigoAccent,
                           shape: RoundedRectangleBorder(
