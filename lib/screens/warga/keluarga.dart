@@ -114,6 +114,7 @@ class _KeluargaPageState extends State<KeluargaPage> {
                         subtitle: Text(
                             'NIK: ${member['nik']}, TTL: ${member['tanggal']}'),
                         trailing: IconButton(
+                          color: Color.fromARGB(255, 244, 96, 85),
                           icon: Icon(Icons.delete),
                           onPressed: () {
                             showDialog(
@@ -159,6 +160,7 @@ class _KeluargaPageState extends State<KeluargaPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.indigoAccent,
         onPressed: () {
           _addMember(
               context); // Add your logic here to handle the click event of the FloatingActionButton
@@ -170,8 +172,8 @@ class _KeluargaPageState extends State<KeluargaPage> {
 
   void _addMember(BuildContext context) {
     final nameController = TextEditingController();
-    final ageController = TextEditingController();
-    final occupationController = TextEditingController();
+    final nikController = TextEditingController();
+    final tanggalController = TextEditingController();
 
     showDialog(
       context: context,
@@ -181,23 +183,29 @@ class _KeluargaPageState extends State<KeluargaPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
+              TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: 'Nama',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    hintText: 'Nama'),
+              ),
+              SizedBox(height: 15),
+              TextField(
+                controller: nikController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  hintText: 'NIK',
                 ),
               ),
+              SizedBox(height: 15),
               TextField(
-                controller: ageController,
+                controller: tanggalController,
                 decoration: InputDecoration(
-                  labelText: 'NIK',
-                ),
-              ),
-              TextField(
-                controller: occupationController,
-                decoration: InputDecoration(
-                  labelText: 'TTL',
-                ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    hintText: 'TTL'),
               ),
             ],
           ),
@@ -205,8 +213,8 @@ class _KeluargaPageState extends State<KeluargaPage> {
             TextButton(
               onPressed: () {
                 final nama = nameController.text;
-                final nik = ageController.text;
-                final tanggal = occupationController.text;
+                final nik = nikController.text;
+                final tanggal = tanggalController.text;
                 setState(() {
                   DataPengungsian.add({
                     'nama': nama,
