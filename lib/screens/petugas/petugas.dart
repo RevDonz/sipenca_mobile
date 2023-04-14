@@ -129,6 +129,7 @@ class _ListPengungsiState extends State<ListPengungsi> {
                               child: Text(dataPengungsi[index]['alamat']),
                             ),
                             FloatingActionButton(
+                              heroTag: "btnPengungsi$index",
                               onPressed: () {},
                               backgroundColor: Colors.indigoAccent,
                               elevation: 5,

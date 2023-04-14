@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sipenca_mobile/screens/Auth/login.dart';
+import 'package:sipenca_mobile/components/appBar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+
         // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
@@ -73,68 +73,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage:
-                            const NetworkImage("https://picsum.photos/200"),
-                        backgroundColor: Colors.grey.shade100,
-                        radius: 25,
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Selamat Siang !",
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const Text(
-                            "Pengungsi",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 20),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        iconSize: 30,
-                        splashRadius: 25,
-                        onPressed: () {},
-                        icon: const Icon(
-                            // Icons.notifications_none_rounded,
-                            Icons.notifications_none_rounded),
-                      ),
-                      IconButton(
-                        iconSize: 30,
-                        splashRadius: 25,
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                              return const LoginPage();
-                            },
-                          ));
-                        },
-                        icon: const Icon(
-                            // Icons.notifications_none_rounded,
-                            Icons.login),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+              const AppBarPengungsi(),
               const SizedBox(
                 height: 20,
               ),
@@ -154,6 +93,7 @@ class _HomePageState extends State<HomePage> {
                 height: 20,
               ),
               ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: DataPengungsian.length,
                 itemBuilder: (context, index) {
@@ -214,6 +154,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Column(children: [
                                 FloatingActionButton(
+                                  heroTag: "btnPengungsian$index",
                                   onPressed: isBooking &&
                                           !DataPengungsian[index]["isBooking"]
                                       ? () {}
