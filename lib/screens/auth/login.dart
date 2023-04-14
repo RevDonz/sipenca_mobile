@@ -13,9 +13,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Login Page',
         home: Scaffold(
-            body: Center(
+            body: SafeArea(
+                child: Center(
           child: SingleChildScrollView(
               child: Container(
             padding: EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
@@ -138,6 +140,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ]),
           )),
-        )));
+        ))));
   }
 }
