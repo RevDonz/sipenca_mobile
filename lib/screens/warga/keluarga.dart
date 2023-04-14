@@ -29,7 +29,9 @@ class _KeluargaPageState extends State<KeluargaPage> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                const AppBarPengungsi(),
+                const AppBarSipenca(
+                  role: "Pengungsi",
+                ),
                 const SizedBox(
                   height: 20,
                 ),

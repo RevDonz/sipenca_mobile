@@ -73,7 +73,9 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const AppBarPengungsi(),
+              const AppBarSipenca(
+                role: "Pengungsi",
+              ),
               const SizedBox(
                 height: 20,
               ),
