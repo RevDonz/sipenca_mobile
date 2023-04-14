@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+
         // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
@@ -154,6 +154,7 @@ class _HomePageState extends State<HomePage> {
                 height: 20,
               ),
               ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: DataPengungsian.length,
                 itemBuilder: (context, index) {
@@ -214,6 +215,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Column(children: [
                                 FloatingActionButton(
+                                  heroTag: "btnPengungsian$index",
                                   onPressed: isBooking &&
                                           !DataPengungsian[index]["isBooking"]
                                       ? () {}
