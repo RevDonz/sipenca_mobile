@@ -131,27 +131,27 @@ class _registerState extends State<register> {
                         const Text(
                           'Sudah punya akun? ',
                         ),
-                      GestureDetector(
-                        onTap: () {
-                          // Navigasi ke halaman registrasi
-                        },
-                        child: InkWell(
-                          onTap: () => {
-                            Navigator.push(context, MaterialPageRoute<void>(
-                              builder: (BuildContext context) {
-                                return LoginPage();
-                              },
-                            ))
+                        GestureDetector(
+                          onTap: () {
+                            // Navigasi ke halaman registrasi
                           },
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              color: Color(0xff51557E),
-                              fontWeight: FontWeight.bold,
+                          child: InkWell(
+                            onTap: () => {
+                              Navigator.push(context, MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                                  return LoginPage();
+                                },
+                              ))
+                            },
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(
+                                color: Color(0xff51557E),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                       ],
                     ),
                   ],
