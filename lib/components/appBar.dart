@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/screens/Auth/login.dart';
 
-class AppBarPengungsi extends StatefulWidget {
-  const AppBarPengungsi({super.key});
+class AppBarSipenca extends StatefulWidget {
+  final String role;
+  const AppBarSipenca({super.key, required this.role});
 
   @override
-  State<AppBarPengungsi> createState() => _AppBarPengungsiState();
+  State<AppBarSipenca> createState() => _AppBarSipencaState();
 }
 
-class _AppBarPengungsiState extends State<AppBarPengungsi> {
+class _AppBarSipencaState extends State<AppBarSipenca> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,8 +38,8 @@ class _AppBarPengungsiState extends State<AppBarPengungsi> {
                       fontSize: 15,
                     ),
                   ),
-                  const Text(
-                    "Pengungsi",
+                  Text(
+                    widget.role,
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
                   )
                 ],
