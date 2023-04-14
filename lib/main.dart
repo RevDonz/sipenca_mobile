@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sipenca_mobile/screens/warga/home.dart';
-import 'package:sipenca_mobile/screens/warga/keluarga.dart';
-import 'package:sipenca_mobile/screens/warga/profile.dart';
+import 'package:sipenca_mobile/screens/auth/login.dart';
+import 'package:sipenca_mobile/screens/auth/register.dart';
+import 'package:sipenca_mobile/screens/petugas/petugas.dart';
+import 'package:sipenca_mobile/screens/warga/warga.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,59 +18,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: "Poppins"),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: const MyHomePage(),
+      routes: <String, WidgetBuilder>{
+        '/': (context) => const MyHomePage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/petugas': (context) => const ListPengungsi(),
+      },
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    KeluargaPage(),
-    ProfilePage(),
-  ];
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.groups_outlined),
-              label: 'Keluarga',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.indigoAccent,
-          onTap: _onItemTapped,
-        ));
   }
 }

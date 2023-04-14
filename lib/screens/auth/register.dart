@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sipenca_mobile/screens/Auth/login.dart';
 import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
+import 'package:sipenca_mobile/screens/petugas/petugas.dart';
 
-class register extends StatefulWidget {
-  const register({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<register> createState() => _registerState();
+  State<RegisterPage> createState() => _registerState();
 }
 
-class _registerState extends State<register> {
+class _registerState extends State<RegisterPage> {
   String selectedRole = "";
 
   @override
@@ -108,7 +108,8 @@ class _registerState extends State<register> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('Konfirmasi Pendaftaran Pengungsian'),
+                                      title: Text(
+                                          'Konfirmasi Pendaftaran Pengungsian'),
                                       content: Text(
                                           'Informasi pengungsian diperlukan untuk pendaftaran'),
                                       actions: [
@@ -163,13 +164,8 @@ class _registerState extends State<register> {
                             // Navigasi ke halaman registrasi
                           },
                           child: InkWell(
-                            onTap: () => {
-                              Navigator.push(context, MaterialPageRoute<void>(
-                                builder: (BuildContext context) {
-                                  return LoginPage();
-                                },
-                              ))
-                            },
+                            onTap: () =>
+                                {Navigator.pushNamed(context, "/login")},
                             child: const Text(
                               'Masuk',
                               style: TextStyle(

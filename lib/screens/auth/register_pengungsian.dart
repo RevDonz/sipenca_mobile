@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sipenca_mobile/screens/petugas/list_pengungsi.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/screens/petugas/petugas.dart';
 
 class RegisterPengungsian extends StatefulWidget {
   const RegisterPengungsian({super.key});

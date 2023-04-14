@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sipenca_mobile/main.dart';
-import 'package:sipenca_mobile/screens/auth/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -94,11 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50, // ukuran tinggi button
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute<void>(
-                          builder: (BuildContext context) {
-                            return const MyApp();
-                          },
-                        ));
+                        Navigator.pushNamed(context, "/");
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigoAccent,
@@ -128,13 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                             // Navigasi ke halaman registrasi
                           },
                           child: InkWell(
-                            onTap: () => {
-                              Navigator.push(context, MaterialPageRoute<void>(
-                                builder: (BuildContext context) {
-                                  return const register();
-                                },
-                              ))
-                            },
+                            onTap: () =>
+                                {Navigator.pushNamed(context, "/register")},
                             child: const Text(
                               'Daftar',
                               style: TextStyle(
