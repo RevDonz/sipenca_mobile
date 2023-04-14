@@ -65,7 +65,7 @@ class _registerState extends State<register> {
                     TextFormField(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock),
-                        hintText: 'Password',
+                        hintText: 'Kata Sandi',
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
                       ),
@@ -80,10 +80,6 @@ class _registerState extends State<register> {
                         ),
                       ),
                       items: [
-                        DropdownMenuItem<String>(
-                          value: 'Admin',
-                          child: Text('Admin'),
-                        ),
                         DropdownMenuItem<String>(
                           value: 'Warga',
                           child: Text('Warga'),
@@ -112,9 +108,9 @@ class _registerState extends State<register> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('Konfirmasi Pendaftaran'),
+                                      title: Text('Konfirmasi Pendaftaran Pengungsian'),
                                       content: Text(
-                                          'Apakah anda ingin mendaftar jadi petugas? Jika iya, mohon lengkapi data yang dibutuhkan.'),
+                                          'Informasi pengungsian diperlukan untuk pendaftaran'),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
@@ -147,7 +143,7 @@ class _registerState extends State<register> {
                           ),
                         ),
                         child: const Text(
-                          'Register',
+                          'Daftar',
                           style: TextStyle(
                             color: Color.fromARGB(255, 255, 255, 255),
                             fontWeight: FontWeight.bold,
@@ -175,7 +171,7 @@ class _registerState extends State<register> {
                               ))
                             },
                             child: const Text(
-                              'Login',
+                              'Masuk',
                               style: TextStyle(
                                 color: Colors.indigoAccent,
                                 fontWeight: FontWeight.bold,

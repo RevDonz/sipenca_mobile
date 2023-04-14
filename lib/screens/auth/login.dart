@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 children: const [
                   Text(
-                    'Login ke ',
+                    'Masuk ke ',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   )
                 ],
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                       prefixIcon: const Icon(Icons.lock),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      hintText: 'Password'),
+                      hintText: 'Kata Sandi'),
                   obscureText: true,
                 ),
               ]),
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                           //set warna background button
                           ),
                       child: const Text(
-                        'Login',
+                        'Masuk',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                               ))
                             },
                             child: const Text(
-                              'Register',
+                              'Daftar',
                               style: TextStyle(
                                 color: Colors.indigoAccent,
                                 fontWeight: FontWeight.bold,
