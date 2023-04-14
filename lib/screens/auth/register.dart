@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
+import 'package:sipenca_mobile/screens/petugas/petugas.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => RegisterPageState();
+  State<RegisterPage> createState() => _registerState();
 }
 
-class RegisterPageState extends State<RegisterPage> {
+class _registerState extends State<RegisterPage> {
+  String selectedRole = "";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,33 +58,25 @@ class RegisterPageState extends State<RegisterPage> {
                         prefixIcon: Icon(Icons.email),
                         hintText: 'Email',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(17)),
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
                     SizedBox(height: 20),
                     TextFormField(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock),
-                        hintText: 'Password',
+                        hintText: 'Kata Sandi',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(17)),
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
                     SizedBox(height: 20),
-                    // TextFormField(
-                    //   decoration: InputDecoration(
-                    //     prefixIcon: Icon(Icons.people),
-                    //     hintText: 'Role',
-                    //     border: OutlineInputBorder(
-                    //         borderRadius: BorderRadius.circular(17)),
-                    //   ),
-                    // ),
                     DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.people),
                         hintText: 'Role',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(17),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       items: [
@@ -89,37 +85,70 @@ class RegisterPageState extends State<RegisterPage> {
                           child: Text('Warga'),
                         ),
                         DropdownMenuItem<String>(
-                          value: 'Pengelola',
-                          child: Text('Pengelola'),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: 'Sukarelawan',
-                          child: Text('Sukarelawan'),
+                          value: 'Petugas',
+                          child: Text('Petugas'),
                         ),
                       ],
                       onChanged: (String? value) {
+                        setState(() {
+                          selectedRole = value!;
+                        });
+
                         // handling saat dropdown dipilih
                       },
-                      value: null, // value harus diatur sebagai nullable
                     ),
-
                     SizedBox(height: 20),
                     SizedBox(
-                      width: 400,
-                      height: 40,
+                      width: 700,
+                      height: 50,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: selectedRole == "Petugas"
+                            ? () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                          'Konfirmasi Pendaftaran Pengungsian'),
+                                      content: Text(
+                                          'Informasi pengungsian diperlukan untuk pendaftaran'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Batal'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            // Lakukan pendaftaran petugas
+                                            Navigator.push(context,
+                                                MaterialPageRoute<void>(
+                                              builder: (BuildContext context) {
+                                                return const RegisterPengungsian();
+                                              },
+                                            ));
+                                          },
+                                          child: Text('Daftar'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            : () {},
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xff51557E),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ) //set warna background button
-                            ),
+                          backgroundColor: Colors.indigoAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         child: const Text(
-                          'Register',
+                          'Daftar',
                           style: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              fontWeight: FontWeight.bold),
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -138,9 +167,9 @@ class RegisterPageState extends State<RegisterPage> {
                             onTap: () =>
                                 {Navigator.pushNamed(context, "/login")},
                             child: const Text(
-                              'Login',
+                              'Masuk',
                               style: TextStyle(
-                                color: Color(0xff51557E),
+                                color: Colors.indigoAccent,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

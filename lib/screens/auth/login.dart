@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 children: const [
                   Text(
-                    'Login ke ',
+                    'Masuk ke ',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   )
                 ],
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                       prefixIcon: const Icon(Icons.lock),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      hintText: 'Password'),
+                      hintText: 'Kata Sandi'),
                   obscureText: true,
                 ),
               ]),
@@ -88,20 +88,20 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
-                    width: 400, // ukuran lebar button
+                    width: 700, // ukuran lebar button
                     height: 50, // ukuran tinggi button
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, "/");
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF51557E),
+                          backgroundColor: Colors.indigoAccent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))
                           //set warna background button
                           ),
                       child: const Text(
-                        'Login',
+                        'Masuk',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -125,10 +125,10 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () =>
                                 {Navigator.pushNamed(context, "/register")},
                             child: const Text(
-                              'Register',
+                              'Daftar',
                               style: TextStyle(
-                                color: Color(0xff254A75),
-                                fontWeight: FontWeight.normal,
+                                color: Colors.indigoAccent,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           )),
