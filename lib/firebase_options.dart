@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '634931892716',
     projectId: 'sipenca-2cebd',
     storageBucket: 'sipenca-2cebd.appspot.com',
-    iosClientId: '634931892716-3dunl1k7285ie7cvt6me97fbbrp7ej3o.apps.googleusercontent.com',
+    iosClientId:
+        '634931892716-3dunl1k7285ie7cvt6me97fbbrp7ej3o.apps.googleusercontent.com',
     iosBundleId: 'com.example.sipencaMobile',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '634931892716',
     projectId: 'sipenca-2cebd',
     storageBucket: 'sipenca-2cebd.appspot.com',
-    iosClientId: '634931892716-3dunl1k7285ie7cvt6me97fbbrp7ej3o.apps.googleusercontent.com',
+    iosClientId:
+        '634931892716-3dunl1k7285ie7cvt6me97fbbrp7ej3o.apps.googleusercontent.com',
     iosBundleId: 'com.example.sipencaMobile',
   );
 }
