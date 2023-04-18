@@ -1,80 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
+  final Map<String, dynamic>? profile;
+  const HomePage({super.key, required this.profile});
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> DataPengungsian = [
-    {
-      "nama": "Lapangan",
-      "kapasitas": 100,
-      "kapasitasTersisa": 50,
-      "alamat": "Kampung Durian Runtuh",
-      "jarak": 1500,
-      "isBooking": false
-    },
-    {
-      "nama": "Rumah Pak RT",
-      "kapasitas": 50,
-      "kapasitasTersisa": 10,
-      "alamat": "Jl. in aja dulu",
-      "jarak": 200,
-      "isBooking": false
-    },
-    {
-      "nama": "Lapangan",
-      "kapasitas": 100,
-      "kapasitasTersisa": 50,
-      "alamat": "Kampung",
-      "jarak": 300,
-      "isBooking": false
-    },
-    {
-      "nama": "Lapangan",
-      "kapasitas": 100,
-      "kapasitasTersisa": 50,
-      "alamat": "Kampung",
-      "jarak": 2300,
-      "isBooking": false
-    },
-    {
-      "nama": "Lapangan",
-      "kapasitas": 100,
-      "kapasitasTersisa": 50,
-      "alamat": "Kampung",
-      "jarak": 150,
-      "isBooking": false
-    },
-    {
-      "nama": "Lapangan",
-      "kapasitas": 100,
-      "kapasitasTersisa": 50,
-      "alamat": "Kampung",
-      "jarak": 150,
-      "isBooking": false
-    },
-  ];
-
+  List<Map<String, dynamic>> DataPengungsian = [];
+  bool isLoading = true;
   bool isBooking = false;
+
+  void getListPengungsian() async {
+    List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
+    setState(() {
+      DataPengungsian = list;
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getListPengungsian();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-        // backgroundColor: Colors.grey.shade50,
         body: SafeArea(
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const AppBarSipenca(
-                role: "Pengungsi",
+              AppBarSipenca(
+                role: isLoading ? "Loading.." : widget.profile!["full_name"],
               ),
               const SizedBox(
                 height: 20,
@@ -99,101 +62,96 @@ class _HomePageState extends State<HomePage> {
                 shrinkWrap: true,
                 itemCount: DataPengungsian.length,
                 itemBuilder: (context, index) {
-                  String jarak;
-                  if (DataPengungsian[index]["jarak"] > 1000) {
-                    jarak = "${DataPengungsian[index]["jarak"] / 1000} KM";
-                  } else {
-                    jarak = "${DataPengungsian[index]["jarak"]} M";
-                  }
-                  return GestureDetector(
-                    onTap: () {
-                      print("as");
-                    },
-                    child: (Card(
-                      elevation: 0,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(16))),
-                      child: InkWell(
-                        hoverColor: Colors.transparent,
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                              return DetailPengungsian(
-                                  data: DataPengungsian[index]);
-                            },
-                          ));
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Wrap(
-                                spacing: 10,
-                                direction: Axis.vertical,
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    DataPengungsian[index]["nama"],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
-                                  ),
-                                  Text(
-                                    "${DataPengungsian[index]["kapasitasTersisa"]} / ${DataPengungsian[index]["kapasitas"]}",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                        color: Colors.grey),
-                                  ),
-                                  Text(
-                                    DataPengungsian[index]["alamat"],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500),
-                                  )
-                                ],
-                              ),
-                              Column(children: [
-                                FloatingActionButton(
-                                  heroTag: "btnPengungsian$index",
-                                  onPressed: isBooking &&
-                                          !DataPengungsian[index]["isBooking"]
-                                      ? () {}
-                                      : () {
-                                          setState(() {
-                                            isBooking = true;
-                                            DataPengungsian[index]
-                                                ["isBooking"] = true;
-                                          });
-                                        },
-                                  backgroundColor: isBooking &&
-                                          !DataPengungsian[index]["isBooking"]
-                                      ? Colors.grey
-                                      : Colors.indigoAccent,
-                                  elevation: 5,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(12))),
-                                  child: DataPengungsian[index]["isBooking"]
-                                      ? Icon(Icons.hourglass_bottom)
-                                      : Icon(Icons.input),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                  // String jarak;
+                  // if (DataPengungsian[index]["jarak"] > 1000) {
+                  //   jarak = "${DataPengungsian[index]["jarak"] / 1000} KM";
+                  // } else {
+                  //   jarak = "${DataPengungsian[index]["jarak"]} M";
+                  // }
+                  return Card(
+                    elevation: 0,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16))),
+                    child: InkWell(
+                      hoverColor: Colors.transparent,
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute<void>(
+                          builder: (BuildContext context) {
+                            return DetailPengungsian(
+                                data: DataPengungsian[index]);
+                          },
+                        ));
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Wrap(
+                              spacing: 10,
+                              direction: Axis.vertical,
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                  jarak,
+                                  DataPengungsian[index]["nama"],
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.blueGrey),
+                                      fontSize: 20),
+                                ),
+                                Text(
+                                  "${DataPengungsian[index]["kapasitas_max"] - DataPengungsian[index]["kapasitas_terisi"]} / ${DataPengungsian[index]["kapasitas_max"]}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      color: Colors.grey),
+                                ),
+                                Text(
+                                  DataPengungsian[index]["alamat"],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500),
                                 )
-                              ]),
-                            ],
-                          ),
+                              ],
+                            ),
+                            Column(children: const [
+                              // FloatingActionButton(
+                              //   heroTag: "btnPengungsian$index",
+                              //   onPressed: isBooking &&
+                              //           !DataPengungsian[index]["isBooking"]
+                              //       ? () {}
+                              //       : () {
+                              //           setState(() {
+                              //             isBooking = true;
+                              //             DataPengungsian[index]
+                              //                 ["isBooking"] = true;
+                              //           });
+                              //         },
+                              //   backgroundColor: isBooking &&
+                              //           !DataPengungsian[index]["isBooking"]
+                              //       ? Colors.grey
+                              //       : Colors.indigoAccent,
+                              //   elevation: 5,
+                              //   shape: const RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.all(
+                              //           Radius.circular(12))),
+                              //   child: DataPengungsian[index]["isBooking"]
+                              //       ? Icon(Icons.hourglass_bottom)
+                              //       : Icon(Icons.input),
+                              // ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "150M",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blueGrey),
+                              )
+                            ]),
+                          ],
                         ),
                       ),
-                    )),
+                    ),
                   );
                 },
               )

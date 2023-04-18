@@ -10,48 +10,56 @@ import 'package:sipenca_mobile/screens/warga/warga.dart';
 
 void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MaterialApp(home: const Akun()));
-  // final db = DatabaseService();
-  // await db.getAkun(email: "tes@gmail.com");
-  // print(tes);
+  // runApp(MaterialApp(home: const MyApp()));
+  runApp(const MyApp());
 }
 
 CollectionReference akun = FirebaseFirestore.instance.collection('users');
-final db = DatabaseService();
 
-class Akun extends StatelessWidget {
+class Akun extends StatefulWidget {
   const Akun({super.key});
 
   @override
+  State<Akun> createState() => _AkunState();
+}
+
+class _AkunState extends State<Akun> {
+  List<Map<String, dynamic>> usersList = [];
+
+  void getUserList() async {
+    List<Map<String, dynamic>> list = await DatabaseService.getAllUsers();
+    setState(() {
+      usersList = list;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserList();
+  }
+
   Widget build(BuildContext context) {
-    getData();
-
-    return FutureBuilder<DocumentSnapshot>(
-        future: akun.doc("3ZU77FNJfUwfqoJeo0B4").get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Text("Something went wrong");
-          }
-
-          if (snapshot.hasData && !snapshot.data!.exists) {
-            return Text("Document does not exist");
-          }
-
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return Text("${data['email']} : ${data['username']}");
-          }
-
-          return Text("loading");
-        });
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('List of Users'),
+      ),
+      body: ListView.builder(
+        itemCount: usersList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text(usersList[index]['username']),
+            subtitle: Text(usersList[index]['email']),
+          );
+        },
+      ),
+    );
   }
 }
 
 void getData() async {
   Map<String, dynamic>? userData =
-      await db.getDetailUsers("3ZU77FNJfUwfqoJeo0B4");
+      await DatabaseService.getDetailUsers("3ZU77FNJfUwfqoJeo0B4");
   // List<Map<String, dynamic>?> userData = await db.getAllUsers();
 
   print(userData);

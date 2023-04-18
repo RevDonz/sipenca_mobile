@@ -1,12 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
+import 'package:sipenca_mobile/firebase_options.dart';
 
 Future<void> main() async {
-  testWidgets("Test method AddAkun", (widgetTester) async {
-    final db = DatabaseService();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-    // final tes = await db.getAkun(email: "tes@gmail.com");
+  test("Tes method", () {
+    // final db = DatabaseService();
 
-    // expect(tes, "pengungsi1");
+    // final tes = db.getAllUsers();
+
+    // expect(tes, {});
   });
 }

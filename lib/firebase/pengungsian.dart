@@ -17,8 +17,7 @@ class DatabaseService {
     }
   }
 
-
-  Future<List<Map<String, dynamic>?>> getAllUsers() async {
+  static Future<List<Map<String, dynamic>>> getAllUsers() async {
     List<Map<String, dynamic>> listUser = [];
 
     QuerySnapshot<Map<String, dynamic>> snapshot =
@@ -31,13 +30,29 @@ class DatabaseService {
     return listUser;
   }
 
-  Future<Map<String, dynamic>?> getDetailUsers(String documentId) async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection('users').doc(documentId).get();
+  static Future<Map<String, dynamic>?> getDetailUsers(String documentId) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(documentId)
+        .get();
 
     // return snapshot;
-    Map<String, dynamic>? res = await snapshot.data();
+    Map<String, dynamic>? res = snapshot.data();
 
     return res;
+  }
+
+  static Future<List<Map<String, dynamic>>> getAllPengungsian() async {
+    List<Map<String, dynamic>> listPengungsian = [];
+
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('pengungsians').get();
+
+    snapshot.docs.forEach((element) {
+      listPengungsian.add(element.data());
+    });
+
+    return listPengungsian;
   }
 }
