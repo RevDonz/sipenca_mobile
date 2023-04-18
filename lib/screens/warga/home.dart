@@ -170,12 +170,12 @@ class DetailPengungsian extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String jarak;
-    if (data["jarak"] > 1000) {
-      jarak = "${data["jarak"] / 1000} KM";
-    } else {
-      jarak = "${data["jarak"]} M";
-    }
+    // String jarak;
+    // if (data["jarak"] > 1000) {
+    //   jarak = "${data["jarak"] / 1000} KM";
+    // } else {
+    //   jarak = "${data["jarak"]} M";
+    // }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -213,20 +213,28 @@ class DetailPengungsian extends StatelessWidget {
                                   fontSize: 15, color: Colors.grey)),
                         ],
                       ),
+                      // IconButton(
+                      //   iconSize: 30,
+                      //   splashRadius: 25,
+                      //   onPressed: () {},
+                      //   icon: data["isBooking"]
+                      //       ? const Icon(
+                      //           // Icons.notifications_none_rounded,
+                      //           Icons.home,
+                      //           color: Colors.indigoAccent)
+                      //       : const Icon(
+                      //           // Icons.notifications_none_rounded,
+                      //           Icons.home_outlined,
+                      //           color: Colors.indigoAccent),
+                      // ),
                       IconButton(
-                        iconSize: 30,
-                        splashRadius: 25,
-                        onPressed: () {},
-                        icon: data["isBooking"]
-                            ? const Icon(
-                                // Icons.notifications_none_rounded,
-                                Icons.home,
-                                color: Colors.indigoAccent)
-                            : const Icon(
-                                // Icons.notifications_none_rounded,
-                                Icons.home_outlined,
-                                color: Colors.indigoAccent),
-                      ),
+                          iconSize: 30,
+                          splashRadius: 25,
+                          onPressed: () {},
+                          icon: const Icon(
+                              // Icons.notifications_none_rounded,
+                              Icons.home,
+                              color: Colors.indigoAccent)),
                     ],
                   ),
                   const SizedBox(
@@ -243,7 +251,7 @@ class DetailPengungsian extends StatelessWidget {
                             side: const BorderSide(
                                 color: Colors.indigoAccent, width: 2)),
                         icon: const Icon(Icons.pin_drop),
-                        label: Text(jarak)),
+                        label: Text("150 M")),
                     OutlinedButton.icon(
                         onPressed: () {},
                         style: OutlinedButton.styleFrom(
@@ -255,7 +263,7 @@ class DetailPengungsian extends StatelessWidget {
                                 color: Colors.indigoAccent, width: 2)),
                         icon: const Icon(Icons.group_outlined),
                         label: Text(
-                            "${data["kapasitasTersisa"]} / ${data["kapasitas"]}"))
+                            "${data["kapasitas_max"] - data["kapasitas_terisi"]} / ${data["kapasitas_max"]}"))
                   ]),
                 ],
               )
