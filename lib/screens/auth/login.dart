@@ -88,29 +88,81 @@ class _LoginPageState extends State<LoginPage> {
                       Text('Ingat Saya'),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
-                    width: 700, // ukuran lebar button
-                    height: 50, // ukuran tinggi button
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/");
-                      },
-                      style: ElevatedButton.styleFrom(
+                      width: 700, // ukuran lebar button
+                      height: 50, 
+                      // ukuran tinggi button
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Center(
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.check_circle_rounded,
+                                        color: Colors.green,
+                                        size: 50,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        "Berhasil !",
+                                        style: TextStyle(
+                                            color: Colors.green, fontSize: 20),
+                                      ),
+                                      Text(
+                                        "Anda berhasil masuk",
+                                        style: TextStyle(
+                                            color: Color(0xFF5C5C5C),
+                                            fontSize: 18),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                actionsPadding: EdgeInsets.only(bottom: 20),
+                                actions: [
+                                  Center(
+                                    child: TextButton(
+                                      child: Text(
+                                        "Ok",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pushNamed(context, "/");
+                                      },
+                                      style: TextButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        backgroundColor: Colors.indigoAccent,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigoAccent,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))
-                          //set warna background button
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                      child: const Text(
-                        'Masuk',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                  ),
+                        child: const Text(
+                          'Masuk',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )),
                   Padding(padding: EdgeInsets.only(top: 10)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
