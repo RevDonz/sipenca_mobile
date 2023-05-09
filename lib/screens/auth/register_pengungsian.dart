@@ -19,9 +19,9 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
           child: Center(
             child: SingleChildScrollView(
                 child: Container(
-              padding:
-                  EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
-              margin: EdgeInsets.all(20),
+              padding: const EdgeInsets.only(
+                  top: 10, right: 20, left: 20, bottom: 10),
+              margin: const EdgeInsets.all(20),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -43,7 +43,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                         )
                       ],
                     ),
-                    Padding(padding: EdgeInsets.only(top: 30)),
+                    const Padding(padding: EdgeInsets.only(top: 30)),
                     Column(children: [
                       SvgPicture.asset(
                         'assets/registerlogo.svg',
@@ -60,7 +60,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 labelText: 'Nama Pengungsian',
-                                labelStyle: TextStyle(fontSize: 15)),
+                                labelStyle: const TextStyle(fontSize: 15)),
                           ),
                           const Padding(padding: EdgeInsets.only(top: 20)),
                           TextFormField(
@@ -70,7 +70,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 labelText: 'Alamat Pengungsian',
-                                labelStyle: TextStyle(fontSize: 15)),
+                                labelStyle: const TextStyle(fontSize: 15)),
                           ),
                           const Padding(padding: EdgeInsets.only(top: 20)),
                           TextFormField(
@@ -78,7 +78,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 labelText: 'Kapasitas Pengungsian',
-                                labelStyle: TextStyle(fontSize: 15)),
+                                labelStyle: const TextStyle(fontSize: 15)),
                           ),
                           const Padding(padding: EdgeInsets.only(top: 20)),
                           TextFormField(
@@ -88,15 +88,15 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 labelText: 'Deskripsi Pengungsian',
-                                labelStyle: TextStyle(fontSize: 15)),
+                                labelStyle: const TextStyle(fontSize: 15)),
                           ),
                         ]),
                     const Padding(padding: EdgeInsets.only(top: 30)),
                     const SizedBox(height: 10.0),
                     Column(
                       children: [
-                        Padding(padding: EdgeInsets.only(top: 10)),
-                        Container(
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        SizedBox(
                           width: 700, // ukuran lebar button
                           height: 50, // ukuran tinggi button
                           child: ElevatedButton(
