@@ -10,7 +10,8 @@ Map<String, dynamic> profile = {
 };
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final Map<String, dynamic>? profileWarga;
+  const ProfilePage({super.key, required this.profileWarga});
 
   @override
   ProfilePageState createState() => ProfilePageState();
@@ -35,7 +36,7 @@ TextEditingController nomorTeleponController = TextEditingController();
 TextEditingController nomorTeleponUpdateController = TextEditingController();
 
 class ProfilePageState extends State<ProfilePage> {
-  String jenisKelamin = profile["jenisKelamin"];
+  String jenisKelamin = "Laki-laki";
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +96,7 @@ class ProfilePageState extends State<ProfilePage> {
                     child: TextFormField(
                       enabled: false,
                       controller: nikController
-                        ..text = profile["nik"].toString(),
+                        ..text = widget.profileWarga!["nik"].toString(),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -118,7 +119,7 @@ class ProfilePageState extends State<ProfilePage> {
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       enabled: false,
-                      controller: namaController..text = profile["nama"],
+                      controller: namaController..text = widget.profileWarga!["full_name"],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -141,7 +142,7 @@ class ProfilePageState extends State<ProfilePage> {
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       enabled: false,
-                      controller: jenisKelaminController..text = jenisKelamin,
+                      controller: jenisKelaminController..text = widget.profileWarga!["jenis_kelamin"],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -163,7 +164,7 @@ class ProfilePageState extends State<ProfilePage> {
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: TextFormField(
                       enabled: false,
-                      controller: alamatController..text = profile["alamat"],
+                      controller: alamatController..text = widget.profileWarga!["alamat"],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -186,7 +187,7 @@ class ProfilePageState extends State<ProfilePage> {
                     child: TextFormField(
                       enabled: false,
                       controller: nomorTeleponController
-                        ..text = profile["nomorTelepon"].toString(),
+                        ..text = widget.profileWarga!["no_hp"].toString(),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -209,7 +210,7 @@ class ProfilePageState extends State<ProfilePage> {
                     child: TextFormField(
                       enabled: false,
                       controller: tanggalLahirController
-                        ..text = profile["tanggalLahir"],
+                        ..text = widget.profileWarga!["tgl_lahir"],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -249,7 +250,7 @@ class ProfilePageState extends State<ProfilePage> {
                                             child: TextField(
                                               controller: nikUpdateController
                                                 ..text =
-                                                    profile["nik"].toString(),
+                                                    widget.profileWarga!["nik"].toString(),
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                     borderRadius:
@@ -264,7 +265,7 @@ class ProfilePageState extends State<ProfilePage> {
                                                 vertical: 10),
                                             child: TextField(
                                               controller: namaUpdateController
-                                                ..text = profile["nama"],
+                                                ..text = widget.profileWarga!["full_name"],
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                     borderRadius:
@@ -308,7 +309,7 @@ class ProfilePageState extends State<ProfilePage> {
                                                   TextInputType.multiline,
                                               maxLines: null,
                                               controller: alamatUpdateController
-                                                ..text = profile["alamat"],
+                                                ..text = widget.profileWarga!["alamat"],
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                     borderRadius:
@@ -325,7 +326,7 @@ class ProfilePageState extends State<ProfilePage> {
                                               controller:
                                                   nomorTeleponUpdateController
                                                     ..text =
-                                                        profile["nomorTelepon"]
+                                                        widget.profileWarga!["no_hp"]
                                                             .toString(),
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
@@ -343,7 +344,7 @@ class ProfilePageState extends State<ProfilePage> {
                                               controller:
                                                   tanggalLahirUpdateController
                                                     ..text =
-                                                        profile["tanggalLahir"],
+                                                        widget.profileWarga!["tgl_lahir"],
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                     borderRadius:
@@ -367,16 +368,12 @@ class ProfilePageState extends State<ProfilePage> {
                                   TextButton(
                                     onPressed: () => {
                                       setState(() {
-                                        profile = {
-                                          "nik": nikUpdateController.text,
-                                          "nama": namaUpdateController.text,
-                                          "jenisKelamin": jenisKelamin,
-                                          "alamat": alamatUpdateController.text,
-                                          "nomorTelepon":
-                                              nomorTeleponUpdateController.text,
-                                          "tanggalLahir":
-                                              tanggalLahirUpdateController.text
-                                        };
+                                        widget.profileWarga!["nik"] = nikUpdateController.text;
+                                        widget.profileWarga!["full_name"] = namaUpdateController.text;
+                                        widget.profileWarga!["jenis_kelamin"] = jenisKelamin;
+                                        widget.profileWarga!["alamat"] = alamatUpdateController.text;
+                                        widget.profileWarga!["no_hp"] = nomorTeleponUpdateController.text;
+                                        widget.profileWarga!["tgl_lahir"] = tanggalLahirUpdateController.text;
                                       }),
                                       Navigator.pop(context, 'OK')
                                     },

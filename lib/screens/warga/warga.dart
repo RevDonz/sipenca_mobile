@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HomePage(profile: profileUser),
       // HomePage(),
       KeluargaPage(),
-      ProfilePage(),
+      ProfilePage(profileWarga: profileUser),
     ];
     
     return Scaffold(
