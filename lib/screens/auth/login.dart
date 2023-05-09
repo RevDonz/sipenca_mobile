@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../firebase/auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -187,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
+                      
                       icon: Icon(
                         _isObscured ? Icons.visibility : Icons.visibility_off,
                         color: Colors.grey,
@@ -224,60 +226,6 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           _signIn();
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (BuildContext context) {
-                          //     return AlertDialog(
-                          //       title: Center(
-                          //         child: Column(
-                          //           children: [
-                          //             Icon(
-                          //               Icons.check_circle_rounded,
-                          //               color: Colors.green,
-                          //               size: 50,
-                          //             ),
-                          //             SizedBox(height: 10),
-                          //             Text(
-                          //               "Berhasil !",
-                          //               style: TextStyle(
-                          //                   color: Colors.green, fontSize: 20),
-                          //             ),
-                          //             Text(
-                          //               "Anda berhasil masuk",
-                          //               style: TextStyle(
-                          //                   color: Color(0xFF5C5C5C),
-                          //                   fontSize: 18),
-                          //             )
-                          //           ],
-                          //         ),
-                          //       ),
-                          //       actionsPadding: EdgeInsets.only(bottom: 20),
-                          //       actions: [
-                          //         Center(
-                          //           child: TextButton(
-                          //             child: Text(
-                          //               "Ok",
-                          //               style: TextStyle(
-                          //                   color: Colors.white,
-                          //                   fontSize: 18,
-                          //                   fontWeight: FontWeight.normal),
-                          //             ),
-                          //             onPressed: () {
-                          //               Navigator.pushNamed(context, "/");
-                          //             },
-                          //             style: TextButton.styleFrom(
-                          //               shape: RoundedRectangleBorder(
-                          //                 borderRadius:
-                          //                     BorderRadius.circular(10),
-                          //               ),
-                          //               backgroundColor: Colors.indigoAccent,
-                          //             ),
-                          //           ),
-                          //         )
-                          //       ],
-                          //     );
-                          //   },
-                          // );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigoAccent,

@@ -18,6 +18,7 @@ class AuthService {
     }
   }
 
+
   // Method untuk logout user
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
