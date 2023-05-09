@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<String?> addAkun(
       {required String email,
@@ -43,12 +43,40 @@ class DatabaseService {
     return res;
   }
 
+  static Future<void> updateData(
+      String documentId, Map<String, dynamic>? data) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(documentId)
+          .update(data!);
+    } catch (e) {
+      // Handle error jika terjadi kesalahan
+      print(e.toString());
+    }
+  }
+
+  static Future<String> getDocumentIdFromQuery(
+      String collection, String field, String value) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(collection)
+        .where(field, isEqualTo: value)
+        .get();
+
+    if (querySnapshot.size > 0) {
+      QueryDocumentSnapshot documentSnapshot = querySnapshot.docs[0];
+      String documentId = documentSnapshot.id;
+      return documentId;
+    } else {
+      return "";
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> getAllPengungsian() async {
     List<Map<String, dynamic>> listPengungsian = [];
 
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('pengungsians').get();
-
     snapshot.docs.forEach((element) {
       listPengungsian.add(element.data());
     });

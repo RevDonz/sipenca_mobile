@@ -77,6 +77,7 @@ class _RegisterState extends State<RegisterPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
+                          obscureText: true,
                         ),
                         const SizedBox(height: 20),
                         DropdownButtonFormField<String>(
