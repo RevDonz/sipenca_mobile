@@ -3,18 +3,20 @@ import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class HomePage extends StatefulWidget {
-  final Map<String, dynamic>? profile;
   const HomePage({super.key, required this.profile});
+  final Map<String, dynamic>? profile;
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> DataPengungsian = [];
+  Map<String, dynamic>? UserProfile = {};
   bool isLoading = true;
   bool isBooking = false;
 
   void getListPengungsian() async {
     List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
+
     setState(() {
       DataPengungsian = list;
       isLoading = false;
@@ -113,37 +115,47 @@ class _HomePageState extends State<HomePage> {
                                 )
                               ],
                             ),
-                            Column(children: const [
-                              // FloatingActionButton(
-                              //   heroTag: "btnPengungsian$index",
-                              //   onPressed: isBooking &&
-                              //           !DataPengungsian[index]["isBooking"]
-                              //       ? () {}
-                              //       : () {
-                              //           setState(() {
-                              //             isBooking = true;
-                              //             DataPengungsian[index]
-                              //                 ["isBooking"] = true;
-                              //           });
-                              //         },
-                              //   backgroundColor: isBooking &&
-                              //           !DataPengungsian[index]["isBooking"]
-                              //       ? Colors.grey
-                              //       : Colors.indigoAccent,
-                              //   elevation: 5,
-                              //   shape: const RoundedRectangleBorder(
-                              //       borderRadius: BorderRadius.all(
-                              //           Radius.circular(12))),
-                              //   child: DataPengungsian[index]["isBooking"]
-                              //       ? Icon(Icons.hourglass_bottom)
-                              //       : Icon(Icons.input),
-                              // ),
+                            Column(children: [
+                              FloatingActionButton(
+                                heroTag: "btnPengungsian$index",
+                                onPressed: widget.profile!['reserve'] == "" &&
+                                        widget.profile!['occupied'] == ""
+                                    ? () async {
+                                        setState(() {
+                                          UserProfile = widget.profile;
+                                        });
+                                        UserProfile!['reserve'] =
+                                            DataPengungsian[index]['nama'];
+                                        String userId = await DatabaseService
+                                            .getDocumentIdFromQuery(
+                                                'users',
+                                                'full_name',
+                                                UserProfile!['full_name']);
+                                        DatabaseService.updateData(
+                                            userId, UserProfile);
+                                      }
+                                    : () async {},
+                                backgroundColor:
+                                    widget.profile!['reserve'] == "" ||
+                                            widget.profile!['reserve'] ==
+                                                DataPengungsian[index]['nama']
+                                        ? Colors.indigoAccent
+                                        : Colors.grey,
+                                elevation: 5,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12))),
+                                child: widget.profile!['reserve'] ==
+                                        DataPengungsian[index]['nama']
+                                    ? const Icon(Icons.hourglass_bottom)
+                                    : const Icon(Icons.input),
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(
+                              const Text(
                                 "150M",
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Colors.blueGrey),
                               )
@@ -265,6 +277,19 @@ class DetailPengungsian extends StatelessWidget {
                         label: Text(
                             "${data["kapasitas_max"] - data["kapasitas_terisi"]} / ${data["kapasitas_max"]}"))
                   ]),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    "Description",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    data['deskripsi'],
+                  ),
                 ],
               )
             ],
