@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,6 +18,34 @@ class _RegisterState extends State<RegisterPage> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isLoading = false;
+
+  Future<void> _register() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+      // If the user was successfully created
+      if (userCredential.user != null) {
+        // Add the user's role to the user's custom claims
+        //await userCredential.user!.setCustomClaims({'role': selectedRole});
+        // Redirect the user to the next page after successful registration
+        Navigator.pushReplacementNamed(context, '/next-page');
+      }
+    } catch (e) {
+      // Handle registration errors
+      print(e);
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +193,13 @@ class _RegisterState extends State<RegisterPage> {
                                       },
                                     );
                                   }
-                                : () {},
+                                : () async {
+                                    String email = emailController.text.trim();
+                                    String password =
+                                        passwordController.text.trim();
+                                    await AuthService.registerAccount(
+                                        email, password);
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
                               shape: RoundedRectangleBorder(
