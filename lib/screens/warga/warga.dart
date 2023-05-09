@@ -42,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
       HomePage(profile: profileUser),
+      // HomePage(),
       KeluargaPage(),
       ProfilePage(),
     ];

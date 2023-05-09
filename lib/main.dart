@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/firebase_options.dart';
+import 'package:sipenca_mobile/screens/admin/daftarpengungsian.dart';
 import 'package:sipenca_mobile/screens/auth/login.dart';
 import 'package:sipenca_mobile/screens/auth/register.dart';
 import 'package:sipenca_mobile/screens/petugas/petugas.dart';
@@ -10,7 +11,7 @@ import 'package:sipenca_mobile/screens/warga/warga.dart';
 
 void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // runApp(MaterialApp(home: const MyApp()));
+  // runApp(MaterialApp(home: DetailScreen(title: "Halaman admin")));
   runApp(const MyApp());
 }
 
