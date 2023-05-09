@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -20,8 +21,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Center(
           child: SingleChildScrollView(
               child: Container(
-            padding: EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
-            margin: EdgeInsets.all(20),
+            padding:
+                const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
+            margin: const EdgeInsets.all(20),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(
@@ -40,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ],
               ),
-              Padding(padding: EdgeInsets.only(top: 30)),
+              const Padding(padding: EdgeInsets.only(top: 30)),
               Column(children: [
                 SvgPicture.asset(
                   'assets/registerlogo.svg',
@@ -85,71 +87,18 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                       ),
-                      Text('Ingat Saya'),
+                      const Text('Ingat Saya'),
                     ],
                   ),
-                  Container(
-                      width: 700, // ukuran lebar button
-                      height: 50, 
-                      // ukuran tinggi button
-                      child: ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Center(
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.check_circle_rounded,
-                                        color: Colors.green,
-                                        size: 50,
-                                      ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        "Berhasil !",
-                                        style: TextStyle(
-                                            color: Colors.green, fontSize: 20),
-                                      ),
-                                      Text(
-                                        "Anda berhasil masuk",
-                                        style: TextStyle(
-                                            color: Color(0xFF5C5C5C),
-                                            fontSize: 18),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                actionsPadding: EdgeInsets.only(bottom: 20),
-                                actions: [
-                                  Center(
-                                    child: TextButton(
-                                      child: Text(
-                                        "Ok",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pushNamed(context, "/");
-                                      },
-                                      style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        backgroundColor: Colors.indigoAccent,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  SizedBox(
+                    width: 700, // ukuran lebar button
+                    height: 50, // ukuran tinggi button
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/");
+                      },
+                      style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigoAccent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/keluarga.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
@@ -12,23 +13,42 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    KeluargaPage(),
-    ProfilePage(),
-  ];
+  Map<String, dynamic>? profileUser;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  void getProfile() async {
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers("3ZU77FNJfUwfqoJeo0B4");
+    setState(() {
+      profileUser = userData;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgetOptions = <Widget>[
+      HomePage(profile: profileUser),
+      // HomePage(),
+      KeluargaPage(),
+      ProfilePage(),
+    ];
+    
     return Scaffold(
-        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+        body: Center(child: widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           elevation: 0,
