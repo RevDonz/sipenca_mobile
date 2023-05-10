@@ -65,8 +65,7 @@ class DatabaseService {
 
     if (querySnapshot.size > 0) {
       QueryDocumentSnapshot documentSnapshot = querySnapshot.docs[0];
-      String documentId = documentSnapshot.id;
-      return documentId;
+      return documentSnapshot.id;
     } else {
       return "";
     }

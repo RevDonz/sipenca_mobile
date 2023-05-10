@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/screens/petugas/petugas.dart';
 
 class RegisterPengungsian extends StatefulWidget {
-  const RegisterPengungsian({super.key});
+  const RegisterPengungsian(
+      {super.key, required this.email, required this.password});
+  final String email, password;
 
   @override
   State<RegisterPengungsian> createState() => _RegisterPengungsianState();
@@ -100,7 +103,10 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           width: 700, // ukuran lebar button
                           height: 50, // ukuran tinggi button
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              await AuthService.registerAccount(
+                                        widget.email, widget.password);
+                                        
                               Navigator.push(context, MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
                                   return const ListPengungsi();

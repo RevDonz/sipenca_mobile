@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/firebase_options.dart';
-import 'package:sipenca_mobile/screens/admin/daftarpengungsian.dart';
 import 'package:sipenca_mobile/screens/auth/login.dart';
 import 'package:sipenca_mobile/screens/auth/register.dart';
 import 'package:sipenca_mobile/screens/petugas/petugas.dart';
@@ -76,9 +75,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: "Poppins"),
-      // home: const MyHomePage(),
+      home:  LoginPage(),
       routes: <String, WidgetBuilder>{
-        '/': (context) => const MyHomePage(),
+        '/warga': (context) => const MyHomePage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/petugas': (context) => const ListPengungsi(),
