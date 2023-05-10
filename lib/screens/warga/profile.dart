@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
-
-Map<String, dynamic> profile = {
-  "nik": 123456789,
-  "nama": "Zahrandi Rusrizal",
-  "jenisKelamin": "Laki-laki",
-  "alamat": "Bandung",
-  "nomorTelepon": 08123456789,
-  "tanggalLahir": "2002-02-22"
-};
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class ProfilePage extends StatefulWidget {
   final Map<String, dynamic>? profileWarga;
@@ -37,6 +29,8 @@ TextEditingController nomorTeleponUpdateController = TextEditingController();
 
 class ProfilePageState extends State<ProfilePage> {
   String jenisKelamin = "Laki-laki";
+  Map<String, dynamic>? profileWargaBaru = {};
+  String userId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -366,16 +360,26 @@ class ProfilePageState extends State<ProfilePage> {
                                     child: const Text('Tutup'),
                                   ),
                                   TextButton(
-                                    onPressed: () => {
+                                    onPressed: () async{
                                       setState(() {
-                                        widget.profileWarga!["nik"] = nikUpdateController.text;
-                                        widget.profileWarga!["full_name"] = namaUpdateController.text;
-                                        widget.profileWarga!["jenis_kelamin"] = jenisKelamin;
-                                        widget.profileWarga!["alamat"] = alamatUpdateController.text;
-                                        widget.profileWarga!["no_hp"] = nomorTeleponUpdateController.text;
-                                        widget.profileWarga!["tgl_lahir"] = tanggalLahirUpdateController.text;
-                                      }),
-                                      Navigator.pop(context, 'OK')
+                                        profileWargaBaru = widget.profileWarga;
+                                      });
+                                      profileWargaBaru!["nik"] = nikUpdateController.text;
+                                      profileWargaBaru!["full_name"] = namaUpdateController.text;
+                                      profileWargaBaru!["jenis_kelamin"] = jenisKelamin;
+                                      profileWargaBaru!["alamat"] = alamatUpdateController.text;
+                                      profileWargaBaru!["no_hp"] = nomorTeleponUpdateController.text;
+                                      profileWargaBaru!["tgl_lahir"] = tanggalLahirUpdateController.text;
+                                      if(userId.isEmpty){
+                                        userId = await DatabaseService
+                                            .getDocumentIdFromQuery(
+                                                'users',
+                                                'full_name',
+                                                profileWargaBaru!['full_name']);
+                                      }
+                                      DatabaseService.updateData(
+                                            userId, profileWargaBaru);
+                                      Navigator.pop(context, 'OK');
                                     },
                                     child: const Text('Update'),
                                   ),
