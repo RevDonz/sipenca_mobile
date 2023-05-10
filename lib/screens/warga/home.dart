@@ -3,30 +3,43 @@ import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.profile});
+  const HomePage(
+      {super.key, required this.profile, required this.listPengungsian});
+  final List<Map<String, dynamic>> listPengungsian;
   final Map<String, dynamic>? profile;
+
+  @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> DataPengungsian = [];
+  // List<Map<String, dynamic>> DataPengungsian = [];
   Map<String, dynamic>? UserProfile = {};
   bool isLoading = true;
 
-  void getListPengungsian() async {
-    List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
+  // void getListPengungsian() async {
+  //   List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
 
-    setState(() {
-      DataPengungsian = list;
-      isLoading = false;
-    });
-  }
+  //   setState(() {
+  //     DataPengungsian = list;
+  //     isLoading = false;
+  //   });
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    getListPengungsian();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getListPengungsian();
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               AppBarSipenca(
-                role: isLoading ? "Loading.." : widget.profile!["full_name"],
+                role: widget.profile!["full_name"],
               ),
               const SizedBox(
                 height: 20,
@@ -61,7 +74,7 @@ class _HomePageState extends State<HomePage> {
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: DataPengungsian.length,
+                itemCount: widget.listPengungsian.length,
                 itemBuilder: (context, index) {
                   // String jarak;
                   // if (DataPengungsian[index]["jarak"] > 1000) {
@@ -80,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(context, MaterialPageRoute<void>(
                           builder: (BuildContext context) {
                             return DetailPengungsian(
-                                data: DataPengungsian[index],
+                                data: widget.listPengungsian[index],
                                 profile: widget.profile);
                           },
                         ));
@@ -96,20 +109,20 @@ class _HomePageState extends State<HomePage> {
                               // crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  DataPengungsian[index]["nama"],
+                                  widget.listPengungsian[index]["nama"],
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20),
                                 ),
                                 Text(
-                                  "${DataPengungsian[index]["kapasitas_max"] - DataPengungsian[index]["kapasitas_terisi"]} / ${DataPengungsian[index]["kapasitas_max"]}",
+                                  "${widget.listPengungsian[index]["kapasitas_max"] - widget.listPengungsian[index]["kapasitas_terisi"]} / ${widget.listPengungsian[index]["kapasitas_max"]}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: 16,
                                       color: Colors.grey),
                                 ),
                                 Text(
-                                  DataPengungsian[index]["alamat"],
+                                  widget.listPengungsian[index]["alamat"],
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w500),
                                 )
@@ -125,8 +138,8 @@ class _HomePageState extends State<HomePage> {
                                           UserProfile = widget.profile;
                                         });
 
-                                        UserProfile!['reserve'] =
-                                            DataPengungsian[index]['nama'];
+                                        UserProfile!['reserve'] = widget
+                                            .listPengungsian[index]['nama'];
 
                                         String userId = await DatabaseService
                                             .getDocumentIdFromQuery(
@@ -141,7 +154,8 @@ class _HomePageState extends State<HomePage> {
                                 backgroundColor:
                                     widget.profile!['reserve'] == "" ||
                                             widget.profile!['reserve'] ==
-                                                DataPengungsian[index]['nama']
+                                                widget.listPengungsian[index]
+                                                    ['nama']
                                         ? Colors.indigoAccent
                                         : Colors.grey,
                                 elevation: 5,
@@ -149,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(12))),
                                 child: widget.profile!['reserve'] ==
-                                        DataPengungsian[index]['nama']
+                                        widget.listPengungsian[index]['nama']
                                     ? const Icon(Icons.hourglass_bottom)
                                     : const Icon(Icons.input),
                               ),

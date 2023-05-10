@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 import '../../firebase/auth.dart';
 
@@ -8,7 +9,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -23,114 +24,130 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  Future<void> _showSuccessLogin(Map<String, dynamic>? user) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: const [
+                Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.green,
+                  size: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Berhasil !",
+                  style: TextStyle(color: Colors.green, fontSize: 20),
+                ),
+                Text(
+                  "Anda berhasil masuk",
+                  style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                )
+              ],
+            ),
+          ),
+          actionsPadding: EdgeInsets.only(bottom: 20),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  // print(user);
+                  if (user!['role'] == 'warga') {
+                    Navigator.pushNamed(context, "/warga", arguments: user);
+                  } else if (user['role'] == 'admin') {
+                    Navigator.pushNamed(context, "/petugas");
+                  }
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.indigoAccent,
+                ),
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showFailedLogin() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: const [
+                Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.red,
+                  size: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Gagal !",
+                  style: TextStyle(color: Colors.red, fontSize: 20),
+                ),
+                Text(
+                  "Anda gagal masuk",
+                  style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                )
+              ],
+            ),
+          ),
+          actionsPadding: EdgeInsets.only(bottom: 20),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context, "");
+                  _emailController.clear();
+                  _passwordController.clear();
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.indigoAccent,
+                ),
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   void _signIn() async {
     User? user = await AuthService.signIn(
         _emailController.text, _passwordController.text);
     if (user != null) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Center(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.green,
-                    size: 50,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Berhasil !",
-                    style: TextStyle(color: Colors.green, fontSize: 20),
-                  ),
-                  Text(
-                    "Anda berhasil masuk",
-                    style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
-                  )
-                ],
-              ),
-            ),
-            actionsPadding: EdgeInsets.only(bottom: 20),
-            actions: [
-              Center(
-                child: TextButton(
-                  child: Text(
-                    "Ok",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/");
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Colors.indigoAccent,
-                  ),
-                ),
-              )
-            ],
-          );
-        },
-      );
+      String userId = AuthService.getCurrentUserID();
+      Map<String, dynamic>? userData =
+          await DatabaseService.getDetailUsers(userId);
+      _showSuccessLogin(userData);
     } else {
       // User gagal login
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Center(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.check_circle_rounded,
-                    color: Colors.red,
-                    size: 50,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    "Gagal !",
-                    style: TextStyle(color: Colors.red, fontSize: 20),
-                  ),
-                  Text(
-                    "Anda gagal masuk",
-                    style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
-                  )
-                ],
-              ),
-            ),
-            actionsPadding: EdgeInsets.only(bottom: 20),
-            actions: [
-              Center(
-                child: TextButton(
-                  child: Text(
-                    "Ok",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context, "");
-                    _emailController.clear();
-                    _passwordController.clear();
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Colors.indigoAccent,
-                  ),
-                ),
-              )
-            ],
-          );
-        },
-      );
+      _showFailedLogin();
     }
   }
 
@@ -188,7 +205,6 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
-                      
                       icon: Icon(
                         _isObscured ? Icons.visibility : Icons.visibility_off,
                         color: Colors.grey,

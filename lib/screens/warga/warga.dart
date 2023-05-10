@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/keluarga.dart';
@@ -12,8 +13,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  List<Map<String, dynamic>> DataPengungsian = [];
   Map<String, dynamic>? profileUser;
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -23,9 +25,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void getProfile() async {
     Map<String, dynamic>? userData =
-        await DatabaseService.getDetailUsers("3ZU77FNJfUwfqoJeo0B4");
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
     setState(() {
       profileUser = userData;
+    });
+  }
+
+  void getListPengungsian() async {
+    List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
+
+    setState(() {
+      DataPengungsian = list;
     });
   }
 
@@ -33,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     getProfile();
+    getListPengungsian();
   }
 
   static const TextStyle optionStyle =
@@ -40,13 +51,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final dynamic data = ModalRoute.of(context)!.settings.arguments;
+
     List<Widget> widgetOptions = <Widget>[
-      HomePage(profile: profileUser),
+      HomePage(listPengungsian: DataPengungsian, profile: data),
       // HomePage(),
       KeluargaPage(),
-      ProfilePage(profileWarga: profileUser),
+      ProfilePage(profileWarga: data),
     ];
-    
+
     return Scaffold(
         body: Center(child: widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: BottomNavigationBar(

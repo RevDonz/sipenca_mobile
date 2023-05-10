@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -168,21 +168,28 @@ class _RegisterState extends State<RegisterPage> {
                                                 await prefs.setString('email',
                                                     emailController.text);
 
-                                                final message =
-                                                    await DatabaseService()
-                                                        .addAkun(
-                                                            email:
-                                                                emailController
-                                                                    .text,
-                                                            role: selectedRole,
-                                                            password:
-                                                                passwordController
-                                                                    .text);
+                                                // final message =
+                                                //     await DatabaseService()
+                                                //         .addAkun(
+                                                //             email:
+                                                //                 emailController
+                                                //                     .text,
+                                                //             role: selectedRole,
+                                                //             password:
+                                                //                 passwordController
+                                                //                     .text);
+                                                String email =
+                                                    emailController.text.trim();
+                                                String password =
+                                                    passwordController.text
+                                                        .trim();
                                                 Navigator.push(context,
                                                     MaterialPageRoute<void>(
                                                   builder:
                                                       (BuildContext context) {
-                                                    return const RegisterPengungsian();
+                                                    return RegisterPengungsian(
+                                                        email: email,
+                                                        password: password);
                                                   },
                                                 ));
                                               },
