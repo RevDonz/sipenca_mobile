@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
 
 class ListPengungsi extends StatefulWidget {
@@ -34,6 +35,11 @@ class _ListPengungsiState extends State<ListPengungsi> {
 
   @override
   Widget build(BuildContext context) {
+    String? email = "";
+    () async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      email = prefs.getString('email');
+    };
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
@@ -57,7 +63,7 @@ class _ListPengungsiState extends State<ListPengungsi> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(children: [
-            const AppBarSipenca(role: "Petugas"),
+            AppBarSipenca(role: email as String),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [Text('Pengungsi yang datang')],

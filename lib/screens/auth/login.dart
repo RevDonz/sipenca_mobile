@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../firebase/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,6 +12,126 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isObscured = true;
+
+  void _toggleObscure() {
+    setState(() {
+      _isObscured = !_isObscured;
+    });
+  }
+
+  void _signIn() async {
+    User? user = await AuthService.signIn(
+        _emailController.text, _passwordController.text);
+    if (user != null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.green,
+                    size: 50,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Berhasil !",
+                    style: TextStyle(color: Colors.green, fontSize: 20),
+                  ),
+                  Text(
+                    "Anda berhasil masuk",
+                    style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                  )
+                ],
+              ),
+            ),
+            actionsPadding: EdgeInsets.only(bottom: 20),
+            actions: [
+              Center(
+                child: TextButton(
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/");
+                  },
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    backgroundColor: Colors.indigoAccent,
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      );
+    } else {
+      // User gagal login
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.check_circle_rounded,
+                    color: Colors.red,
+                    size: 50,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Gagal !",
+                    style: TextStyle(color: Colors.red, fontSize: 20),
+                  ),
+                  Text(
+                    "Anda gagal masuk",
+                    style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                  )
+                ],
+              ),
+            ),
+            actionsPadding: EdgeInsets.only(bottom: 20),
+            actions: [
+              Center(
+                child: TextButton(
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context, "");
+                    _emailController.clear();
+                    _passwordController.clear();
+                  },
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    backgroundColor: Colors.indigoAccent,
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
 
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,24 +173,31 @@ class _LoginPageState extends State<LoginPage> {
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Padding(padding: EdgeInsets.only(top: 50)),
                 TextFormField(
-                  //tambahkan icon email disini
+                  controller: _emailController,
                   decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                       hintText: 'Email'),
-
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const Padding(padding: EdgeInsets.only(top: 20)),
                 TextFormField(
-                  //tambahkan icon kunci disini
+                  controller: _passwordController,
                   decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      hintText: 'Kata Sandi'),
-                  obscureText: true,
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isObscured ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.grey,
+                      ),
+                      onPressed: _toggleObscure,
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    hintText: 'Kata Sandi',
+                  ),
+                  obscureText: _isObscured,
                 ),
               ]),
               const Padding(padding: EdgeInsets.only(top: 30)),
@@ -88,29 +217,82 @@ class _LoginPageState extends State<LoginPage> {
                       Text('Ingat Saya'),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
-                    width: 700, // ukuran lebar button
-                    height: 50, // ukuran tinggi button
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/");
-                      },
-                      style: ElevatedButton.styleFrom(
+                      width: 700, // ukuran lebar button
+                      height: 50,
+                      // ukuran tinggi button
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _signIn();
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (BuildContext context) {
+                          //     return AlertDialog(
+                          //       title: Center(
+                          //         child: Column(
+                          //           children: [
+                          //             Icon(
+                          //               Icons.check_circle_rounded,
+                          //               color: Colors.green,
+                          //               size: 50,
+                          //             ),
+                          //             SizedBox(height: 10),
+                          //             Text(
+                          //               "Berhasil !",
+                          //               style: TextStyle(
+                          //                   color: Colors.green, fontSize: 20),
+                          //             ),
+                          //             Text(
+                          //               "Anda berhasil masuk",
+                          //               style: TextStyle(
+                          //                   color: Color(0xFF5C5C5C),
+                          //                   fontSize: 18),
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //       actionsPadding: EdgeInsets.only(bottom: 20),
+                          //       actions: [
+                          //         Center(
+                          //           child: TextButton(
+                          //             child: Text(
+                          //               "Ok",
+                          //               style: TextStyle(
+                          //                   color: Colors.white,
+                          //                   fontSize: 18,
+                          //                   fontWeight: FontWeight.normal),
+                          //             ),
+                          //             onPressed: () {
+                          //               Navigator.pushNamed(context, "/");
+                          //             },
+                          //             style: TextButton.styleFrom(
+                          //               shape: RoundedRectangleBorder(
+                          //                 borderRadius:
+                          //                     BorderRadius.circular(10),
+                          //               ),
+                          //               backgroundColor: Colors.indigoAccent,
+                          //             ),
+                          //           ),
+                          //         )
+                          //       ],
+                          //     );
+                          //   },
+                          // );
+                        },
+                        style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.indigoAccent,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))
-                          //set warna background button
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                      child: const Text(
-                        'Masuk',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                  ),
+                        child: const Text(
+                          'Masuk',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )),
                   Padding(padding: EdgeInsets.only(top: 10)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -1,17 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
-import 'package:sipenca_mobile/screens/petugas/petugas.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _registerState();
+  State<RegisterPage> createState() => _RegisterState();
 }
 
-class _registerState extends State<RegisterPage> {
+class _RegisterState extends State<RegisterPage> {
   String selectedRole = "";
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isLoading = false;
+
+  Future<void> _register() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+      // If the user was successfully created
+      if (userCredential.user != null) {
+        // Add the user's role to the user's custom claims
+        //await userCredential.user!.setCustomClaims({'role': selectedRole});
+        // Redirect the user to the next page after successful registration
+        Navigator.pushReplacementNamed(context, '/next-page');
+      }
+    } catch (e) {
+      // Handle registration errors
+      print(e);
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +55,13 @@ class _registerState extends State<RegisterPage> {
           body: SafeArea(
             child: Center(
               child: Container(
-                margin: EdgeInsets.all(40.0),
+                margin: const EdgeInsets.all(40.0),
                 child: SingleChildScrollView(
                   child: Center(
                     child: Column(
                       children: [
                         Row(
-                          children: [
+                          children: const [
                             Text(
                               'Buat',
                               style: TextStyle(
@@ -38,7 +72,7 @@ class _registerState extends State<RegisterPage> {
                           ],
                         ),
                         Row(
-                          children: [
+                          children: const [
                             Text(
                               'Akun Anda',
                               style: TextStyle(
@@ -48,40 +82,43 @@ class _registerState extends State<RegisterPage> {
                             )
                           ],
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         SvgPicture.asset(
                           'assets/registerlogo.svg',
                           height: 180,
                           width: 180,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TextFormField(
+                          controller: emailController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.email),
+                            prefixIcon: const Icon(Icons.email),
                             hintText: 'Email',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TextFormField(
+                          controller: passwordController,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.lock),
+                            prefixIcon: const Icon(Icons.lock),
                             hintText: 'Kata Sandi',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
+                          obscureText: true,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         DropdownButtonFormField<String>(
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.people),
+                            prefixIcon: const Icon(Icons.people),
                             hintText: 'Role',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          items: [
+                          items: const [
                             DropdownMenuItem<String>(
                               value: 'Warga',
                               child: Text('Warga'),
@@ -99,7 +136,7 @@ class _registerState extends State<RegisterPage> {
                             // handling saat dropdown dipilih
                           },
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         SizedBox(
                           width: 700,
                           height: 50,
@@ -110,20 +147,37 @@ class _registerState extends State<RegisterPage> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Text(
+                                          title: const Text(
                                               'Konfirmasi Pendaftaran Pengungsian'),
-                                          content: Text(
+                                          content: const Text(
                                               'Informasi pengungsian diperlukan untuk pendaftaran'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
-                                              child: Text('Batal'),
+                                              child: const Text('Batal'),
                                             ),
                                             TextButton(
-                                              onPressed: () {
+                                              onPressed: () async {
                                                 // Lakukan pendaftaran petugas
+                                                final SharedPreferences prefs =
+                                                    await SharedPreferences
+                                                        .getInstance();
+
+                                                await prefs.setString('email',
+                                                    emailController.text);
+
+                                                final message =
+                                                    await DatabaseService()
+                                                        .addAkun(
+                                                            email:
+                                                                emailController
+                                                                    .text,
+                                                            role: selectedRole,
+                                                            password:
+                                                                passwordController
+                                                                    .text);
                                                 Navigator.push(context,
                                                     MaterialPageRoute<void>(
                                                   builder:
@@ -132,14 +186,20 @@ class _registerState extends State<RegisterPage> {
                                                   },
                                                 ));
                                               },
-                                              child: Text('Daftar'),
+                                              child: const Text('Daftar'),
                                             ),
                                           ],
                                         );
                                       },
                                     );
                                   }
-                                : () {},
+                                : () async {
+                                    String email = emailController.text.trim();
+                                    String password =
+                                        passwordController.text.trim();
+                                    await AuthService.registerAccount(
+                                        email, password);
+                                  },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
                               shape: RoundedRectangleBorder(
@@ -155,7 +215,7 @@ class _registerState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
