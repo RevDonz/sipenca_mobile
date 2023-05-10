@@ -12,6 +12,9 @@ import 'package:sipenca_mobile/screens/warga/warga.dart';
 void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // runApp(MaterialApp(home: DetailScreen(title: "Halaman admin")));
+  // List<Map<String, dynamic>> list =
+  //     await DatabaseService.getPengungsiOnPengungsian('AXUj1TS3rnLlBuob6Ud2');
+  // list.forEach((element) => print(element['full_name']));
   runApp(const MyApp());
 }
 
