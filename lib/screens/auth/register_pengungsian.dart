@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/screens/petugas/petugas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../firebase/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
