@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

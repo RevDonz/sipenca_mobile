@@ -75,9 +75,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: "Poppins"),
-      // home: const MyHomePage(),
+      home:  LoginPage(),
       routes: <String, WidgetBuilder>{
-        '/': (context) => const MyHomePage(),
+        '/warga': (context) => const MyHomePage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/petugas': (context) => const ListPengungsi(),

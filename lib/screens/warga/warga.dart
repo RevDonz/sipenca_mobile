@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/keluarga.dart';
@@ -12,8 +13,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  List<Map<String, dynamic>> DataPengungsian = [];
   Map<String, dynamic>? profileUser;
+  int _selectedIndex = 0;
+  bool isLoading = true;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -23,9 +26,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void getProfile() async {
     Map<String, dynamic>? userData =
-        await DatabaseService.getDetailUsers("3ZU77FNJfUwfqoJeo0B4");
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
     setState(() {
       profileUser = userData;
+      isLoading = false;
+    });
+  }
+
+  void getListPengungsian() async {
+    List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
+
+    setState(() {
+      DataPengungsian = list;
+      isLoading = false;
     });
   }
 
@@ -33,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     getProfile();
+    getListPengungsian();
   }
 
   static const TextStyle optionStyle =
@@ -41,14 +55,18 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      HomePage(profile: profileUser),
+      HomePage(listPengungsian: DataPengungsian, profile: profileUser),
       // HomePage(),
       KeluargaPage(),
       ProfilePage(profileWarga: profileUser),
     ];
-    
+
     return Scaffold(
-        body: Center(child: widgetOptions.elementAt(_selectedIndex)),
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Center(child: widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           elevation: 0,
