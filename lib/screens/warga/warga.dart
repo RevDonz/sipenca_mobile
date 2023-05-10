@@ -16,6 +16,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> DataPengungsian = [];
   Map<String, dynamic>? profileUser;
   int _selectedIndex = 0;
+  bool isLoading = true;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
     setState(() {
       profileUser = userData;
+      isLoading = false;
     });
   }
 
@@ -36,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       DataPengungsian = list;
+      isLoading = false;
     });
   }
 
@@ -51,17 +54,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final dynamic data = ModalRoute.of(context)!.settings.arguments;
-
     List<Widget> widgetOptions = <Widget>[
-      HomePage(listPengungsian: DataPengungsian, profile: data),
+      HomePage(listPengungsian: DataPengungsian, profile: profileUser),
       // HomePage(),
       KeluargaPage(),
-      ProfilePage(profileWarga: data),
+      ProfilePage(profileWarga: profileUser),
     ];
 
     return Scaffold(
-        body: Center(child: widgetOptions.elementAt(_selectedIndex)),
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Center(child: widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           elevation: 0,

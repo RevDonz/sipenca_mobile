@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   // print(user);
                   if (user!['role'] == 'warga') {
-                    Navigator.pushNamed(context, "/warga", arguments: user);
+                    Navigator.pushNamed(context, "/warga");
                   } else if (user['role'] == 'admin') {
                     Navigator.pushNamed(context, "/petugas");
                   }
