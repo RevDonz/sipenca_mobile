@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
-import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -168,16 +167,6 @@ class _RegisterState extends State<RegisterPage> {
                                                 await prefs.setString('email',
                                                     emailController.text);
 
-                                                // final message =
-                                                //     await DatabaseService()
-                                                //         .addAkun(
-                                                //             email:
-                                                //                 emailController
-                                                //                     .text,
-                                                //             role: selectedRole,
-                                                //             password:
-                                                //                 passwordController
-                                                //                     .text);
                                                 String email =
                                                     emailController.text.trim();
                                                 String password =
@@ -204,10 +193,9 @@ class _RegisterState extends State<RegisterPage> {
                                     String email = emailController.text.trim();
                                     String password =
                                         passwordController.text.trim();
-                                    
-                                    
+
                                     await AuthService.registerAccount(
-                                        email, password, selectedRole);
+                                        email, password, 'warga');
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
