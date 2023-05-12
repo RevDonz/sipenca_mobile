@@ -162,8 +162,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Center(
           child: SingleChildScrollView(
               child: Container(
-            padding: EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
-            margin: EdgeInsets.all(20),
+            padding:
+                const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
+            margin: const EdgeInsets.all(20),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Row(
@@ -182,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ],
               ),
-              Padding(padding: EdgeInsets.only(top: 30)),
+              const Padding(padding: EdgeInsets.only(top: 30)),
               Column(children: [
                 SvgPicture.asset(
                   'assets/registerlogo.svg',
@@ -237,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text('Ingat Saya'),
                     ],
                   ),
-                  Container(
+                  SizedBox(
                       width: 700, // ukuran lebar button
                       height: 50,
                       // ukuran tinggi button
@@ -259,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       )),
-                  Padding(padding: EdgeInsets.only(top: 10)),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
