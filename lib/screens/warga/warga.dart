@@ -15,8 +15,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> DataPengungsian = [];
   Map<String, dynamic>? profileUser;
-  int _selectedIndex = 0;
   bool isLoading = true;
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,9 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
     getListPengungsian();
   }
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
@@ -63,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
         body: isLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : Center(child: widgetOptions.elementAt(_selectedIndex)),
