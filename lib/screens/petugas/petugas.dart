@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class ListPengungsi extends StatefulWidget {
   const ListPengungsi({super.key});
@@ -10,11 +10,21 @@ class ListPengungsi extends StatefulWidget {
 }
 
 class _ListPengungsiState extends State<ListPengungsi> {
-  List<Map<String, dynamic>> dataPengungsi = [
-    {"nama": "Rama", "member": 4, "alamat": "Kampung A", "jarak": 500},
-    {"nama": "Doni", "member": 2, "alamat": "Kampung B", "jarak": 1000},
-    {"nama": "Nopal", "member": 3, "alamat": "Kampung C", "jarak": 1500},
-  ];
+  List<Map<String, dynamic>> dataPengungsi = [];
+
+  void getListPengungsi() async {
+    List<Map<String, dynamic>> list =
+        await DatabaseService.getPengungsiOnPengungsian('AXUj1TS3rnLlBuob6Ud2');
+
+    setState(() {
+      dataPengungsi = list;
+    });
+  }
+  // List<Map<String, dynamic>> dataPengungsi = [
+  //   {"nama": "Rama", "member": 4, "alamat": "Kampung A", "jarak": 500},
+  //   {"nama": "Doni", "member": 2, "alamat": "Kampung B", "jarak": 1000},
+  //   {"nama": "Nopal", "member": 3, "alamat": "Kampung C", "jarak": 1500},
+  // ];
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -34,12 +44,13 @@ class _ListPengungsiState extends State<ListPengungsi> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getListPengungsi();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String? email = "";
-    () async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      email = prefs.getString('email');
-    };
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
@@ -63,7 +74,7 @@ class _ListPengungsiState extends State<ListPengungsi> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(children: [
-            AppBarSipenca(role: email as String),
+            const AppBarSipenca(role: "Petugas"),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [Text('Pengungsi yang datang')],
@@ -72,12 +83,12 @@ class _ListPengungsiState extends State<ListPengungsi> {
               shrinkWrap: true,
               itemCount: dataPengungsi.length,
               itemBuilder: (context, index) {
-                String jarak;
-                if (dataPengungsi[index]["jarak"] >= 1000) {
-                  jarak = "${dataPengungsi[index]["jarak"] / 1000} KM";
-                } else {
-                  jarak = "${dataPengungsi[index]["jarak"]} M";
-                }
+                // String jarak;
+                // if (dataPengungsi[index]["jarak"] >= 1000) {
+                //   jarak = "${dataPengungsi[index]["jarak"] / 1000} KM";
+                // } else {
+                //   jarak = "${dataPengungsi[index]["jarak"]} M";
+                // }
                 return GestureDetector(
                   onTap: () {},
                   child: Card(
@@ -96,9 +107,9 @@ class _ListPengungsiState extends State<ListPengungsi> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(dataPengungsi[index]['nama']),
-                                Text(jarak),
-                                Text("${dataPengungsi[index]['member']}orang"),
+                                Text(dataPengungsi[index]['full_name']),
+                                // Text(jarak),
+                                // Text("${dataPengungsi[index]['member']}orang"),
                               ],
                             ),
                             Padding(

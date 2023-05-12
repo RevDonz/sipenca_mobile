@@ -82,4 +82,23 @@ class DatabaseService {
 
     return listPengungsian;
   }
+
+  static Future<List<Map<String, dynamic>>> getPengungsiOnPengungsian(
+      String pengungsian) async {
+    List<Map<String, dynamic>> listPengungsi = [];
+
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('users').get();
+    snapshot.docs.forEach((element) {
+      if (element['reserve'] == pengungsian) {
+        listPengungsi.add(element.data());
+      }
+    });
+
+    return listPengungsi;
+  }
+
+  // static Future<bool> registerKeluarga(List<Map<String, dynamic>> keluarga) async {
+
+  // }
 }
