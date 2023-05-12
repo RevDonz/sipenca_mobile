@@ -204,8 +204,10 @@ class _RegisterState extends State<RegisterPage> {
                                     String email = emailController.text.trim();
                                     String password =
                                         passwordController.text.trim();
+                                    
+                                    
                                     await AuthService.registerAccount(
-                                        email, password);
+                                        email, password, selectedRole);
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
