@@ -65,8 +65,7 @@ class DatabaseService {
 
     if (querySnapshot.size > 0) {
       QueryDocumentSnapshot documentSnapshot = querySnapshot.docs[0];
-      String documentId = documentSnapshot.id;
-      return documentId;
+      return documentSnapshot.id;
     } else {
       return "";
     }
@@ -91,6 +90,7 @@ class DatabaseService {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('users').get();
     snapshot.docs.forEach((element) {
+      print(element['reserve']);
       if (element['reserve'] == pengungsian) {
         listPengungsi.add(element.data());
       }
