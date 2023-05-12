@@ -140,18 +140,38 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _signIn() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+
     User? user = await AuthService.signIn(
         _emailController.text, _passwordController.text);
     if (user != null) {
       String userId = AuthService.getCurrentUserID();
       Map<String, dynamic>? userData =
           await DatabaseService.getDetailUsers(userId);
+
+      // prefs.setString('ProfileUser', jsonEncode(userData));
       _showSuccessLogin(userData);
     } else {
       // User gagal login
       _showFailedLogin();
     }
   }
+
+  // void checkSession() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //   String? stringUser = prefs.getString('ProfileUser');
+  //   if (stringUser != "") {
+  //     Navigator.pushNamed(context, "/warga");
+  //   }
+  //   // Map<String, dynamic>? userData = jsonDecode(string_user!);
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   checkSession();
+  // }
 
   Widget build(BuildContext context) {
     return MaterialApp(

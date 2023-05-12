@@ -157,7 +157,7 @@ class _RegisterState extends State<RegisterPage> {
                                               child: const Text('Batal'),
                                             ),
                                             TextButton(
-                                              onPressed: () async {
+                                              onPressed: () {
                                                 // Lakukan pendaftaran petugas
                                                 // final SharedPreferences prefs =
                                                 //     await SharedPreferences
@@ -171,11 +171,15 @@ class _RegisterState extends State<RegisterPage> {
                                                 String password =
                                                     passwordController.text
                                                         .trim();
-                                                RegisterPengungsian(
-                                                    email: email,
-                                                    password: password);
-                                                Navigator.pushNamed(
-                                                    context, "/login");
+                                                Navigator.push(context,
+                                                    MaterialPageRoute<void>(
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return RegisterPengungsian(
+                                                        email: email,
+                                                        password: password);
+                                                  },
+                                                ));
                                               },
                                               child: const Text('Daftar'),
                                             ),
