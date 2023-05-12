@@ -148,11 +148,10 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           height: 50, // ukuran tinggi button
                           child: ElevatedButton(
                             onPressed: () async {
+                              Navigator.pushNamed(context, "/login");
                               addToFirebaseCollection();
                               await AuthService.registerAccount(
                                   widget.email, widget.password, "petugas");
-
-                              Navigator.pushNamed(context, "/petugas");
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
