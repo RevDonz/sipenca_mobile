@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
@@ -12,22 +13,22 @@ class ListPengungsi extends StatefulWidget {
 
 class _ListPengungsiState extends State<ListPengungsi> {
   Map<String, dynamic>? user;
-  // List<Map<String, dynamic>> dataPengungsi = [];
+  List<Map<String, dynamic>> dataPengungsi = [];
 
-  List<Map<String, dynamic>> dataPengungsi = [
-    {
-      "alamat": "Bandung",
-      "email": "aprilio842@gmail.com",
-      "full_name": "Reva Doni Aprilio",
-      "jenis_kelamin": "Laki-laki",
-      "nik": "320xxx",
-      "no_hp": "089xxx",
-      "occupied": "",
-      "reserve": "",
-      "role": "warga",
-      "tgl_lahir": "08-04-2002"
-    }
-  ];
+  // List<Map<String, dynamic>> dataPengungsi = [
+  //   {
+  //     "alamat": "Bandung",
+  //     "email": "aprilio842@gmail.com",
+  //     "full_name": "Reva Doni Aprilio",
+  //     "jenis_kelamin": "Laki-laki",
+  //     "nik": "320xxx",
+  //     "no_hp": "089xxx",
+  //     "occupied": "",
+  //     "reserve": "",
+  //     "role": "warga",
+  //     "tgl_lahir": "08-04-2002"
+  //   }
+  // ];
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -60,10 +61,18 @@ class _ListPengungsiState extends State<ListPengungsi> {
   }
 
   void getListPengungsi() async {
-    List<Map<String, dynamic>> list =
-        await DatabaseService.getPengungsiOnPengungsian(user?['pengungsian']);
+    List<Map<String, dynamic>> list = [];
+    QuerySnapshot<Map<String, dynamic>> snap = await FirebaseFirestore.instance
+        .collection('users')
+        .where('reserve', isEqualTo: user?['pengungsian'])
+        .get();
+    snap.docs.forEach((element) {
+      list.add(element.data());
+    });
+    // List<Map<String, dynamic>> list =
+    //     await DatabaseService.getPengungsiOnPengungsian(user?['pengungsian']);
 
-    print(user?['pengungsian']);
+    // print(user?['pengungsian']);
     setState(() {
       dataPengungsi = list;
     });
