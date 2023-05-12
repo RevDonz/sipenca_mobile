@@ -90,7 +90,7 @@ class DatabaseService {
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection('users').get();
     snapshot.docs.forEach((element) {
-      print(element['reserve']);
+      // print(element['reserve']);
       if (element['reserve'] == pengungsian) {
         listPengungsi.add(element.data());
       }

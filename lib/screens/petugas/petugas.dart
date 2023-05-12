@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
@@ -10,21 +11,23 @@ class ListPengungsi extends StatefulWidget {
 }
 
 class _ListPengungsiState extends State<ListPengungsi> {
-  List<Map<String, dynamic>> dataPengungsi = [];
+  Map<String, dynamic>? user;
+  // List<Map<String, dynamic>> dataPengungsi = [];
 
-  void getListPengungsi() async {
-    List<Map<String, dynamic>> list =
-        await DatabaseService.getPengungsiOnPengungsian('AXUj1TS3rnLlBuob6Ud2');
-
-    setState(() {
-      dataPengungsi = list;
-    });
-  }
-  // List<Map<String, dynamic>> dataPengungsi = [
-  //   {"nama": "Rama", "member": 4, "alamat": "Kampung A", "jarak": 500},
-  //   {"nama": "Doni", "member": 2, "alamat": "Kampung B", "jarak": 1000},
-  //   {"nama": "Nopal", "member": 3, "alamat": "Kampung C", "jarak": 1500},
-  // ];
+  List<Map<String, dynamic>> dataPengungsi = [
+    {
+      "alamat": "Bandung",
+      "email": "aprilio842@gmail.com",
+      "full_name": "Reva Doni Aprilio",
+      "jenis_kelamin": "Laki-laki",
+      "nik": "320xxx",
+      "no_hp": "089xxx",
+      "occupied": "",
+      "reserve": "",
+      "role": "warga",
+      "tgl_lahir": "08-04-2002"
+    }
+  ];
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -46,21 +49,41 @@ class _ListPengungsiState extends State<ListPengungsi> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        user =
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      });
+    });
     getListPengungsi();
+  }
+
+  void getListPengungsi() async {
+    List<Map<String, dynamic>> list =
+        await DatabaseService.getPengungsiOnPengungsian(user?['pengungsian']);
+
+    print(user?['pengungsian']);
+    setState(() {
+      dataPengungsi = list;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> data =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Warga',
+            icon: const Icon(Icons.person_outline),
+            label: data['full_name'] as String,
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Pengungsian',
           ),
@@ -74,7 +97,7 @@ class _ListPengungsiState extends State<ListPengungsi> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(children: [
-            const AppBarSipenca(role: "Petugas"),
+            const AppBarSipenca(role: 'Petugas'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [Text('Pengungsi yang datang')],
