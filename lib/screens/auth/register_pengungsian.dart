@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
-import 'package:sipenca_mobile/screens/petugas/petugas.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,14 +25,12 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
   final TextEditingController _alamatController = TextEditingController();
   final TextEditingController _kapasitasController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
-  final TextEditingController _kapasitasTerisi = TextEditingController();
 
   void addToFirebaseCollection() {
     String nama = _namaController.text;
     String alamat = _alamatController.text;
     String kapasitas = _kapasitasController.text;
     String deskripsi = _deskripsiController.text;
-    String kapasitasterisi = _kapasitasTerisi.text;
 
     firestore.collection('pengungsians').add({
       'nama': nama,
@@ -155,11 +152,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                               await AuthService.registerAccount(
                                   widget.email, widget.password, "petugas");
 
-                              Navigator.push(context, MaterialPageRoute<void>(
-                                builder: (BuildContext context) {
-                                  return const ListPengungsi();
-                                },
-                              ));
+                              Navigator.pushNamed(context, "/petugas");
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,

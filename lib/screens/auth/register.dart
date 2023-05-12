@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/screens/auth/register_pengungsian.dart';
 
@@ -160,27 +159,23 @@ class _RegisterState extends State<RegisterPage> {
                                             TextButton(
                                               onPressed: () async {
                                                 // Lakukan pendaftaran petugas
-                                                final SharedPreferences prefs =
-                                                    await SharedPreferences
-                                                        .getInstance();
+                                                // final SharedPreferences prefs =
+                                                //     await SharedPreferences
+                                                //         .getInstance();
 
-                                                await prefs.setString('email',
-                                                    emailController.text);
+                                                // await prefs.setString('email',
+                                                //     emailController.text);
 
                                                 String email =
                                                     emailController.text.trim();
                                                 String password =
                                                     passwordController.text
                                                         .trim();
-                                                Navigator.push(context,
-                                                    MaterialPageRoute<void>(
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return RegisterPengungsian(
-                                                        email: email,
-                                                        password: password);
-                                                  },
-                                                ));
+                                                RegisterPengungsian(
+                                                    email: email,
+                                                    password: password);
+                                                Navigator.pushNamed(
+                                                    context, "/login");
                                               },
                                               child: const Text('Daftar'),
                                             ),
@@ -190,6 +185,7 @@ class _RegisterState extends State<RegisterPage> {
                                     );
                                   }
                                 : () async {
+                                    Navigator.pushNamed(context, "/login");
                                     String email = emailController.text.trim();
                                     String password =
                                         passwordController.text.trim();

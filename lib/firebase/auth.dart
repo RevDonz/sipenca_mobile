@@ -54,8 +54,6 @@ class AuthService {
           'role': role,
           'tgl_lahir': ""
         });
-
-        
       } else if (role == "warga") {
         await FirebaseFirestore.instance
             .collection('users')
@@ -72,8 +70,6 @@ class AuthService {
           'role': role,
           'tgl_lahir': ""
         });
-
-        
       }
       // Simpan data pengguna ke koleksi "users" di Firestore
     } catch (e) {
