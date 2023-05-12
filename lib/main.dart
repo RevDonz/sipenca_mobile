@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/firebase_options.dart';
 import 'package:sipenca_mobile/screens/admin/admin.dart';
@@ -28,7 +32,8 @@ class _AkunState extends State<Akun> {
   List<Map<String, dynamic>> usersList = [];
 
   void getUserList() async {
-    List<Map<String, dynamic>> list = await DatabaseService.getAllUsers();
+    List<Map<String, dynamic>> list =
+        await DatabaseService.getPengungsiOnPengungsian('HJ9UI8nZnWCsToXiwtsz');
     setState(() {
       usersList = list;
     });
