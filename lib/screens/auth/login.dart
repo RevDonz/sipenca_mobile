@@ -57,8 +57,10 @@ class _LoginPageState extends State<LoginPage> {
                   // print(user);
                   if (user!['role'] == 'warga') {
                     Navigator.pushNamed(context, "/warga");
-                  } else if (user['role'] == 'admin') {
+                  } else if (user['role'] == 'petugas') {
                     Navigator.pushNamed(context, "/petugas");
+                  } else if (user['role'] == 'admin') {
+                    Navigator.pushNamed(context, "/admin");
                   }
                 },
                 style: TextButton.styleFrom(

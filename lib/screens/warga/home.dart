@@ -17,29 +17,6 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? UserProfile = {};
   bool isLoading = true;
 
-  // void getListPengungsian() async {
-  //   List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
-
-  //   setState(() {
-  //     DataPengungsian = list;
-  //     isLoading = false;
-  //   });
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getListPengungsian();
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

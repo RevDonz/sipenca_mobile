@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -17,7 +18,7 @@ class AuthService {
   }
 
   // Method untuk logout user
-  Future<void> signOut() async {
+  static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
 
@@ -27,16 +28,57 @@ class AuthService {
     return userID;
   }
 
-  static Future<UserCredential?> registerAccount(
-      String email, String password) async {
+  static Future<void> registerAccount(
+      String email, String password, String role) async {
     try {
-      UserCredential result = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      User? user = result.user;
-      return result;
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = userCredential.user;
+
+      if (role == "petugas") {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.uid)
+            .set({
+          'alamat': "",
+          'email': email,
+          'full_name': "",
+          'jenis_kelamin': "",
+          'nik': "",
+          'no_hp': "",
+          'password': password,
+          'pengungsian': "",
+          'role': role,
+          'tgl_lahir': ""
+        });
+
+        print('Registered user: ${user?.uid}');
+      } else if (role == "warga") {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.uid)
+            .set({
+          'alamat': "",
+          'email': email,
+          'full_name': "",
+          'jenis_kelamin': "",
+          'nik': "",
+          'no_hp': "",
+          'occupied': "",
+          'reserve': "",
+          'role': role,
+          'tgl_lahir': ""
+        });
+
+        print('Registered user: ${user?.uid}');
+      }
+      // Simpan data pengguna ke koleksi "users" di Firestore
     } catch (e) {
+      // Handle error jika terjadi kesalahan
       print(e.toString());
-      return null;
     }
   }
 }
