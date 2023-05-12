@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/screens/Auth/login.dart';
 
 class AppBarSipenca extends StatefulWidget {
@@ -60,15 +61,14 @@ class _AppBarSipencaState extends State<AppBarSipenca> {
                 iconSize: 30,
                 splashRadius: 25,
                 onPressed: () {
+                  AuthService.signOut();
                   Navigator.push(context, MaterialPageRoute<void>(
                     builder: (BuildContext context) {
                       return const LoginPage();
                     },
                   ));
                 },
-                icon: const Icon(
-                    // Icons.notifications_none_rounded,
-                    Icons.login),
+                icon: const Icon(Icons.login),
               ),
             ],
           )
