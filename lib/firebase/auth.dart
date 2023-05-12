@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
   // Method untuk login user
   static Future<User?> signIn(String email, String password) async {
     try {
@@ -32,20 +30,64 @@ class AuthService {
   }
 
   // Method untuk logout user
-  Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+  static Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 
-  static Future<UserCredential?> registerAccount(
-      String email, String password) async {
+  static String getCurrentUserID() {
+    final User? user = FirebaseAuth.instance.currentUser;
+    final String userID = user!.uid;
+    return userID;
+  }
+
+  static Future<void> registerAccount(
+      String email, String password, String role) async {
     try {
-      UserCredential result = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
-      User? user = result.user;
-      return result;
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = userCredential.user;
+
+      if (role == "petugas") {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.uid)
+            .set({
+          'alamat': "",
+          'email': email,
+          'full_name': "",
+          'jenis_kelamin': "",
+          'nik': "",
+          'no_hp': "",
+          'password': password,
+          'pengungsian': "",
+          'role': role,
+          'tgl_lahir': ""
+        });
+      } else if (role == "warga") {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.uid)
+            .set({
+          'alamat': "",
+          'email': email,
+          'full_name': "",
+          'jenis_kelamin': "",
+          'nik': "",
+          'no_hp': "",
+          'occupied': "",
+          'reserve': "",
+          'role': role,
+          'tgl_lahir': ""
+        });
+      }
+      // Simpan data pengguna ke koleksi "users" di Firestore
+
     } catch (e) {
+      // Handle error jika terjadi kesalahan
       print(e.toString());
-      return null;
     }
   }
 }

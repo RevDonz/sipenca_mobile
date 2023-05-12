@@ -1,28 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sipenca_mobile/screens/petugas/petugas.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
+
+final FirebaseFirestore firestore = FirebaseFirestore.instance;
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 class RegisterPengungsian extends StatefulWidget {
-  const RegisterPengungsian({super.key});
+  const RegisterPengungsian({
+    Key? key,
+    required this.email,
+    required this.password,
+  }) : super(key: key);
+  final String email;
+  final String password;
 
   @override
   State<RegisterPengungsian> createState() => _RegisterPengungsianState();
 }
 
 class _RegisterPengungsianState extends State<RegisterPengungsian> {
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _alamatController = TextEditingController();
+  final TextEditingController _kapasitasController = TextEditingController();
+  final TextEditingController _deskripsiController = TextEditingController();
+
+  void addToFirebaseCollection() {
+    String nama = _namaController.text;
+    String alamat = _alamatController.text;
+    String kapasitas = _kapasitasController.text;
+    String deskripsi = _deskripsiController.text;
+
+    firestore.collection('pengungsians').add({
+      'nama': nama,
+      'alamat': alamat,
+      'kapasitas_max': int.parse(kapasitas),
+      'kapasitas_terisi': int.parse('10'),
+      'deskripsi': deskripsi,
+      // tambahkan field dan nilai yang sesuai
+    }).then((value) {
+      print('Data berhasil ditambahkan ke Firebase');
+    }).catchError((error) {
+      print('Terjadi kesalahan: $error');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            body: SafeArea(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-                child: Container(
-              padding: const EdgeInsets.only(
-                  top: 10, right: 20, left: 20, bottom: 10),
-              margin: const EdgeInsets.all(20),
-              child: Column(
+              child: Container(
+                padding: const EdgeInsets.only(
+                    top: 10, right: 20, left: 20, bottom: 10),
+                margin: const EdgeInsets.all(20),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
@@ -44,53 +80,64 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                       ],
                     ),
                     const Padding(padding: EdgeInsets.only(top: 30)),
-                    Column(children: [
-                      SvgPicture.asset(
-                        'assets/registerlogo.svg',
-                        height: 180,
-                        width: 160,
-                      ),
-                    ]),
                     Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Padding(padding: EdgeInsets.only(top: 50)),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                labelText: 'Nama Pengungsian',
-                                labelStyle: const TextStyle(fontSize: 15)),
+                      children: [
+                        SvgPicture.asset(
+                          'assets/registerlogo.svg',
+                          height: 180,
+                          width: 160,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Padding(padding: EdgeInsets.only(top: 50)),
+                        TextFormField(
+                          controller: _namaController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            labelText: 'Nama Pengungsian',
+                            labelStyle: const TextStyle(fontSize: 15),
                           ),
-                          const Padding(padding: EdgeInsets.only(top: 20)),
-                          TextFormField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                labelText: 'Alamat Pengungsian',
-                                labelStyle: const TextStyle(fontSize: 15)),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 20)),
+                        TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          controller: _alamatController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            labelText: 'Alamat Pengungsian',
+                            labelStyle: const TextStyle(fontSize: 15),
                           ),
-                          const Padding(padding: EdgeInsets.only(top: 20)),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                labelText: 'Kapasitas Pengungsian',
-                                labelStyle: const TextStyle(fontSize: 15)),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 20)),
+                        TextFormField(
+                          controller: _kapasitasController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            labelText: 'Kapasitas Pengungsian',
+                            labelStyle: const TextStyle(fontSize: 15),
                           ),
-                          const Padding(padding: EdgeInsets.only(top: 20)),
-                          TextFormField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                labelText: 'Deskripsi Pengungsian',
-                                labelStyle: const TextStyle(fontSize: 15)),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 20)),
+                        TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          controller: _deskripsiController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            labelText: 'Deskripsi Pengungsian',
+                            labelStyle: const TextStyle(fontSize: 15),
                           ),
-                        ]),
+                        ),
+                      ],
+                    ),
                     const Padding(padding: EdgeInsets.only(top: 30)),
                     const SizedBox(height: 10.0),
                     Column(
@@ -100,19 +147,18 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           width: 700, // ukuran lebar button
                           height: 50, // ukuran tinggi button
                           child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute<void>(
-                                builder: (BuildContext context) {
-                                  return const ListPengungsi();
-                                },
-                              ));
+                            onPressed: () async {
+                              Navigator.pushNamed(context, "/login");
+                              addToFirebaseCollection();
+                              await AuthService.registerAccount(
+                                  widget.email, widget.password, "petugas");
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.indigoAccent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))
-                                //set warna background button
-                                ),
+                              backgroundColor: Colors.indigoAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                             child: const Text(
                               'Daftar',
                               style: TextStyle(
@@ -124,9 +170,13 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                         ),
                       ],
                     ),
-                  ]),
-            )),
+                  ],
+                ),
+              ),
+            ),
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

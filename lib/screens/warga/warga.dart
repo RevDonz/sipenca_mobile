@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/screens/warga/home.dart';
 import 'package:sipenca_mobile/screens/warga/keluarga.dart';
@@ -12,8 +13,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  List<Map<String, dynamic>> DataPengungsian = [];
   Map<String, dynamic>? profileUser;
+  bool isLoading = true;
+  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -23,32 +26,62 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void getProfile() async {
     Map<String, dynamic>? userData =
-        await DatabaseService.getDetailUsers("3ZU77FNJfUwfqoJeo0B4");
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
     setState(() {
       profileUser = userData;
+      isLoading = false;
     });
+  }
+
+  void getListPengungsian() async {
+    List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
+
+    setState(() {
+      DataPengungsian = list;
+      isLoading = false;
+    });
+  }
+
+  void checkProfile() async {
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
+    if (userData!['full_name'] == "" ||
+        userData['nik'] == "" ||
+        userData['no_hp'] == "" ||
+        userData['jenis_kelamin'] == "" ||
+        userData['tgl_lahir'] == "" ||
+        userData['alamat'] == "") {
+      setState(() {
+        _selectedIndex = 2;
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
     getProfile();
+    getListPengungsian();
+    checkProfile();
   }
-
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      HomePage(profile: profileUser),
+      HomePage(listPengungsian: DataPengungsian, profile: profileUser),
       // HomePage(),
       KeluargaPage(),
       ProfilePage(profileWarga: profileUser),
     ];
-    
+
     return Scaffold(
-        body: Center(child: widgetOptions.elementAt(_selectedIndex)),
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Center(child: widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
           elevation: 0,
