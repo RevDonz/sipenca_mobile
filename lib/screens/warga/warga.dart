@@ -27,6 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void getProfile() async {
     Map<String, dynamic>? userData =
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
     setState(() {
       profileUser = userData;
       isLoading = false;
@@ -42,11 +43,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void checkProfile() async {
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
+    if (userData!['full_name'] == "" ||
+        userData['nik'] == "" ||
+        userData['no_hp'] == "" ||
+        userData['jenis_kelamin'] == "" ||
+        userData['tgl_lahir'] == "" ||
+        userData['alamat'] == "") {
+      setState(() {
+        _selectedIndex = 2;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getProfile();
     getListPengungsian();
+    checkProfile();
   }
 
   @override

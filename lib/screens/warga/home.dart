@@ -147,12 +147,12 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text(
-                                "150M",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.blueGrey),
-                              )
+                              // const Text(
+                              //   "150M",
+                              //   style: TextStyle(
+                              //       fontWeight: FontWeight.w600,
+                              //       color: Colors.blueGrey),
+                              // )
                             ]),
                           ],
                         ),
