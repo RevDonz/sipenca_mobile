@@ -98,4 +98,8 @@ class DatabaseService {
 
     return listPengungsi;
   }
+
+  // static Future<bool> registerKeluarga(List<Map<String, dynamic>> keluarga) async {
+
+  // }
 }
