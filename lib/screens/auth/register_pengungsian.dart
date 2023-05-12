@@ -105,8 +105,8 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           child: ElevatedButton(
                             onPressed: () async {
                               await AuthService.registerAccount(
-                                        widget.email, widget.password);
-                                        
+                                  widget.email, widget.password, "warga");
+
                               Navigator.push(context, MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
                                   return const ListPengungsi();
