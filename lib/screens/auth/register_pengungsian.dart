@@ -151,8 +151,9 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           height: 50, // ukuran tinggi button
                           child: ElevatedButton(
                             onPressed: () async {
+                              addToFirebaseCollection();
                               await AuthService.registerAccount(
-                                  widget.email, widget.password, "warga");
+                                  widget.email, widget.password, "petugas");
 
                               Navigator.push(context, MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
