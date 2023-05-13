@@ -80,19 +80,19 @@ class _ListPengungsiState extends State<ListPengungsi> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    // final Map<String, dynamic> data =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.person_outline),
-            label: data['full_name'] as String,
+            icon: Icon(Icons.person_outline),
+            label: 'Petugas',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Pengungsian',
           ),
@@ -106,7 +106,7 @@ class _ListPengungsiState extends State<ListPengungsi> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(children: [
-            const AppBarSipenca(role: 'Petugas'),
+            AppBarSipenca(role: user?['full_name'] as String),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [Text('Pengungsi yang datang')],
