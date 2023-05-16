@@ -72,6 +72,8 @@ class DatabaseService {
     }
   }
 
+  
+
   static Future<String> getDocumentIdFromQuery(
       String collection, String field, String value) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -93,16 +95,6 @@ class DatabaseService {
     List<Map<String, dynamic>> listPetugas = await getAllPetugas();
     Map<String, dynamic> combinedData;
 
-    // QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-    //     .instance
-    //     .collection('pengungsians')
-    //     .where('verified', isEqualTo: false)
-    //     .get();
-
-    // snapshot.docs.forEach((element) {
-    //   listPengungsian.add(element.data());
-    // });
-
     for (var element in listPetugas) {
       if (element['pengungsian'] != null && element['pengungsian'] != '') {
         DocumentSnapshot<Map<String, dynamic>> tes = await FirebaseFirestore
@@ -118,6 +110,25 @@ class DatabaseService {
         listPengungsian.add(combinedData);
       }
     }
+    List<Map<String, dynamic>> newPengungsian = listPengungsian
+        .where((element) => element['rescueData']['verified'] == false)
+        .toList();
+    // print(newPengungsian);
+
+    return newPengungsian;
+  }
+
+  static Future<List<Map<String, dynamic>>> getVerifiedPengungsian() async {
+    List<Map<String, dynamic>> listPengungsian = [];
+
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('pengungsians')
+        .where('verified', isEqualTo: true)
+        .get();
+    snapshot.docs.forEach((element) {
+      listPengungsian.add(element.data());
+    });
 
     return listPengungsian;
   }
@@ -162,5 +173,18 @@ class DatabaseService {
     });
 
     return listPengungsi;
+  }
+
+  static Future<void> updatePengungsian(
+      String documentId, Map<String, dynamic>? data) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("pengungsians")
+          .doc(documentId)
+          .update(data!);
+    } catch (e) {
+      // Handle error jika terjadi kesalahan
+      print(e.toString());
+    }
   }
 }
