@@ -143,6 +143,7 @@ class _AdminPageState extends State<AdminPage> {
                                                 ['pengungsian'],
                                             listPengungsian[index]
                                                 ['rescueData']);
+                                                getListPengungsian();
                                       },
                                       backgroundColor: Colors.indigoAccent,
                                       elevation: 5,
