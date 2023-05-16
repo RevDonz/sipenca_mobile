@@ -30,6 +30,22 @@ class DatabaseService {
     return listUser;
   }
 
+  static Future<List<Map<String, dynamic>>> getAllPetugas() async {
+    List<Map<String, dynamic>> listPetugas = [];
+
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .where('role', isEqualTo: 'petugas')
+        .get();
+
+    snapshot.docs.forEach((element) {
+      listPetugas.add(element.data());
+    });
+
+    return listPetugas;
+  }
+
   static Future<Map<String, dynamic>?> getDetailUsers(String documentId) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
         .instance
@@ -71,6 +87,41 @@ class DatabaseService {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> getUnverifPengungsian() async {
+    List<Map<String, dynamic>> listPengungsian = [];
+
+    List<Map<String, dynamic>> listPetugas = await getAllPetugas();
+    Map<String, dynamic> combinedData;
+
+    // QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+    //     .instance
+    //     .collection('pengungsians')
+    //     .where('verified', isEqualTo: false)
+    //     .get();
+
+    // snapshot.docs.forEach((element) {
+    //   listPengungsian.add(element.data());
+    // });
+
+    for (var element in listPetugas) {
+      if (element['pengungsian'] != null && element['pengungsian'] != '') {
+        DocumentSnapshot<Map<String, dynamic>> tes = await FirebaseFirestore
+            .instance
+            .collection('pengungsians')
+            .doc(element['pengungsian'])
+            .get();
+
+        combinedData = {
+          ...element,
+          'rescueData': tes.data(),
+        };
+        listPengungsian.add(combinedData);
+      }
+    }
+
+    return listPengungsian;
+  }
+
   static Future<List<Map<String, dynamic>>> getAllPengungsian() async {
     List<Map<String, dynamic>> listPengungsian = [];
 
@@ -81,6 +132,21 @@ class DatabaseService {
     });
 
     return listPengungsian;
+  }
+
+  static Future<Map<String, dynamic>?> getPengungsianById(
+      String documentId) async {
+    List<Map<String, dynamic>> listPengungsian = [];
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('pengungsians')
+        .doc(documentId)
+        .get();
+
+    Map<String, dynamic>? res = snapshot.data();
+
+    return res;
   }
 
   static Future<List<Map<String, dynamic>>> getPengungsiOnPengungsian(
@@ -97,8 +163,4 @@ class DatabaseService {
 
     return listPengungsi;
   }
-
-  // static Future<bool> registerKeluarga(List<Map<String, dynamic>> keluarga) async {
-
-  // }
 }

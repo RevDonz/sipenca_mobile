@@ -26,25 +26,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
   final TextEditingController _kapasitasController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
 
-  void addToFirebaseCollection() {
-    String nama = _namaController.text;
-    String alamat = _alamatController.text;
-    String kapasitas = _kapasitasController.text;
-    String deskripsi = _deskripsiController.text;
-
-    firestore.collection('pengungsians').add({
-      'nama': nama,
-      'alamat': alamat,
-      'kapasitas_max': int.parse(kapasitas),
-      'kapasitas_terisi': int.parse('10'),
-      'deskripsi': deskripsi,
-      // tambahkan field dan nilai yang sesuai
-    }).then((value) {
-      print('Data berhasil ditambahkan ke Firebase');
-    }).catchError((error) {
-      print('Terjadi kesalahan: $error');
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +131,30 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           child: ElevatedButton(
                             onPressed: () async {
                               Navigator.pushNamed(context, "/login");
-                              addToFirebaseCollection();
-                              await AuthService.registerAccount(
-                                  widget.email, widget.password, "petugas");
+                              String nama = _namaController.text;
+                              String alamat = _alamatController.text;
+                              String kapasitas = _kapasitasController.text;
+                              String deskripsi = _deskripsiController.text;
+
+                              firestore.collection('pengungsians').add({
+                                'nama': nama,
+                                'alamat': alamat,
+                                'kapasitas_max': int.parse(kapasitas),
+                                'kapasitas_terisi': int.parse('10'),
+                                'deskripsi': deskripsi,
+                                'verified': false,
+                                // tambahkan field dan nilai yang sesuai
+                              }).then((value) async {
+                                await AuthService.registerAccount(
+                                  widget.email,
+                                  widget.password,
+                                  "petugas",
+                                  value.id,
+                                );
+                                print('Data berhasil ditambahkan ke Firebase');
+                              }).catchError((error) {
+                                print('Terjadi kesalahan: $error');
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
