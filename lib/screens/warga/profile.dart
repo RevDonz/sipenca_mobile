@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
+import 'package:sipenca_mobile/components/appBar.dart';
 
 class ProfilePage extends StatefulWidget {
   final Map<String, dynamic>? profileWarga;
@@ -40,6 +41,9 @@ class ProfilePageState extends State<ProfilePage> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
+            const SizedBox(
+              height: 20,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: Column(
