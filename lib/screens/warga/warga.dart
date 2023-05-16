@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void getListPengungsian() async {
-    List<Map<String, dynamic>> list = await DatabaseService.getAllPengungsian();
+    List<Map<String, dynamic>> list = await DatabaseService.getVerifiedPengungsian();
 
     setState(() {
       DataPengungsian = list;

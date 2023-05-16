@@ -41,7 +41,7 @@ class AuthService {
   }
 
   static Future<void> registerAccount(
-      String email, String password, String role) async {
+      String email, String password, String role, String idPengungsian) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -62,7 +62,7 @@ class AuthService {
           'nik': "",
           'no_hp': "",
           'password': password,
-          'pengungsian': "",
+          'pengungsian': idPengungsian,
           'role': role,
           'tgl_lahir': ""
         });
@@ -84,7 +84,6 @@ class AuthService {
         });
       }
       // Simpan data pengguna ke koleksi "users" di Firestore
-
     } catch (e) {
       // Handle error jika terjadi kesalahan
       print(e.toString());

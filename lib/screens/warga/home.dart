@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
@@ -16,7 +18,6 @@ class _HomePageState extends State<HomePage> {
   // List<Map<String, dynamic>> DataPengungsian = [];
   Map<String, dynamic>? UserProfile = {};
   bool isLoading = true;
-
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +204,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 child: Image.network(
-                  "https://picsum.photos/500/300",
+                  "https://picsum.photos/id/${Random().nextInt(100)}/500/300",
                 ),
               ),
               const SizedBox(height: 20),
