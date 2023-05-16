@@ -15,7 +15,8 @@ import 'package:sipenca_mobile/screens/warga/warga.dart';
 
 void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // runApp(MaterialApp(debugShowCheckedModeBanner: false, home: AdminPage()));
+  // runApp(const MaterialApp(
+  //     debugShowCheckedModeBanner: false, home: ListPengungsi()));
   runApp(const MyApp());
 }
 
