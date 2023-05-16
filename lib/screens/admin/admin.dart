@@ -87,42 +87,71 @@ class _AdminPageState extends State<AdminPage> {
                               child: Container(
                                 padding: const EdgeInsets.all(20),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      height: 75,
-                                      width: 100,
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                        child: Image.network(
-                                          "https://picsum.photos/id/${index + 1 * Random().nextInt(100)}/100/75",
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Wrap(
-                                      direction: Axis.vertical,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      alignment: WrapAlignment.spaceEvenly,
+                                    Row(
                                       children: [
-                                        Text(
-                                            listPengungsian[index]['rescueData']
-                                                ['nama'],
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                        Text(listPengungsian[index]
-                                            ['rescueData']['alamat']),
-                                        Text(listPengungsian[index]
-                                                ['rescueData']['verified']
-                                            ? 'true'
-                                            : 'false'),
-                                        Text(listPengungsian[index]['email']),
+                                        SizedBox(
+                                          height: 75,
+                                          width: 100,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20)),
+                                            child: Image.network(
+                                              "https://picsum.photos/id/${index + 1 * Random().nextInt(100)}/100/75",
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Wrap(
+                                          direction: Axis.vertical,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.start,
+                                          alignment: WrapAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                                listPengungsian[index]
+                                                    ['rescueData']['nama'],
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text(listPengungsian[index]
+                                                ['rescueData']['alamat']),
+                                            Text(listPengungsian[index]
+                                                    ['rescueData']['verified']
+                                                ? 'true'
+                                                : 'false'),
+                                            Text(listPengungsian[index]
+                                                ['email']),
+                                          ],
+                                        ),
                                       ],
-                                    )
+                                    ),
+                                    FloatingActionButton(
+                                      heroTag: "btnPengungsian$index",
+                                      onPressed: () {
+                                        listPengungsian[index]['rescueData']
+                                            ['verified'] = true;
+
+                                        DatabaseService.updatePengungsian(
+                                            listPengungsian[index]
+                                                ['pengungsian'],
+                                            listPengungsian[index]
+                                                ['rescueData']);
+                                                getListPengungsian();
+                                      },
+                                      backgroundColor: Colors.indigoAccent,
+                                      elevation: 5,
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(12))),
+                                      child: const Icon(Icons.check),
+                                    ),
                                   ],
                                 ),
                               ),
