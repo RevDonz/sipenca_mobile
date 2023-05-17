@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
-
-import '../../firebase/pengungsian.dart';
+import 'package:sipenca_mobile/screens/warga/profile.dart';
+import 'package:sipenca_mobile/screens/petugas/accWarga.dart';
 
 class ListPengungsi extends StatefulWidget {
   const ListPengungsi({super.key});
@@ -13,51 +14,56 @@ class ListPengungsi extends StatefulWidget {
 }
 
 class _ListPengungsiState extends State<ListPengungsi> {
-  // Map<String, dynamic>? user;
   List<Map<String, dynamic>> dataPengungsi = [];
-  Map<String, dynamic>? profileUser;
-  bool isLoading = true;
-
-  // List<Map<String, dynamic>> dataPengungsi = [
-  //   {
-  //     "alamat": "Bandung",
-  //     "email": "aprilio842@gmail.com",
-  //     "full_name": "Reva Doni Aprilio",
-  //     "jenis_kelamin": "Laki-laki",
-  //     "nik": "320xxx",
-  //     "no_hp": "089xxx",
-  //     "occupied": "",
-  //     "reserve": "",
-  //     "role": "warga",
-  //     "tgl_lahir": "08-04-2002"
-  //   }
-  // ];
-
+  Map<String, dynamic>? profilePetugas;
+  Map<String, dynamic>? user;
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Scaffold(),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-    Scaffold(),
-  ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void getListPengungsi() async {
+  //   List<Map<String, dynamic>> list =
+  //       await DatabaseService.getPengungsiOnPengungsian('AXUj1TS3rnLlBuob6Ud2');
+
+  //   setState(() {
+  //     dataPengungsi = list;
+  //   });
+  // }
 
   void getProfile() async {
     Map<String, dynamic>? userData =
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
 
     setState(() {
-      profileUser = userData;
-      isLoading = false;
+      profilePetugas = userData;
+    });
+  }
+
+  void checkProfile() async {
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
+    if (userData!['full_name'] == "" ||
+        userData['nik'] == "" ||
+        userData['no_hp'] == "" ||
+        userData['jenis_kelamin'] == "" ||
+        userData['tgl_lahir'] == "" ||
+        userData['alamat'] == "") {
+      setState(() {
+        _selectedIndex = 2;
+      });
+    }
+  }
+  // List<Map<String, dynamic>> dataPengungsi = [
+  //   {"nama": "Rama", "member": 4, "alamat": "Kampung A", "jarak": 500},
+  //   {"nama": "Doni", "member": 2, "alamat": "Kampung B", "jarak": 1000},
+  //   {"nama": "Nopal", "member": 3, "alamat": "Kampung C", "jarak": 1500},
+  // ];
+
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
     });
   }
 
@@ -97,95 +103,38 @@ class _ListPengungsiState extends State<ListPengungsi> {
 
   @override
   Widget build(BuildContext context) {
-    // final Map<String, dynamic> data =
-    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    List<Widget> widgetOptions = <Widget>[
+      accWarga(listWarga: dataPengungsi),
+      const Text(
+        'Index 2: School',
+        style: optionStyle,
+      ),
+      ProfilePage(profileWarga: profilePetugas),
+    ];
 
     return Scaffold(
+      body: Center(child: widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Petugas',
+            icon: const Icon(Icons.person_outline),
+            label: profilePetugas!['full_name'] as String,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Pengungsian',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.indigoAccent,
         onTap: _onItemTapped,
       ),
-      body: SafeArea(
-          child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(children: [
-            AppBarSipenca(role: profileUser?['pengungsian']),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [Text('Pengungsi yang datang')],
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: dataPengungsi.length,
-              itemBuilder: (context, index) {
-                // String jarak;
-                // if (dataPengungsi[index]["jarak"] >= 1000) {
-                //   jarak = "${dataPengungsi[index]["jarak"] / 1000} KM";
-                // } else {
-                //   jarak = "${dataPengungsi[index]["jarak"]} M";
-                // }
-                return GestureDetector(
-                  onTap: () {},
-                  child: Card(
-                    elevation: 0,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16))),
-                    child: InkWell(
-                      hoverColor: Colors.transparent,
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(dataPengungsi[index]['full_name']),
-                                // Text(jarak),
-                                // Text("${dataPengungsi[index]['member']}orang"),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16),
-                              child: Text(dataPengungsi[index]['alamat']),
-                            ),
-                            FloatingActionButton(
-                              heroTag: "btnPengungsi$index",
-                              onPressed: () {},
-                              backgroundColor: Colors.indigoAccent,
-                              elevation: 5,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12))),
-                              child: const Icon(Icons.input),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            )
-          ]),
-        ),
-      )),
     );
   }
 }
