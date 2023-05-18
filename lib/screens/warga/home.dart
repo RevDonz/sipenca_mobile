@@ -116,8 +116,8 @@ class _HomePageState extends State<HomePage> {
                                           UserProfile = widget.profile;
                                         });
 
-                                        UserProfile!['reserve'] = widget
-                                            .listPengungsian[index]['nama'];
+                                        UserProfile!['reserve'] =
+                                            widget.listPengungsian[index]['id'];
 
                                         String userId = await DatabaseService
                                             .getDocumentIdFromQuery(
@@ -129,19 +129,25 @@ class _HomePageState extends State<HomePage> {
                                             userId, UserProfile);
                                       }
                                     : () async {},
-                                backgroundColor:
-                                    widget.profile!['reserve'] == "" ||
-                                            widget.profile!['reserve'] ==
-                                                widget.listPengungsian[index]
-                                                    ['nama']
-                                        ? Colors.indigoAccent
-                                        : Colors.grey,
+                                backgroundColor: widget.profile!['reserve'] ==
+                                            widget.listPengungsian[index]
+                                                ['id'] ||
+                                        widget.profile!['occupied'] ==
+                                            widget.listPengungsian[index]
+                                                ['id'] ||
+                                        (widget.profile!['reserve'] == '' &&
+                                            widget.profile!['occupied'] == '')
+                                    ? Colors.indigoAccent
+                                    : Colors.grey,
                                 elevation: 5,
                                 shape: const RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(12))),
                                 child: widget.profile!['reserve'] ==
-                                        widget.listPengungsian[index]['nama']
+                                            widget.listPengungsian[index]
+                                                ['id'] ||
+                                        widget.profile!['occupied'] ==
+                                            widget.listPengungsian[index]['id']
                                     ? const Icon(Icons.hourglass_bottom)
                                     : const Icon(Icons.input),
                               ),
@@ -229,9 +235,8 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                         iconSize: 30,
                         splashRadius: 25,
                         onPressed: () {},
-                        icon: widget.data["nama"] != "" &&
-                                widget.data['nama'] ==
-                                    widget.profile!['reserve']
+                        icon: widget.data["id"] != "" &&
+                                widget.data['id'] == widget.profile!['reserve']
                             ? const Icon(
                                 // Icons.notifications_none_rounded,
                                 Icons.home,

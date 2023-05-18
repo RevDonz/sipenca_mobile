@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:sipenca_mobile/screens/petugas/detail_pengungsian.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
 import 'package:sipenca_mobile/screens/petugas/accWarga.dart';
 
@@ -18,15 +18,6 @@ class _ListPengungsiState extends State<ListPengungsi> {
   Map<String, dynamic>? profilePetugas;
   Map<String, dynamic>? user;
   int _selectedIndex = 0;
-
-  // void getListPengungsi() async {
-  //   List<Map<String, dynamic>> list =
-  //       await DatabaseService.getPengungsiOnPengungsian('AXUj1TS3rnLlBuob6Ud2');
-
-  //   setState(() {
-  //     dataPengungsi = list;
-  //   });
-  // }
 
   void getProfile() async {
     Map<String, dynamic>? userData =
@@ -69,19 +60,16 @@ class _ListPengungsiState extends State<ListPengungsi> {
 
   void getListPengungsi() async {
     List<Map<String, dynamic>> list = [];
-    QuerySnapshot<Map<String, dynamic>> snap = await FirebaseFirestore.instance
-        .collection('users')
-        .where('reserve', isEqualTo: 'HJ9UI8nZnWCsToXiwtsz')
-        .get();
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await FirebaseFirestore.instance.collection('users').get();
 
     snap.docs.forEach((element) {
-      list.add(element.data());
+      if (element.data()['reserve'] == profilePetugas!['pengungsian']) {
+        Map<String, dynamic> data = element.data();
+        data['id'] = element.id;
+        list.add(data);
+      }
     });
-
-    // List<Map<String, dynamic>> list =
-    //     await DatabaseService.getPengungsiOnPengungsian(user?['pengungsian']);
-
-    // print(user?['pengungsian']);
     setState(() {
       dataPengungsi = list;
     });
@@ -90,13 +78,6 @@ class _ListPengungsiState extends State<ListPengungsi> {
   @override
   void initState() {
     super.initState();
-
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   setState(() {
-    //     user =
-    //         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    //   });
-    // });
     getProfile();
     getListPengungsi();
   }
@@ -104,11 +85,8 @@ class _ListPengungsiState extends State<ListPengungsi> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      accWarga(listWarga: dataPengungsi),
-      const Text(
-        'Index 2: School',
-        style: optionStyle,
-      ),
+      accWarga(),
+      DetailPengungsianPetugas(),
       ProfilePage(profileWarga: profilePetugas),
     ];
 
@@ -120,14 +98,14 @@ class _ListPengungsiState extends State<ListPengungsi> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: const Icon(Icons.person_outline),
-            label: profilePetugas!['full_name'] as String,
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Pengungsian',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
+            icon: Icon(Icons.home_outlined),
             label: 'Profile',
           ),
         ],

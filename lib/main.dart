@@ -32,19 +32,19 @@ class Akun extends StatefulWidget {
 class _AkunState extends State<Akun> {
   List<Map<String, dynamic>> usersList = [];
 
-  void getUserList() async {
-    List<Map<String, dynamic>> list =
-        await DatabaseService.getPengungsiOnPengungsian('HJ9UI8nZnWCsToXiwtsz');
-    setState(() {
-      usersList = list;
-    });
-  }
+  // void getUserList() async {
+  //   List<Map<String, dynamic>> list =
+  //       await DatabaseService.getPengungsiOnPengungsian('HJ9UI8nZnWCsToXiwtsz');
+  //   setState(() {
+  //     usersList = list;
+  //   });
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    getUserList();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserList();
+  // }
 
   Widget build(BuildContext context) {
     return Scaffold(

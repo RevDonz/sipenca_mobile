@@ -72,8 +72,6 @@ class DatabaseService {
     }
   }
 
-  
-
   static Future<String> getDocumentIdFromQuery(
       String collection, String field, String value) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -127,7 +125,9 @@ class DatabaseService {
         .where('verified', isEqualTo: true)
         .get();
     snapshot.docs.forEach((element) {
-      listPengungsian.add(element.data());
+      Map<String, dynamic> data = element.data();
+      data['id'] = element.id;
+      listPengungsian.add(data);
     });
 
     return listPengungsian;

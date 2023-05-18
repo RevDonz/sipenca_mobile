@@ -1,19 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sipenca_mobile/components/appBar.dart';
-import 'package:sipenca_mobile/firebase/pengungsian.dart';
-import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 
-class accWarga extends StatefulWidget {
-  const accWarga({super.key});
+import '../../components/appBar.dart';
+import '../../firebase/auth.dart';
+import '../../firebase/pengungsian.dart';
+import '../warga/profile.dart';
+import 'accWarga.dart';
+
+class DetailPengungsianPetugas extends StatefulWidget {
+  const DetailPengungsianPetugas({super.key});
 
   @override
-  State<accWarga> createState() => _accWargaState();
+  State<DetailPengungsianPetugas> createState() => _DetailPengungsianState();
 }
 
-class _accWargaState extends State<accWarga> {
+class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
   List<Map<String, dynamic>> dataPengungsi = [];
   Map<String, dynamic>? profilePetugas;
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   void getProfile() async {
     Map<String, dynamic>? userData =
@@ -30,7 +42,7 @@ class _accWargaState extends State<accWarga> {
         await FirebaseFirestore.instance.collection('users').get();
 
     snap.docs.forEach((element) {
-      if (element.data()['reserve'] == profilePetugas!['pengungsian']) {
+      if (element.data()['occupied'] == profilePetugas!['pengungsian']) {
         Map<String, dynamic> data = element.data();
         data['id'] = element.id;
         list.add(data);
@@ -50,6 +62,12 @@ class _accWargaState extends State<accWarga> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> widgetOptions = <Widget>[
+      const accWarga(),
+      const DetailPengungsianPetugas(),
+      ProfilePage(profileWarga: profilePetugas),
+    ];
+
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
@@ -59,7 +77,7 @@ class _accWargaState extends State<accWarga> {
             const AppBarSipenca(role: "Petugas"),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [Text('Pengungsi yang datang')],
+              children: const [Text('Pengungsi ditampung')],
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -98,28 +116,29 @@ class _accWargaState extends State<accWarga> {
                               padding: const EdgeInsets.only(left: 16),
                               child: Text(dataPengungsi[index]['alamat']),
                             ),
-                            FloatingActionButton(
-                              heroTag: "btnPengungsi$index",
-                              onPressed: () {
-                                Map<String, dynamic> data =
-                                    dataPengungsi[index];
-                                data['occupied'] = data['reserve'];
-                                data['reserve'] = '';
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(dataPengungsi[index]['id'])
-                                    .update(data);
-                                setState(() {
-                                  getListPengungsi();
-                                });
-                              },
-                              backgroundColor: Colors.indigoAccent,
-                              elevation: 5,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(12))),
-                              child: const Icon(Icons.input),
-                            ),
+                            if (dataPengungsi[index]['pulang'])
+                              FloatingActionButton(
+                                heroTag: "btnPengungsi$index",
+                                onPressed: () {
+                                  Map<String, dynamic> data =
+                                      dataPengungsi[index];
+                                  data['occupied'] = data['reserve'];
+                                  data['reserve'] = '';
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(dataPengungsi[index]['id'])
+                                      .update(data);
+                                  setState(() {
+                                    getListPengungsi();
+                                  });
+                                },
+                                backgroundColor: Colors.indigoAccent,
+                                elevation: 5,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12))),
+                                child: const Icon(Icons.input),
+                              ),
                           ],
                         ),
                       ),
