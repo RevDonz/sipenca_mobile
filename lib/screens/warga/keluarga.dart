@@ -22,9 +22,11 @@ class _KeluargaPageState extends State<KeluargaPage> {
         .where('akun', isEqualTo: AuthService.getCurrentUserID())
         .get();
     setState(() {
+      List<Map<String, dynamic>> list = [];
       snap.docs.forEach((element) {
-        dataKeluarga.add(element.data());
+        list.add(element.data());
       });
+      dataKeluarga = list;
     });
   }
 
@@ -216,6 +218,12 @@ class _KeluargaPageState extends State<KeluargaPage> {
           actions: [
             TextButton(
               onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
                 final nama = nameController.text;
                 final nik = nikController.text;
                 final tanggal = tanggalController.text;
@@ -240,12 +248,6 @@ class _KeluargaPageState extends State<KeluargaPage> {
                 Navigator.of(context).pop();
               },
               child: Text('Save'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
             ),
           ],
         );
