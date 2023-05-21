@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
+
+import '../../firebase/auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(
@@ -16,8 +19,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // List<Map<String, dynamic>> DataPengungsian = [];
-  Map<String, dynamic>? UserProfile = {};
+  Map<String, dynamic>? profileUser = {};
   bool isLoading = true;
+
+  void getProfile() async {
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
+    setState(() {
+      profileUser = userData;
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,20 +132,20 @@ class _HomePageState extends State<HomePage> {
                                         widget.profile!['occupied'] == ""
                                     ? () async {
                                         setState(() {
-                                          UserProfile = widget.profile;
+                                          profileUser = widget.profile;
                                         });
 
-                                        UserProfile!['reserve'] =
+                                        profileUser!['reserve'] =
                                             widget.listPengungsian[index]['id'];
 
                                         String userId = await DatabaseService
                                             .getDocumentIdFromQuery(
                                                 'users',
                                                 'full_name',
-                                                UserProfile!['full_name']);
+                                                profileUser!['full_name']);
 
                                         DatabaseService.updateData(
-                                            userId, UserProfile);
+                                            userId, profileUser);
                                       }
                                     : () async {},
                                 backgroundColor: widget.profile!['reserve'] ==
@@ -234,7 +253,20 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                       IconButton(
                         iconSize: 30,
                         splashRadius: 25,
-                        onPressed: () {},
+                        onPressed: () {
+                          var data = widget.profile;
+                          data!['pulang'] = true;
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(widget.profile!['id'])
+                              .update(data);
+                          const snackBar = SnackBar(
+                            content: Text('Izin meninggalkan pengungsian'),
+                          );
+                          Navigator.pushNamed(context, '/warga');
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        },
                         icon: widget.data["id"] != "" &&
                                 widget.data['id'] == widget.profile!['reserve']
                             ? const Icon(
@@ -243,8 +275,8 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                 color: Colors.indigoAccent)
                             : const Icon(
                                 // Icons.notifications_none_rounded,
-                                Icons.home_outlined,
-                                color: Colors.indigoAccent),
+                                Icons.exit_to_app,
+                                color: Colors.redAccent),
                       ),
                     ],
                   ),

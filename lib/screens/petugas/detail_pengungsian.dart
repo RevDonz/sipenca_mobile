@@ -122,8 +122,9 @@ class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
                                 onPressed: () {
                                   Map<String, dynamic> data =
                                       dataPengungsi[index];
-                                  data['occupied'] = data['reserve'];
+                                  data['occupied'] = '';
                                   data['reserve'] = '';
+                                  data['pulang'] = false;
                                   FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(dataPengungsi[index]['id'])

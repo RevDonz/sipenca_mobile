@@ -57,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         userData['alamat'] == "") {
       setState(() {
         _selectedIndex = 2;
+        isLoading = false;
       });
     }
     // else if (userData['occupied'] != '') {
@@ -89,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
         occupied_pengungsian = list
             .where((element) => element['id'] == userData['occupied'])
             .first;
+        isLoading = false;
       });
     }
   }
@@ -105,12 +107,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      profileUser!['occupied'] == ''
-          ? HomePage(listPengungsian: DataPengungsian, profile: profileUser)
-          : DetailPengungsian(
-              data: occupied_pengungsian!,
-              profile: profileUser,
-            ),
+      isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : profileUser!['occupied'] == ''
+              ? HomePage(listPengungsian: DataPengungsian, profile: profileUser)
+              : DetailPengungsian(
+                  data: occupied_pengungsian!,
+                  profile: profileUser,
+                ),
       // HomePage(listPengungsian: DataPengungsian, profile: profileUser),
       const KeluargaPage(),
       ProfilePage(profileWarga: profileUser),
