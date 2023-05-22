@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -26,7 +27,58 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
   final TextEditingController _kapasitasController = TextEditingController();
   final TextEditingController _deskripsiController = TextEditingController();
 
-  
+  Future<void> showAlertDialog() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: const [
+                Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.green,
+                  size: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Terimakasih Sudah Daftar!",
+                  style: TextStyle(color: Colors.green, fontSize: 20),
+                ),
+                Text(
+                  "Akun Anda sedang diverifikasi oleh Admin. Kami akan segera mengkonfirmasi status verifikasi.",
+                  style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                )
+              ],
+            ),
+          ),
+          actionsPadding: EdgeInsets.only(bottom: 20),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/login");
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.indigoAccent,
+                ),
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +151,10 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                         const Padding(padding: EdgeInsets.only(top: 20)),
                         TextFormField(
                           controller: _kapasitasController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -129,8 +185,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           width: 700, // ukuran lebar button
                           height: 50, // ukuran tinggi button
                           child: ElevatedButton(
-                            onPressed: () async {
-                              Navigator.pushNamed(context, "/login");
+                            onPressed: () {
                               String nama = _namaController.text;
                               String alamat = _alamatController.text;
                               String kapasitas = _kapasitasController.text;
@@ -145,13 +200,13 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                                 'verified': false,
                                 // tambahkan field dan nilai yang sesuai
                               }).then((value) async {
-                                await AuthService.registerAccount(
-                                  widget.email,
-                                  widget.password,
-                                  "petugas",
-                                  value.id,
-                                );
-                                print('Data berhasil ditambahkan ke Firebase');
+                                String docId = await DatabaseService
+                                    .getDocumentIdFromQuery(
+                                        'users', 'email', widget.email);
+                                print(docId);
+                                await DatabaseService.updateData(
+                                    docId, {"pengungsian": value.id});
+                                showAlertDialog();
                               }).catchError((error) {
                                 print('Terjadi kesalahan: $error');
                               });
