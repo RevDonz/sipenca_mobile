@@ -40,7 +40,7 @@ class AuthService {
     return userID;
   }
 
-  static Future<void> registerAccount(
+  static Future<String> registerAccount(
       String email, String password, String role, String idPengungsian) async {
     try {
       UserCredential userCredential =
@@ -85,10 +85,13 @@ class AuthService {
           'keluarga': 1
         });
       }
+      return "success";
       // Simpan data pengguna ke koleksi "users" di Firestore
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       // Handle error jika terjadi kesalahan
-      print(e.toString());
+      // print(e.code);
+      // print(e.message);
+      return e.code;
     }
   }
 }

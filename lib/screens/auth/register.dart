@@ -19,33 +19,7 @@ class _RegisterState extends State<RegisterPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isLoading = false;
 
-  Future<void> _register() async {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      final UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text,
-      );
-      // If the user was successfully created
-      if (userCredential.user != null) {
-        // Add the user's role to the user's custom claims
-        //await userCredential.user!.setCustomClaims({'role': selectedRole});
-        // Redirect the user to the next page after successful registration
-        Navigator.pushReplacementNamed(context, '/next-page');
-      }
-    } catch (e) {
-      // Handle registration errors
-      print(e);
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Future<void> _showSuccessRegisterwarga(String email, String password) async {
+  Future<void> _showSuccessRegisterwarga() async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -75,10 +49,7 @@ class _RegisterState extends State<RegisterPage> {
             Center(
               child: TextButton(
                 onPressed: () async {
-                  // print(user);
                   Navigator.pushNamed(context, "/login");
-                  await AuthService.registerAccount(
-                      email, password, 'warga', '');
                 },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -101,26 +72,26 @@ class _RegisterState extends State<RegisterPage> {
     );
   }
 
-  Future<void> _showFailedRegister() async {
+  Future<void> _showFailedRegister(String message) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(
             child: Column(
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   Icons.check_circle_rounded,
                   color: Colors.red,
                   size: 50,
                 ),
-                SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   "Gagal !",
                   style: TextStyle(color: Colors.red, fontSize: 20),
                 ),
                 Text(
-                  "Masukan Email / Password",
+                  message,
                   style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
                 )
               ],
@@ -132,8 +103,6 @@ class _RegisterState extends State<RegisterPage> {
               child: TextButton(
                 onPressed: () {
                   Navigator.pop(context, "");
-                  emailController.clear();
-                  passwordController.clear();
                 },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -256,7 +225,7 @@ class _RegisterState extends State<RegisterPage> {
                                     String password =
                                         passwordController.text.trim();
                                     if (email == "" || password == "") {
-                                      _showFailedRegister();
+                                      _showFailedRegister("");
                                     } else {
                                       showDialog(
                                         context: context,
@@ -275,13 +244,6 @@ class _RegisterState extends State<RegisterPage> {
                                               ),
                                               TextButton(
                                                 onPressed: () {
-                                                  // Lakukan pendaftaran petugas
-                                                  // final SharedPreferences prefs =
-                                                  //     await SharedPreferences
-                                                  //         .getInstance();
-
-                                                  // await prefs.setString('email',
-                                                  //     emailController.text);
                                                   String email = emailController
                                                       .text
                                                       .trim();
@@ -307,18 +269,32 @@ class _RegisterState extends State<RegisterPage> {
                                     }
                                   }
                                 : () async {
-                                    // Navigator.pushNamed(context, "/login");
                                     String email = emailController.text.trim();
                                     String password =
                                         passwordController.text.trim();
 
-                                    // await AuthService.registerAccount(
-                                    //     email, password, 'warga', '');
-                                    if (email == "" || password == "") {
-                                      _showFailedRegister();
+                                    String message =
+                                        await AuthService.registerAccount(
+                                            email, password, 'warga', '');
+                                    if (password.isEmpty) {
+                                      _showFailedRegister(
+                                          'Password tidak boleh kosong!');
                                     } else {
-                                      _showSuccessRegisterwarga(
-                                          email, password);
+                                      if (message == 'success') {
+                                        _showSuccessRegisterwarga();
+                                      } else if (message == 'invalid-email') {
+                                        _showFailedRegister(
+                                            'Email tidak valid!');
+                                      } else if (message == 'unknown') {
+                                        _showFailedRegister(
+                                            'Email tidak boleh kosong!');
+                                      } else if (message ==
+                                          'email-already-in-use') {
+                                        _showFailedRegister(
+                                            'Email sudah terpakai!');
+                                      } else {
+                                        _showFailedRegister(message);
+                                      }
                                     }
                                   },
                             style: ElevatedButton.styleFrom(
