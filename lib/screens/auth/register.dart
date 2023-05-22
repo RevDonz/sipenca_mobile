@@ -45,7 +45,7 @@ class _RegisterState extends State<RegisterPage> {
     });
   }
 
-  Future<void> _showSuccessRegister(String email, String password) async {
+  Future<void> _showSuccessRegisterwarga(String email, String password) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -252,7 +252,7 @@ class _RegisterState extends State<RegisterPage> {
 
                                     // await AuthService.registerAccount(
                                     //     email, password, 'warga', '');
-                                    _showSuccessRegister(email, password);
+                                    _showSuccessRegisterwarga(email, password);
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
