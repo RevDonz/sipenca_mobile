@@ -45,6 +45,62 @@ class _RegisterState extends State<RegisterPage> {
     });
   }
 
+  Future<void> _showSuccessRegisterwarga(String email, String password) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: const [
+                Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.green,
+                  size: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Berhasil !",
+                  style: TextStyle(color: Colors.green, fontSize: 20),
+                ),
+                Text(
+                  "Anda berhasil daftar",
+                  style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                )
+              ],
+            ),
+          ),
+          actionsPadding: EdgeInsets.only(bottom: 20),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () async {
+                  // print(user);
+                  Navigator.pushNamed(context, "/login");
+                  await AuthService.registerAccount(
+                      email, password, 'warga', '');
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.indigoAccent,
+                ),
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -189,13 +245,14 @@ class _RegisterState extends State<RegisterPage> {
                                     );
                                   }
                                 : () async {
-                                    Navigator.pushNamed(context, "/login");
+                                    // Navigator.pushNamed(context, "/login");
                                     String email = emailController.text.trim();
                                     String password =
                                         passwordController.text.trim();
 
-                                    await AuthService.registerAccount(
-                                        email, password, 'warga', '');
+                                    // await AuthService.registerAccount(
+                                    //     email, password, 'warga', '');
+                                    _showSuccessRegisterwarga(email, password);
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
