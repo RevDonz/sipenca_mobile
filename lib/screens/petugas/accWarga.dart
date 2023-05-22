@@ -100,7 +100,7 @@ class _accWargaState extends State<accWarga> {
                             ),
                             FloatingActionButton(
                               heroTag: "btnPengungsi$index",
-                              onPressed: () {
+                              onPressed: () async {
                                 Map<String, dynamic> data =
                                     dataPengungsi[index];
                                 data['occupied'] = data['reserve'];
@@ -109,6 +109,23 @@ class _accWargaState extends State<accWarga> {
                                     .collection('users')
                                     .doc(dataPengungsi[index]['id'])
                                     .update(data);
+
+                                Map<String, dynamic>? detailPetugas =
+                                    await DatabaseService.getDetailUsers(
+                                        AuthService.getCurrentUserID());
+                                DocumentSnapshot<Map<String, dynamic>> snap =
+                                    await FirebaseFirestore.instance
+                                        .collection('pengungsians')
+                                        .doc(detailPetugas!['pengungsian'])
+                                        .get();
+                                Map<String, dynamic>? pengungsian = snap.data();
+                                pengungsian!['kapasitas_terisi'] +=
+                                    data['keluarga'];
+                                FirebaseFirestore.instance
+                                    .collection('pengungsians')
+                                    .doc(snap.id)
+                                    .update(pengungsian);
+
                                 setState(() {
                                   getListPengungsi();
                                 });

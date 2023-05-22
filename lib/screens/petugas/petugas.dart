@@ -85,8 +85,8 @@ class _ListPengungsiState extends State<ListPengungsi> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      accWarga(),
-      DetailPengungsianPetugas(),
+      const accWarga(),
+      const DetailPengungsianPetugas(),
       ProfilePage(profileWarga: profilePetugas),
     ];
 
@@ -95,9 +95,9 @@ class _ListPengungsiState extends State<ListPengungsi> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.person_outline),
+            icon: Icon(Icons.person_outline),
             label: 'Home',
           ),
           BottomNavigationBarItem(

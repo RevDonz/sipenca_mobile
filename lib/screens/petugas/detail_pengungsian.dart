@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../components/appBar.dart';
 import '../../firebase/auth.dart';
@@ -119,7 +117,7 @@ class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
                             if (dataPengungsi[index]['pulang'])
                               FloatingActionButton(
                                 heroTag: "btnPengungsi$index",
-                                onPressed: () {
+                                onPressed: () async {
                                   Map<String, dynamic> data =
                                       dataPengungsi[index];
                                   data['occupied'] = '';
@@ -129,6 +127,24 @@ class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
                                       .collection('users')
                                       .doc(dataPengungsi[index]['id'])
                                       .update(data);
+
+                                  Map<String, dynamic>? detailPetugas =
+                                      await DatabaseService.getDetailUsers(
+                                          AuthService.getCurrentUserID());
+                                  DocumentSnapshot<Map<String, dynamic>> snap =
+                                      await FirebaseFirestore.instance
+                                          .collection('pengungsians')
+                                          .doc(detailPetugas!['pengungsian'])
+                                          .get();
+                                  Map<String, dynamic>? pengungsian =
+                                      snap.data();
+                                  pengungsian!['kapasitas_terisi'] -=
+                                      data['keluarga'];
+                                  FirebaseFirestore.instance
+                                      .collection('pengungsians')
+                                      .doc(snap.id)
+                                      .update(pengungsian);
+
                                   setState(() {
                                     getListPengungsi();
                                   });

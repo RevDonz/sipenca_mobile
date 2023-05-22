@@ -140,7 +140,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                                 'nama': nama,
                                 'alamat': alamat,
                                 'kapasitas_max': int.parse(kapasitas),
-                                'kapasitas_terisi': int.parse('10'),
+                                'kapasitas_terisi': 0,
                                 'deskripsi': deskripsi,
                                 'verified': false,
                                 // tambahkan field dan nilai yang sesuai
