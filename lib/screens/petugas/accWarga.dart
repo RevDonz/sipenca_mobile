@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
-import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class accWarga extends StatefulWidget {
   const accWarga({super.key});
@@ -29,8 +29,11 @@ class _accWargaState extends State<accWarga> {
     QuerySnapshot<Map<String, dynamic>> snap =
         await FirebaseFirestore.instance.collection('users').get();
 
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
     snap.docs.forEach((element) {
-      if (element.data()['reserve'] == profilePetugas!['pengungsian']) {
+      if (element.data()['reserve'] == userData!['pengungsian']) {
         Map<String, dynamic> data = element.data();
         data['id'] = element.id;
         list.add(data);

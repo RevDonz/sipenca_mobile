@@ -17,6 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Map<String, dynamic>? profileUser = {};
   Map<String, dynamic>? occupied_pengungsian;
   bool isLoading = true;
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -31,7 +32,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       profileUser = userData;
-      isLoading = false;
     });
   }
 
@@ -41,7 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       DataPengungsian = list;
-      isLoading = false;
     });
   }
 
@@ -57,25 +56,12 @@ class _MyHomePageState extends State<MyHomePage> {
         userData['alamat'] == "") {
       setState(() {
         _selectedIndex = 2;
-        isLoading = false;
       });
-    }
-    // else if (userData['occupied'] != '') {
-    //   setState(() {
-    //     occupied_pengungsian = DataPengungsian.where(
-    //         (element) => element['id'] == userData['occupied']).first;
-    //   });
-    // print("sini");
-    // print(DataPengungsian);
-    // DataPengungsian.forEach((element) {
-    //   print(element);
-    // if (element['id'] == userData['occupied']) {
-    //   setState(() {
-    //     occupied_pengungsian = element;
-    //   });
-    // }
-    // });
-    // }
+    } 
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _updateOccupied() async {
