@@ -64,7 +64,7 @@ class AuthService {
           'password': password,
           'pengungsian': idPengungsian,
           'role': role,
-          'tgl_lahir': ""
+          'tgl_lahir': "",
         });
       } else if (role == "warga") {
         await FirebaseFirestore.instance
@@ -80,7 +80,9 @@ class AuthService {
           'occupied': "",
           'reserve': "",
           'role': role,
-          'tgl_lahir': ""
+          'tgl_lahir': "",
+          'pulang': false,
+          'keluarga': 1
         });
       }
       // Simpan data pengguna ke koleksi "users" di Firestore

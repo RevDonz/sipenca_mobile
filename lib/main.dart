@@ -15,8 +15,8 @@ import 'package:sipenca_mobile/screens/warga/warga.dart';
 
 void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // runApp(MaterialApp(debugShowCheckedModeBanner: false, home: AdminPage()));
+  // runApp(const MaterialApp(
+  //     debugShowCheckedModeBanner: false, home: ListPengungsi()));
   runApp(const MyApp());
 }
 
@@ -32,19 +32,19 @@ class Akun extends StatefulWidget {
 class _AkunState extends State<Akun> {
   List<Map<String, dynamic>> usersList = [];
 
-  void getUserList() async {
-    List<Map<String, dynamic>> list =
-        await DatabaseService.getPengungsiOnPengungsian('HJ9UI8nZnWCsToXiwtsz');
-    setState(() {
-      usersList = list;
-    });
-  }
+  // void getUserList() async {
+  //   List<Map<String, dynamic>> list =
+  //       await DatabaseService.getPengungsiOnPengungsian('HJ9UI8nZnWCsToXiwtsz');
+  //   setState(() {
+  //     usersList = list;
+  //   });
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    getUserList();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserList();
+  // }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +82,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(fontFamily: "Poppins"),
-
       home: LoginPage(),
       routes: <String, WidgetBuilder>{
         '/warga': (context) => const MyHomePage(),

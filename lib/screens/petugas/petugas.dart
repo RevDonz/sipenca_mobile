@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:sipenca_mobile/screens/petugas/detail_pengungsian.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
 import 'package:sipenca_mobile/screens/petugas/accWarga.dart';
 
@@ -15,16 +16,8 @@ class ListPengungsi extends StatefulWidget {
 class _ListPengungsiState extends State<ListPengungsi> {
   List<Map<String, dynamic>> dataPengungsi = [];
   Map<String, dynamic>? profilePetugas;
+  Map<String, dynamic>? user;
   int _selectedIndex = 0;
-
-  void getListPengungsi() async {
-    List<Map<String, dynamic>> list =
-        await DatabaseService.getPengungsiOnPengungsian('AXUj1TS3rnLlBuob6Ud2');
-
-    setState(() {
-      dataPengungsi = list;
-    });
-  }
 
   void getProfile() async {
     Map<String, dynamic>? userData =
@@ -65,40 +58,54 @@ class _ListPengungsiState extends State<ListPengungsi> {
     });
   }
 
+  void getListPengungsi() async {
+    List<Map<String, dynamic>> list = [];
+    QuerySnapshot<Map<String, dynamic>> snap =
+        await FirebaseFirestore.instance.collection('users').get();
+
+    snap.docs.forEach((element) {
+      if (element.data()['reserve'] == profilePetugas!['pengungsian']) {
+        Map<String, dynamic> data = element.data();
+        data['id'] = element.id;
+        list.add(data);
+      }
+    });
+    setState(() {
+      dataPengungsi = list;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    getListPengungsi();
     getProfile();
+    getListPengungsi();
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      accWarga(listWarga: dataPengungsi),
-      const Text(
-        'Index 2: School',
-        style: optionStyle,
-      ),
+      accWarga(),
+      DetailPengungsianPetugas(),
       ProfilePage(profileWarga: profilePetugas),
     ];
 
     return Scaffold(
-      body: Center(child: widgetOptions.elementAt(_selectedIndex)),    
+      body: Center(child: widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Warga',
+            icon: const Icon(Icons.person_outline),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Pengungsian',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
+            icon: Icon(Icons.home_outlined),
             label: 'Profile',
           ),
         ],

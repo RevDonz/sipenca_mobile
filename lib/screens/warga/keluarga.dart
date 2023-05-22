@@ -1,7 +1,10 @@
 //import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
+import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class KeluargaPage extends StatefulWidget {
   const KeluargaPage({super.key});
@@ -11,13 +14,28 @@ class KeluargaPage extends StatefulWidget {
 }
 
 class _KeluargaPageState extends State<KeluargaPage> {
-  List<Map<String, dynamic>> DataPengungsian = [
-    {"nama": "Nopal", "nik": "1302200022", "tanggal": "29/01/2002"},
-    {"nama": "Doni", "nik": "112334567", "tanggal": "08/04/2002"},
-    {"nama": "Zahrandi", "nik": "1302204080", "tanggal": "03/04/2002"},
-    {"nama": "NPC1", "nik": "13456789", "tanggal": "08/04/2002"},
-    {"nama": "NPC2", "nik": "112334567", "tanggal": "08/04/2002"},
-  ];
+  List<Map<String, dynamic>> dataKeluarga = [];
+
+  void getDataKeluarga() async {
+    QuerySnapshot<Map<String, dynamic>> snap = await FirebaseFirestore.instance
+        .collection('keluarga')
+        .where('akun', isEqualTo: AuthService.getCurrentUserID())
+        .get();
+    setState(() {
+      List<Map<String, dynamic>> list = [];
+      snap.docs.forEach((element) {
+        list.add(element.data());
+      });
+      dataKeluarga = list;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDataKeluarga();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,18 +56,39 @@ class _KeluargaPageState extends State<KeluargaPage> {
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: DataPengungsian.length,
+                  itemCount: dataKeluarga.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final member = DataPengungsian[index];
+                    final member = dataKeluarga[index];
                     return Dismissible(
                       key: UniqueKey(),
-                      onDismissed: (direction) {
-                        setState(() {
-                          DataPengungsian.removeAt(index);
-                        });
+                      onDismissed: (direction) async {
+                        final userid = AuthService.getCurrentUserID();
+                        Map<String, dynamic>? userData =
+                            await DatabaseService.getDetailUsers(userid);
+                        QuerySnapshot snap = await FirebaseFirestore.instance
+                            .collection('keluarga')
+                            .where('akun', isEqualTo: userid)
+                            .get();
+
+                        var keluargaId = snap.docs.first.id;
+
+                        FirebaseFirestore.instance
+                            .collection('keluarga')
+                            .doc(keluargaId)
+                            .delete();
+
+                        userData!['keluarga'] -= 1;
+
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(userid)
+                            .update(userData);
+
+                        getDataKeluarga();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text("Data keluarga telah dihapus"),
                         ));
+                        Navigator.pop(context);
                       },
                       child: ListTile(
                         title: Text(member["nama"] ?? 'unknown'),
@@ -72,15 +111,40 @@ class _KeluargaPageState extends State<KeluargaPage> {
                                       child: Text("Tidak"),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          DataPengungsian.removeAt(index);
-                                        });
+                                      onPressed: () async {
+                                        final userid =
+                                            AuthService.getCurrentUserID();
+                                        Map<String, dynamic>? userData =
+                                            await DatabaseService
+                                                .getDetailUsers(userid);
+                                        QuerySnapshot snap =
+                                            await FirebaseFirestore.instance
+                                                .collection('keluarga')
+                                                .where('akun',
+                                                    isEqualTo: userid)
+                                                .get();
+
+                                        var keluargaId = snap.docs.first.id;
+
+                                        FirebaseFirestore.instance
+                                            .collection('keluarga')
+                                            .doc(keluargaId)
+                                            .delete();
+
+                                        userData!['keluarga'] -= 1;
+
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(userid)
+                                            .update(userData);
+
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
                                           content: Text(
                                               "Data keluarga telah dihapus"),
                                         ));
+                                        getDataKeluarga();
+
                                         Navigator.pop(context);
                                       },
                                       child: Text("Ya"),
@@ -153,26 +217,37 @@ class _KeluargaPageState extends State<KeluargaPage> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                final nama = nameController.text;
-                final nik = nikController.text;
-                final tanggal = tanggalController.text;
-                setState(() {
-                  DataPengungsian.add({
-                    'nama': nama,
-                    'nik': nik,
-                    'tanggal': tanggal,
-                  });
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text('Save'),
-            ),
-            TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
               },
               child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final nama = nameController.text;
+                final nik = nikController.text;
+                final tanggal = tanggalController.text;
+                final userid = AuthService.getCurrentUserID();
+                Map<String, dynamic>? userData =
+                    await DatabaseService.getDetailUsers(userid);
+                FirebaseFirestore.instance.collection('keluarga').add({
+                  'nama': nama,
+                  'nik': nik,
+                  'tanggal': tanggal,
+                  'akun': userid
+                });
+
+                userData!['keluarga'] += 1;
+
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userid)
+                    .update(userData);
+
+                getDataKeluarga();
+                Navigator.of(context).pop();
+              },
+              child: Text('Save'),
             ),
           ],
         );

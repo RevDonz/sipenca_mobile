@@ -14,7 +14,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> DataPengungsian = [];
-  Map<String, dynamic>? profileUser;
+  Map<String, dynamic>? profileUser = {};
+  Map<String, dynamic>? occupied_pengungsian;
   bool isLoading = true;
   int _selectedIndex = 0;
 
@@ -35,7 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void getListPengungsian() async {
-    List<Map<String, dynamic>> list = await DatabaseService.getVerifiedPengungsian();
+    List<Map<String, dynamic>> list =
+        await DatabaseService.getVerifiedPengungsian();
 
     setState(() {
       DataPengungsian = list;
@@ -55,6 +57,40 @@ class _MyHomePageState extends State<MyHomePage> {
         userData['alamat'] == "") {
       setState(() {
         _selectedIndex = 2;
+        isLoading = false;
+      });
+    }
+    // else if (userData['occupied'] != '') {
+    //   setState(() {
+    //     occupied_pengungsian = DataPengungsian.where(
+    //         (element) => element['id'] == userData['occupied']).first;
+    //   });
+    // print("sini");
+    // print(DataPengungsian);
+    // DataPengungsian.forEach((element) {
+    //   print(element);
+    // if (element['id'] == userData['occupied']) {
+    //   setState(() {
+    //     occupied_pengungsian = element;
+    //   });
+    // }
+    // });
+    // }
+  }
+
+  void _updateOccupied() async {
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
+    List<Map<String, dynamic>> list =
+        await DatabaseService.getVerifiedPengungsian();
+
+    if (userData!['occupied'] != '') {
+      setState(() {
+        occupied_pengungsian = list
+            .where((element) => element['id'] == userData['occupied'])
+            .first;
+        isLoading = false;
       });
     }
   }
@@ -65,14 +101,24 @@ class _MyHomePageState extends State<MyHomePage> {
     getProfile();
     getListPengungsian();
     checkProfile();
+    _updateOccupied();
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      HomePage(listPengungsian: DataPengungsian, profile: profileUser),
-      // HomePage(),
-      KeluargaPage(),
+      isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : profileUser!['occupied'] == ''
+              ? HomePage(listPengungsian: DataPengungsian, profile: profileUser)
+              : DetailPengungsian(
+                  data: occupied_pengungsian!,
+                  profile: profileUser,
+                ),
+      // HomePage(listPengungsian: DataPengungsian, profile: profileUser),
+      const KeluargaPage(),
       ProfilePage(profileWarga: profileUser),
     ];
 
