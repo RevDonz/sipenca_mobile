@@ -62,7 +62,7 @@ class AuthService {
           'nik': "",
           'no_hp': "",
           'password': password,
-          'pengungsian': idPengungsian,
+          'pengungsian': "",
           'role': role,
           'tgl_lahir': "",
         });
