@@ -45,6 +45,117 @@ class _RegisterState extends State<RegisterPage> {
     });
   }
 
+  Future<void> _showSuccessRegisterwarga(String email, String password) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: const [
+                Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.green,
+                  size: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Berhasil !",
+                  style: TextStyle(color: Colors.green, fontSize: 20),
+                ),
+                Text(
+                  "Anda berhasil daftar",
+                  style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                )
+              ],
+            ),
+          ),
+          actionsPadding: EdgeInsets.only(bottom: 20),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () async {
+                  // print(user);
+                  Navigator.pushNamed(context, "/login");
+                  await AuthService.registerAccount(
+                      email, password, 'warga', '');
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.indigoAccent,
+                ),
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showFailedRegister() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: const [
+                Icon(
+                  Icons.check_circle_rounded,
+                  color: Colors.red,
+                  size: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Gagal !",
+                  style: TextStyle(color: Colors.red, fontSize: 20),
+                ),
+                Text(
+                  "Masukan Email / Password",
+                  style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
+                )
+              ],
+            ),
+          ),
+          actionsPadding: EdgeInsets.only(bottom: 20),
+          actions: [
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context, "");
+                  emailController.clear();
+                  passwordController.clear();
+                },
+                style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Colors.indigoAccent,
+                ),
+                child: const Text(
+                  "Ok",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal),
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -141,61 +252,74 @@ class _RegisterState extends State<RegisterPage> {
                           child: ElevatedButton(
                             onPressed: selectedRole == "Petugas"
                                 ? () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                              'Konfirmasi Pendaftaran Pengungsian'),
-                                          content: const Text(
-                                              'Informasi pengungsian diperlukan untuk pendaftaran'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Batal'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                // Lakukan pendaftaran petugas
-                                                // final SharedPreferences prefs =
-                                                //     await SharedPreferences
-                                                //         .getInstance();
+                                    String email = emailController.text.trim();
+                                    String password =
+                                        passwordController.text.trim();
+                                    if (email == "" || password == "") {
+                                      _showFailedRegister();
+                                    } else {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                                'Konfirmasi Pendaftaran Pengungsian'),
+                                            content: const Text(
+                                                'Informasi pengungsian diperlukan untuk pendaftaran'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Batal'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  // Lakukan pendaftaran petugas
+                                                  // final SharedPreferences prefs =
+                                                  //     await SharedPreferences
+                                                  //         .getInstance();
 
-                                                // await prefs.setString('email',
-                                                //     emailController.text);
-
-                                                String email =
-                                                    emailController.text.trim();
-                                                String password =
-                                                    passwordController.text
-                                                        .trim();
-                                                Navigator.push(context,
-                                                    MaterialPageRoute<void>(
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return RegisterPengungsian(
-                                                        email: email,
-                                                        password: password);
-                                                  },
-                                                ));
-                                              },
-                                              child: const Text('Daftar'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                                  // await prefs.setString('email',
+                                                  //     emailController.text);
+                                                  String email = emailController
+                                                      .text
+                                                      .trim();
+                                                  String password =
+                                                      passwordController.text
+                                                          .trim();
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute<void>(
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return RegisterPengungsian(
+                                                          email: email,
+                                                          password: password);
+                                                    },
+                                                  ));
+                                                },
+                                                child: const Text('Daftar'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
                                   }
                                 : () async {
-                                    Navigator.pushNamed(context, "/login");
+                                    // Navigator.pushNamed(context, "/login");
                                     String email = emailController.text.trim();
                                     String password =
                                         passwordController.text.trim();
 
-                                    await AuthService.registerAccount(
-                                        email, password, 'warga', '');
+                                    // await AuthService.registerAccount(
+                                    //     email, password, 'warga', '');
+                                    if (email == "" || password == "") {
+                                      _showFailedRegister();
+                                    } else {
+                                      _showSuccessRegisterwarga(
+                                          email, password);
+                                    }
                                   },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigoAccent,
