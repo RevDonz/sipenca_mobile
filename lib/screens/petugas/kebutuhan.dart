@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../components/appBar.dart';
 import '../../firebase/auth.dart';
 import '../../firebase/pengungsian.dart';
 import '../warga/profile.dart';
-import 'accWarga.dart';
+import 'warga.dart';
 
 class DetailPengungsianPetugas extends StatefulWidget {
   const DetailPengungsianPetugas({super.key});
@@ -41,8 +39,11 @@ class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
     QuerySnapshot<Map<String, dynamic>> snap =
         await FirebaseFirestore.instance.collection('users').get();
 
+    Map<String, dynamic>? userData =
+        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+
     snap.docs.forEach((element) {
-      if (element.data()['occupied'] == profilePetugas!['pengungsian']) {
+      if (element.data()['occupied'] == userData!['pengungsian']) {
         Map<String, dynamic> data = element.data();
         data['id'] = element.id;
         list.add(data);
@@ -63,7 +64,7 @@ class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      const accWarga(),
+      const PengungsiWarga(),
       const DetailPengungsianPetugas(),
       ProfilePage(profileWarga: profilePetugas),
     ];
@@ -83,12 +84,6 @@ class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
               shrinkWrap: true,
               itemCount: dataPengungsi.length,
               itemBuilder: (context, index) {
-                // String jarak;
-                // if (dataPengungsi[index]["jarak"] >= 1000) {
-                //   jarak = "${dataPengungsi[index]["jarak"] / 1000} KM";
-                // } else {
-                //   jarak = "${dataPengungsi[index]["jarak"]} M";
-                // }
                 return GestureDetector(
                   onTap: () {},
                   child: Card(
