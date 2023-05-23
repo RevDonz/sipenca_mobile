@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   profile: profileUser,
                 ),
       // HomePage(listPengungsian: DataPengungsian, profile: profileUser),
-      KeluargaPage(),
+      KeluargaPage(profileWarga: profileUser),
       ProfilePage(profileWarga: profileUser),
     ];
 
