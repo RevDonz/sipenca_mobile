@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _selectedIndex = 2;
       });
-    } 
+    }
 
     setState(() {
       isLoading = false;
@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   profile: profileUser,
                 ),
       // HomePage(listPengungsian: DataPengungsian, profile: profileUser),
-      KeluargaPage(profileWarga: profileUser),
+      KeluargaPage(),
       ProfilePage(profileWarga: profileUser),
     ];
 
