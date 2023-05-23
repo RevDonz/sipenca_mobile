@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/screens/petugas/kebutuhan.dart';
-import 'package:sipenca_mobile/screens/petugas/warga.dart';
+import 'package:sipenca_mobile/screens/petugas/pengungsi.dart';
 import 'package:sipenca_mobile/screens/warga/profile.dart';
 
 class ListPengungsi extends StatefulWidget {
@@ -18,17 +18,19 @@ class _ListPengungsiState extends State<ListPengungsi> {
   Map<String, dynamic>? profilePetugas;
   Map<String, dynamic>? user;
   int _selectedIndex = 0;
+  bool isLoading = true;
 
-  void getProfile() async {
+  Future<void> getProfile() async {
     Map<String, dynamic>? userData =
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
 
     setState(() {
       profilePetugas = userData;
+      isLoading = false;
     });
   }
 
-  void checkProfile() async {
+  Future<void> checkProfile() async {
     Map<String, dynamic>? userData =
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
 
@@ -43,9 +45,6 @@ class _ListPengungsiState extends State<ListPengungsi> {
       });
     }
   }
-
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -73,20 +72,29 @@ class _ListPengungsiState extends State<ListPengungsi> {
   @override
   void initState() {
     super.initState();
-    getProfile();
-    getListPengungsi();
+    getProfile().then((value) {
+      getListPengungsi();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
-      const PengungsiWarga(),
-      DetailPengungsian(profileWarga: profilePetugas),
+      PengungsiWarga(
+        profileData: profilePetugas,
+      ),
+      DetailPengungsian(
+        profileData: profilePetugas,
+      ),
       ProfilePage(profileWarga: profilePetugas),
     ];
 
     return Scaffold(
-      body: Center(child: widgetOptions.elementAt(_selectedIndex)),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Center(child: widgetOptions.elementAt(_selectedIndex)),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 0,

@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
@@ -69,96 +68,117 @@ class _AdminPageState extends State<AdminPage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: listPengungsian.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            elevation: 0,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16))),
-                            child: InkWell(
-                              hoverColor: Colors.transparent,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(16)),
-                              onTap: () {},
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          height: 75,
-                                          width: 100,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(20)),
-                                            child: Image.network(
-                                              "https://picsum.photos/id/${index + 1 * Random().nextInt(100)}/100/75",
-                                            ),
+                      listPengungsian.isEmpty
+                          ? const Center(
+                              child: Text("Tidak ada data untuk ditampilkan"))
+                          : ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: listPengungsian.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  elevation: 0,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16))),
+                                  child: InkWell(
+                                    hoverColor: Colors.transparent,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(16)),
+                                    onTap: () {},
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Wrap(
+                                                direction: Axis.vertical,
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.start,
+                                                alignment:
+                                                    WrapAlignment.spaceEvenly,
+                                                children: [
+                                                  Text(
+                                                      listPengungsian[index]
+                                                              ['rescueData']
+                                                          ['nama'],
+                                                      style: const TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Text(listPengungsian[index]
+                                                      ['rescueData']['alamat']),
+                                                  Text(listPengungsian[index]
+                                                      ['email']),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Wrap(
-                                          direction: Axis.vertical,
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.start,
-                                          alignment: WrapAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                                listPengungsian[index]
-                                                    ['rescueData']['nama'],
-                                                style: const TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Text(listPengungsian[index]
-                                                ['rescueData']['alamat']),
-                                            Text(listPengungsian[index]
-                                                    ['rescueData']['verified']
-                                                ? 'true'
-                                                : 'false'),
-                                            Text(listPengungsian[index]
-                                                ['email']),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    FloatingActionButton(
-                                      heroTag: "btnPengungsian$index",
-                                      onPressed: () {
-                                        listPengungsian[index]['rescueData']
-                                            ['verified'] = true;
+                                          FloatingActionButton(
+                                            heroTag: "btnPengungsian$index",
+                                            onPressed: () {
+                                              listPengungsian[index]
+                                                      ['rescueData']
+                                                  ['verified'] = true;
 
-                                        DatabaseService.updatePengungsian(
-                                            listPengungsian[index]
-                                                ['pengungsian'],
-                                            listPengungsian[index]
-                                                ['rescueData']);
-                                                getListPengungsian();
-                                      },
-                                      backgroundColor: Colors.indigoAccent,
-                                      elevation: 5,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12))),
-                                      child: const Icon(Icons.check),
+                                              DatabaseService.updatePengungsian(
+                                                  listPengungsian[index]
+                                                      ['pengungsian'],
+                                                  listPengungsian[index]
+                                                      ['rescueData']);
+                                              getListPengungsian();
+                                            },
+                                            backgroundColor:
+                                                Colors.indigoAccent,
+                                            elevation: 5,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(12))),
+                                            child: const Icon(Icons.check),
+                                          ),
+                                          FloatingActionButton(
+                                            heroTag: "btnPengungsian$index",
+                                            onPressed: () async {
+                                              String docId =
+                                                  await DatabaseService
+                                                      .getDocumentIdFromQuery(
+                                                          'users',
+                                                          'email',
+                                                          listPengungsian[index]
+                                                              ['email']);
+                                              FirebaseFirestore.instance
+                                                  .collection('pengungsians')
+                                                  .doc(listPengungsian[index]
+                                                      ['pengungsian'])
+                                                  .delete();
+
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(docId)
+                                                  .delete();
+
+                                              getListPengungsian();
+                                            },
+                                            backgroundColor: Colors.red,
+                                            elevation: 5,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(12))),
+                                            child: const Icon(Icons.cancel),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      )
+                                  ),
+                                );
+                              },
+                            )
                     ],
                   ),
                 ),
