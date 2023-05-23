@@ -112,6 +112,13 @@ class _accWargaState extends State<accWarga> {
                                     .collection('users')
                                     .doc(dataPengungsi[index]['id'])
                                     .update(data);
+                                FirebaseFirestore.instance
+                                    .collection('pengungsians')
+                                    .doc(data['occupied'])
+                                    .update({
+                                  'kapasitas_terisi':
+                                      FieldValue.increment(data['keluarga'])
+                                });
                                 setState(() {
                                   getListPengungsi();
                                 });
