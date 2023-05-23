@@ -5,7 +5,8 @@ import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class PengungsiWarga extends StatefulWidget {
-  const PengungsiWarga({super.key});
+  const PengungsiWarga({super.key, required this.profileData});
+  final Map<String, dynamic>? profileData;
 
   @override
   State<PengungsiWarga> createState() => _PengungsiWargaState();
@@ -14,6 +15,7 @@ class PengungsiWarga extends StatefulWidget {
 class _PengungsiWargaState extends State<PengungsiWarga> {
   List<Map<String, dynamic>> dataPengungsiReserve = [];
   List<Map<String, dynamic>> dataPengungsiOccupied = [];
+  bool isLoading = true;
 
   void getListReserve() async {
     List<Map<String, dynamic>> list = [];
@@ -32,6 +34,7 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
     });
     setState(() {
       dataPengungsiReserve = list;
+      isLoading = false;
     });
   }
 
@@ -52,6 +55,7 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
     });
     setState(() {
       dataPengungsiOccupied = list;
+      isLoading = false;
     });
   }
 
@@ -73,7 +77,7 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const AppBarSipenca(role: "Petugas"),
+              AppBarSipenca(role: widget.profileData!['full_name']),
               const SizedBox(height: 10),
               const TabBar(
                 indicatorColor: Colors.indigoAccent,

@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void checkProfile() async {
+  Future<void> checkProfile() async {
     Map<String, dynamic>? userData =
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
 
@@ -57,11 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _selectedIndex = 2;
       });
-    } 
-
-    setState(() {
-      isLoading = false;
-    });
+    }
   }
 
   void _updateOccupied() async {
@@ -86,8 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     getProfile();
     getListPengungsian();
-    checkProfile();
-    _updateOccupied();
+    checkProfile().then((value) {
+      _updateOccupied();
+    });
   }
 
   @override

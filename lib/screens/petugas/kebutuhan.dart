@@ -7,8 +7,8 @@ import '../../components/appBar.dart';
 import '../../firebase/pengungsian.dart';
 
 class DetailPengungsian extends StatefulWidget {
-  const DetailPengungsian({super.key, required this.profileWarga});
-  final Map<String, dynamic>? profileWarga;
+  const DetailPengungsian({super.key, required this.profileData});
+  final Map<String, dynamic>? profileData;
 
   @override
   State<DetailPengungsian> createState() => _DetailPengungsianState();
@@ -25,7 +25,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
 
   void getDataPengungsian() async {
     Map<String, dynamic>? data = await DatabaseService.getPengungsianById(
-        widget.profileWarga!['pengungsian']);
+        widget.profileData!['pengungsian']);
 
     setState(() {
       dataPengungsi = data;
@@ -51,7 +51,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const AppBarSipenca(role: "Petugas"),
+              AppBarSipenca(role: widget.profileData!['full_name']),
               const SizedBox(height: 10),
               const TabBar(
                 indicatorColor: Colors.indigoAccent,
@@ -183,7 +183,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                                               ..text = dataPengungsi![
                                                                       'deskripsi']
                                                                   .toString(),
-                                                                  keyboardType:
+                                                            keyboardType:
                                                                 TextInputType
                                                                     .multiline,
                                                             maxLines: null,
@@ -227,7 +227,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                                             descController.text;
                                                         await DatabaseService
                                                                 .updatePengungsian(
-                                                                    widget.profileWarga![
+                                                                    widget.profileData![
                                                                         'pengungsian'],
                                                                     dataPengungsiBaru)
                                                             .then((value) => {
