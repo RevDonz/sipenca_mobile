@@ -1,149 +1,311 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../components/appBar.dart';
-import '../../firebase/auth.dart';
 import '../../firebase/pengungsian.dart';
-import '../warga/profile.dart';
-import 'warga.dart';
 
-class DetailPengungsianPetugas extends StatefulWidget {
-  const DetailPengungsianPetugas({super.key});
+class DetailPengungsian extends StatefulWidget {
+  const DetailPengungsian({super.key, required this.profileWarga});
+  final Map<String, dynamic>? profileWarga;
 
   @override
-  State<DetailPengungsianPetugas> createState() => _DetailPengungsianState();
+  State<DetailPengungsian> createState() => _DetailPengungsianState();
 }
 
-class _DetailPengungsianState extends State<DetailPengungsianPetugas> {
-  List<Map<String, dynamic>> dataPengungsi = [];
-  Map<String, dynamic>? profilePetugas;
-  int _selectedIndex = 0;
+class _DetailPengungsianState extends State<DetailPengungsian> {
+  TextEditingController namaController = TextEditingController();
+  TextEditingController kapasitasController = TextEditingController();
+  TextEditingController descController = TextEditingController();
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  Map<String, dynamic>? dataPengungsi = {};
+  Map<String, dynamic>? dataPengungsiBaru = {};
+  bool isLoading = true;
 
-  void getProfile() async {
-    Map<String, dynamic>? userData =
-        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
+  void getDataPengungsian() async {
+    Map<String, dynamic>? data = await DatabaseService.getPengungsianById(
+        widget.profileWarga!['pengungsian']);
 
     setState(() {
-      profilePetugas = userData;
-    });
-  }
-
-  void getListPengungsi() async {
-    List<Map<String, dynamic>> list = [];
-    QuerySnapshot<Map<String, dynamic>> snap =
-        await FirebaseFirestore.instance.collection('users').get();
-
-    Map<String, dynamic>? userData =
-        await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
-
-    snap.docs.forEach((element) {
-      if (element.data()['occupied'] == userData!['pengungsian']) {
-        Map<String, dynamic> data = element.data();
-        data['id'] = element.id;
-        list.add(data);
-      }
-    });
-    setState(() {
-      dataPengungsi = list;
+      dataPengungsi = data;
+      dataPengungsiBaru = data;
+      isLoading = false;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getProfile();
-    getListPengungsi();
+    getDataPengungsian();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetOptions = <Widget>[
-      const PengungsiWarga(),
-      const DetailPengungsianPetugas(),
-      ProfilePage(profileWarga: profilePetugas),
-    ];
-
-    return Scaffold(
-      body: SafeArea(
-          child: SingleChildScrollView(
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2,
+      child: Scaffold(
+          body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(children: [
-            const AppBarSipenca(role: "Petugas"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [Text('Pengungsi ditampung')],
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: dataPengungsi.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {},
-                  child: Card(
-                    elevation: 0,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16))),
-                    child: InkWell(
-                      hoverColor: Colors.transparent,
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(dataPengungsi[index]['full_name']),
-                                // Text(jarak),
-                                // Text("${dataPengungsi[index]['member']}orang"),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16),
-                              child: Text(dataPengungsi[index]['alamat']),
-                            ),
-                            if (dataPengungsi[index]['pulang'])
-                              FloatingActionButton(
-                                heroTag: "btnPengungsi$index",
-                                onPressed: () {
-                                  Map<String, dynamic> data =
-                                      dataPengungsi[index];
-                                  data['occupied'] = '';
-                                  data['reserve'] = '';
-                                  data['pulang'] = false;
-                                  FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(dataPengungsi[index]['id'])
-                                      .update(data);
-                                  setState(() {
-                                    getListPengungsi();
-                                  });
-                                },
-                                backgroundColor: Colors.indigoAccent,
-                                elevation: 5,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12))),
-                                child: const Icon(Icons.input),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
+          child: Column(
+            children: [
+              const AppBarSipenca(role: "Petugas"),
+              const SizedBox(height: 10),
+              const TabBar(
+                indicatorColor: Colors.indigoAccent,
+                labelColor: Colors.indigoAccent,
+                unselectedLabelColor: Colors.grey,
+                overlayColor: MaterialStatePropertyAll(Colors.transparent),
+                tabs: <Widget>[
+                  Tab(
+                    text: "Detail Pengungsian",
                   ),
-                );
-              },
-            )
-          ]),
+                  Tab(
+                    text: "Kebutuhan",
+                  ),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: <Widget>[
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20)),
+                                    child: Image.network(
+                                      "https://picsum.photos/id/${Random().nextInt(100)}/500/300",
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(dataPengungsi!["nama"],
+                                                  style: const TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                              Text(dataPengungsi!["alamat"],
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.grey)),
+                                            ],
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              showDialog<String>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AlertDialog(
+                                                  title: const Text(
+                                                      'Edit Pengungsian'),
+                                                  content:
+                                                      SingleChildScrollView(
+                                                    child: ListBody(
+                                                      children: [
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 10),
+                                                          child: TextField(
+                                                            controller: namaController
+                                                              ..text =
+                                                                  dataPengungsi![
+                                                                      'nama'],
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                              labelText:
+                                                                  'Nama Pengungsian',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 10),
+                                                          child: TextField(
+                                                            controller: kapasitasController
+                                                              ..text = dataPengungsi![
+                                                                      'kapasitas_max']
+                                                                  .toString(),
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            inputFormatters: [
+                                                              FilteringTextInputFormatter
+                                                                  .digitsOnly,
+                                                            ],
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                              labelText:
+                                                                  'Kapasitas maksimal',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 10),
+                                                          child: TextField(
+                                                            controller: descController
+                                                              ..text = dataPengungsi![
+                                                                      'deskripsi']
+                                                                  .toString(),
+                                                                  keyboardType:
+                                                                TextInputType
+                                                                    .multiline,
+                                                            maxLines: null,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10)),
+                                                              labelText:
+                                                                  'Deskripsi Pengungsian',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(context,
+                                                              'Cancel'),
+                                                      child:
+                                                          const Text('Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        Navigator.pop(
+                                                            context, 'OK');
+                                                        dataPengungsiBaru![
+                                                                'nama'] =
+                                                            namaController.text;
+                                                        dataPengungsiBaru![
+                                                                'kapasitas_max'] =
+                                                            int.parse(
+                                                                kapasitasController
+                                                                    .text);
+                                                        dataPengungsiBaru![
+                                                                'deskripsi'] =
+                                                            descController.text;
+                                                        await DatabaseService
+                                                                .updatePengungsian(
+                                                                    widget.profileWarga![
+                                                                        'pengungsian'],
+                                                                    dataPengungsiBaru)
+                                                            .then((value) => {
+                                                                  getDataPengungsian()
+                                                                });
+                                                      },
+                                                      child: const Text('OK'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            icon:
+                                                const Icon(Icons.edit_document),
+                                            color: Colors.indigoAccent,
+                                            splashRadius: 25,
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Wrap(
+                                          direction: Axis.horizontal,
+                                          spacing: 10,
+                                          children: [
+                                            OutlinedButton.icon(
+                                                onPressed: () {},
+                                                style: OutlinedButton.styleFrom(
+                                                    foregroundColor:
+                                                        Colors.indigoAccent,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            15),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50)),
+                                                    side: const BorderSide(
+                                                        color:
+                                                            Colors.indigoAccent,
+                                                        width: 2)),
+                                                icon: const Icon(
+                                                    Icons.group_outlined),
+                                                label: Text(
+                                                    "${dataPengungsi!["kapasitas_max"] - dataPengungsi!["kapasitas_terisi"]} / ${dataPengungsi!["kapasitas_max"]}"))
+                                          ]),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Text(
+                                        "Description",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      Text(
+                                        dataPengungsi!['deskripsi'],
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                    Center(
+                      child: Text("Kedua"),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       )),
     );

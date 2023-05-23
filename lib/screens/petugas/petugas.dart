@@ -81,7 +81,7 @@ class _ListPengungsiState extends State<ListPengungsi> {
   Widget build(BuildContext context) {
     List<Widget> widgetOptions = <Widget>[
       const PengungsiWarga(),
-      const DetailPengungsianPetugas(),
+      DetailPengungsian(profileWarga: profilePetugas),
       ProfilePage(profileWarga: profilePetugas),
     ];
 
