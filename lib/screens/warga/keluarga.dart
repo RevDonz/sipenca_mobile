@@ -7,7 +7,8 @@ import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class KeluargaPage extends StatefulWidget {
-  const KeluargaPage({super.key});
+  const KeluargaPage({super.key, required this.profileWarga});
+  final Map<String, dynamic>? profileWarga;
 
   @override
   State<KeluargaPage> createState() => _KeluargaPageState();
@@ -47,8 +48,8 @@ class _KeluargaPageState extends State<KeluargaPage> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                const AppBarSipenca(
-                  role: "Pengungsi",
+                AppBarSipenca(
+                  role: widget.profileWarga!['full_name'],
                 ),
                 const SizedBox(
                   height: 20,
