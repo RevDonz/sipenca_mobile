@@ -12,7 +12,8 @@ class Petugas extends Users {
   String? pengungsian;
   DateTime? tglLahir;
 
-  Petugas();
+  Petugas(this.alamat, this.jenisKelamin, this.nik, this.noHp, this.pengungsian,
+      this.tglLahir);
 }
 
 class Warga extends Users {
