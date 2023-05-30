@@ -41,6 +41,26 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void _signIn() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    User? user = await AuthService.signIn(
+        _emailController.text, _passwordController.text);
+    if (user != null) {
+      String userId = AuthService.getCurrentUserID();
+      Map<String, dynamic>? userData =
+          await DatabaseService.getDetailUsers(userId);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setString('ProfileUser', jsonEncode(userData));
+      prefs.setBool('isLogin', true);
+      _showSuccessLogin(userData);
+    } else {
+      // User gagal login
+      _showFailedLogin();
+    }
+  }
+
   Future<void> _showSuccessLogin(Map<String, dynamic>? user) async {
     return showDialog(
       context: context,
@@ -154,26 +174,6 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
-  }
-
-  void _signIn() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    User? user = await AuthService.signIn(
-        _emailController.text, _passwordController.text);
-    if (user != null) {
-      String userId = AuthService.getCurrentUserID();
-      Map<String, dynamic>? userData =
-          await DatabaseService.getDetailUsers(userId);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      prefs.setString('ProfileUser', jsonEncode(userData));
-      prefs.setBool('isLogin', true);
-      _showSuccessLogin(userData);
-    } else {
-      // User gagal login
-      _showFailedLogin();
-    }
   }
 
   Widget build(BuildContext context) {

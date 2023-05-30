@@ -12,6 +12,12 @@ class AppBarSipenca extends StatefulWidget {
 }
 
 class _AppBarSipencaState extends State<AppBarSipenca> {
+  
+  void clearData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -67,8 +73,8 @@ class _AppBarSipencaState extends State<AppBarSipenca> {
                     return const LoginPage();
                   },
                 ));
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.clear();
+
+                clearData();
               },
               icon: const Icon(Icons.login),
             ),
