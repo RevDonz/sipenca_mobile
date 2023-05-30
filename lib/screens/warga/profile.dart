@@ -256,6 +256,8 @@ class ProfilePageState extends State<ProfilePage> {
                                                 ..text = widget
                                                     .profileWarga!["nik"]
                                                     .toString(),
+                                              keyboardType:
+                                                  TextInputType.number,
                                               inputFormatters: [
                                                 FilteringTextInputFormatter
                                                     .digitsOnly,
