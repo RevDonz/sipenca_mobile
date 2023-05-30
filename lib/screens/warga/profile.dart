@@ -386,7 +386,7 @@ class ProfilePageState extends State<ProfilePage> {
                                                   if (date != null) {
                                                     tanggalLahirUpdateController
                                                             .text =
-                                                        DateFormat('MM/dd/yyyy')
+                                                        DateFormat('dd/MM/yyyy')
                                                             .format(date);
                                                   }
                                                 }),
