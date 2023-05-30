@@ -335,7 +335,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: const Text('Update Data'),
+                                title: const Text('Tambah Kebutuhan Pengungsian'),
                                 content: Builder(builder: (context) {
                                   return Container(
                                     // height: height - 300,
@@ -401,7 +401,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                       getDataKebutuhan();
                                       Navigator.pop(context, 'OK');
                                     },
-                                    child: const Text('Update'),
+                                    child: const Text('Tambah'),
                                   ),
                                 ],
                               ),
