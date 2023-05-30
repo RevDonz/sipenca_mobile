@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/screens/Auth/login.dart';
 
@@ -19,8 +20,7 @@ class _AppBarSipencaState extends State<AppBarSipenca> {
         Row(
           children: [
             CircleAvatar(
-              backgroundImage:
-                  const NetworkImage("https://picsum.photos/200"),
+              backgroundImage: const NetworkImage("https://picsum.photos/200"),
               backgroundColor: Colors.grey.shade100,
               radius: 25,
             ),
@@ -59,13 +59,16 @@ class _AppBarSipencaState extends State<AppBarSipenca> {
             IconButton(
               iconSize: 30,
               splashRadius: 25,
-              onPressed: () {
+              onPressed: () async {
                 AuthService.signOut();
+
                 Navigator.push(context, MaterialPageRoute<void>(
                   builder: (BuildContext context) {
                     return const LoginPage();
                   },
                 ));
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.clear();
               },
               icon: const Icon(Icons.login),
             ),

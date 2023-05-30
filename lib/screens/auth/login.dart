@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 import '../../firebase/auth.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -17,6 +20,20 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscured = true;
+
+  @override
+  void initState() {
+    // checkLogin();
+  }
+
+  void checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isLogin = prefs.getBool('isLogin');
+    Map<String, dynamic>? profile = jsonDecode(prefs.getString('ProfileUser')!);
+
+    // ignore: use_build_context_synchronously
+    isLogin! ? Navigator.pushNamed(context, "/${profile!['role']}") : '';
+  }
 
   void _toggleObscure() {
     setState(() {
@@ -148,30 +165,16 @@ class _LoginPageState extends State<LoginPage> {
       String userId = AuthService.getCurrentUserID();
       Map<String, dynamic>? userData =
           await DatabaseService.getDetailUsers(userId);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      // prefs.setString('ProfileUser', jsonEncode(userData));
+      prefs.setString('ProfileUser', jsonEncode(userData));
+      prefs.setBool('isLogin', true);
       _showSuccessLogin(userData);
     } else {
       // User gagal login
       _showFailedLogin();
     }
   }
-
-  // void checkSession() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   String? stringUser = prefs.getString('ProfileUser');
-  //   if (stringUser != "") {
-  //     Navigator.pushNamed(context, "/warga");
-  //   }
-  //   // Map<String, dynamic>? userData = jsonDecode(string_user!);
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   checkSession();
-  // }
 
   Widget build(BuildContext context) {
     return MaterialApp(
