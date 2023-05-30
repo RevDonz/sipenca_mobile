@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
+import 'package:intl/intl.dart';
 
 class ProfilePage extends StatefulWidget {
   final Map<String, dynamic>? profileWarga;
@@ -254,6 +256,10 @@ class ProfilePageState extends State<ProfilePage> {
                                                 ..text = widget
                                                     .profileWarga!["nik"]
                                                     .toString(),
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .digitsOnly,
+                                              ],
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                     borderRadius:
@@ -333,6 +339,12 @@ class ProfilePageState extends State<ProfilePage> {
                                                     ..text = widget
                                                         .profileWarga!["no_hp"]
                                                         .toString(),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .digitsOnly,
+                                              ],
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                     borderRadius:
@@ -346,19 +358,36 @@ class ProfilePageState extends State<ProfilePage> {
                                             margin: const EdgeInsets.symmetric(
                                                 vertical: 10),
                                             child: TextField(
-                                              controller:
-                                                  tanggalLahirUpdateController
-                                                    ..text =
-                                                        widget.profileWarga![
-                                                            "tgl_lahir"],
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                labelText: 'Tanggal Lahir',
-                                              ),
-                                            ),
+                                                controller:
+                                                    tanggalLahirUpdateController
+                                                      ..text =
+                                                          widget.profileWarga![
+                                                              "tgl_lahir"],
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  labelText: 'Tanggal Lahir',
+                                                ),
+                                                readOnly: true,
+                                                onTap: () async {
+                                                  var date =
+                                                      await showDatePicker(
+                                                          context: context,
+                                                          initialDate:
+                                                              DateTime.now(),
+                                                          firstDate:
+                                                              DateTime(1900),
+                                                          lastDate:
+                                                              DateTime(2100));
+                                                  if (date != null) {
+                                                    tanggalLahirUpdateController
+                                                            .text =
+                                                        DateFormat('MM/dd/yyyy')
+                                                            .format(date);
+                                                  }
+                                                }),
                                           ),
                                         ],
                                       ),
