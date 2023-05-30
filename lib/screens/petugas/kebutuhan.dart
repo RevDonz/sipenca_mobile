@@ -335,7 +335,8 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
-                                title: const Text('Tambah Kebutuhan Pengungsian'),
+                                title:
+                                    const Text('Tambah Kebutuhan Pengungsian'),
                                 content: Builder(builder: (context) {
                                   return Container(
                                     // height: height - 300,
