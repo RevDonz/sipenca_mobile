@@ -43,45 +43,16 @@ class ProfilePageState extends State<ProfilePage> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
-            const SizedBox(
-              height: 20,
-            ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage:
-                            const NetworkImage("https://picsum.photos/200"),
-                        backgroundColor: Colors.grey.shade100,
-                        radius: 25,
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Profile Page",
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                  AppBarSipenca(
+                    role: widget.profileWarga!["full_name"],
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
@@ -278,6 +249,10 @@ class ProfilePageState extends State<ProfilePage> {
                                               controller: namaUpdateController
                                                 ..text = widget
                                                     .profileWarga!["full_name"],
+                                              inputFormatters: [
+                                                LengthLimitingTextInputFormatter(
+                                                    15),
+                                              ],
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(
                                                     borderRadius:
