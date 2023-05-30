@@ -26,4 +26,19 @@ class NeedsService {
 
     return listKebutuhan;
   }
+
+  static Future<void> updateKebutuhan(
+      String docId, Map<String, dynamic> data) async {
+    await FirebaseFirestore.instance
+        .collection('kebutuhan')
+        .doc(docId)
+        .update(data);
+  }
+
+  static Future<void> deleteKebutuhan(String docId) async {
+    await FirebaseFirestore.instance
+        .collection('kebutuhan')
+        .doc(docId)
+        .delete();
+  }
 }

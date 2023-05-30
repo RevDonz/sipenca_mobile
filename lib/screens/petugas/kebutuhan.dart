@@ -318,20 +318,153 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                           ),
                     Scaffold(
                       body: Padding(
-                        padding: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.only(top: 0),
                         child: ListView.builder(
                           itemCount: listKebutuhan.length,
                           itemBuilder: (context, index) {
                             return Card(
-                              child: Text(listKebutuhan[index]['kebutuhan']),
+                              child: ListTile(
+                                title: Text(listKebutuhan[index]['kebutuhan']),
+                                onLongPress: () {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text('Konfirmasi'),
+                                      content: const Text(
+                                          'Apakah anda yakin ingin menghapus data?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () => {
+                                            Navigator.pop(context, 'Cancel'),
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Penghapusan data dibatalkan'),
+                                              ),
+                                            )
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            Navigator.pop(context, 'OK');
+                                            String docId = await DatabaseService
+                                                .getDocumentIdFromQuery(
+                                                    'kebutuhan',
+                                                    'kebutuhan',
+                                                    listKebutuhan[index]
+                                                        ['kebutuhan']);
+
+                                            NeedsService.deleteKebutuhan(docId);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Data berhasil dihapus!'),
+                                              ),
+                                            );
+                                            getDataKebutuhan();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                onTap: () {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text(
+                                          'Perbarui Kebutuhan Pengungsian'),
+                                      content: SingleChildScrollView(
+                                          child: ListBody(children: [
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                hintText: "Kebutuhan"),
+                                            controller: kebutuhanController
+                                              ..text = listKebutuhan[index]
+                                                  ['kebutuhan'],
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child:
+                                              DropdownButtonFormField<String>(
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              labelText: 'Kategori',
+                                            ),
+                                            items: const [
+                                              DropdownMenuItem<String>(
+                                                  value: "primer",
+                                                  child: Text("Primer")),
+                                              DropdownMenuItem<String>(
+                                                  value: "sekunder",
+                                                  child: Text("Sekunder")),
+                                            ],
+                                            value: kategori,
+                                            onChanged: (value) {
+                                              kategori = value!;
+                                            },
+                                          ),
+                                        ),
+                                      ])),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Cancel'),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            Navigator.pop(context, 'OK');
+                                            String docId = await DatabaseService
+                                                .getDocumentIdFromQuery(
+                                                    'kebutuhan',
+                                                    'kebutuhan',
+                                                    listKebutuhan[index]
+                                                        ['kebutuhan']);
+
+                                            Map<String, dynamic> data =
+                                                listKebutuhan[index];
+
+                                            data['kebutuhan'] =
+                                                kebutuhanController.text;
+                                            data['kategori'] = kategori;
+                                            NeedsService.updateKebutuhan(
+                                                docId, data);
+                                            kebutuhanController.text = "";
+                                            kategoriController.text = "";
+                                            getDataKebutuhan();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                             );
                           },
                         ),
                       ),
                       floatingActionButton: FloatingActionButton(
                           onPressed: () {
-                            // NeedsService.addKebutuhan(
-                            //     "kebutuhan", "kategori", "doc");
                             showDialog<String>(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
@@ -339,8 +472,6 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                     const Text('Tambah Kebutuhan Pengungsian'),
                                 content: Builder(builder: (context) {
                                   return Container(
-                                    // height: height - 300,
-                                    // width: width - 200,
                                     child: SingleChildScrollView(
                                       child: ListBody(
                                         children: [
@@ -399,6 +530,8 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                     onPressed: () async {
                                       NeedsService.addKebutuhan(
                                           kebutuhanController.text, kategori);
+                                      kebutuhanController.text = "";
+                                      kategoriController.text = "";
                                       getDataKebutuhan();
                                       Navigator.pop(context, 'OK');
                                     },
