@@ -153,7 +153,7 @@ class _RegisterPengungsianState extends State<RegisterPengungsian> {
                           controller: _kapasitasController,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly,
                           ],
                           decoration: InputDecoration(
                             border: OutlineInputBorder(

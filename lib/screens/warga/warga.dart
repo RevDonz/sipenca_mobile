@@ -17,6 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Map<String, dynamic>? profileUser = {};
   Map<String, dynamic>? occupied_pengungsian;
   bool isLoading = true;
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -31,7 +32,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       profileUser = userData;
-      isLoading = false;
     });
   }
 
@@ -41,11 +41,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       DataPengungsian = list;
-      isLoading = false;
     });
   }
 
-  void checkProfile() async {
+  Future<void> checkProfile() async {
     Map<String, dynamic>? userData =
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
 
@@ -57,25 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
         userData['alamat'] == "") {
       setState(() {
         _selectedIndex = 2;
-        isLoading = false;
       });
     }
-    // else if (userData['occupied'] != '') {
-    //   setState(() {
-    //     occupied_pengungsian = DataPengungsian.where(
-    //         (element) => element['id'] == userData['occupied']).first;
-    //   });
-    // print("sini");
-    // print(DataPengungsian);
-    // DataPengungsian.forEach((element) {
-    //   print(element);
-    // if (element['id'] == userData['occupied']) {
-    //   setState(() {
-    //     occupied_pengungsian = element;
-    //   });
-    // }
-    // });
-    // }
   }
 
   void _updateOccupied() async {
@@ -100,8 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     getProfile();
     getListPengungsian();
-    checkProfile();
-    _updateOccupied();
+    checkProfile().then((value) {
+      _updateOccupied();
+    });
   }
 
   @override
@@ -118,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   profile: profileUser,
                 ),
       // HomePage(listPengungsian: DataPengungsian, profile: profileUser),
-      const KeluargaPage(),
+      KeluargaPage(profileWarga: profileUser),
       ProfilePage(profileWarga: profileUser),
     ];
 
