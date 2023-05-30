@@ -83,8 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
     getProfile();
     getListPengungsian();
     checkProfile().then((value) {
-      _updateOccupied();
+      setState(() {
+        isLoading = false;
+      });
     });
+    _updateOccupied();
   }
 
   @override
