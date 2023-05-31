@@ -28,7 +28,6 @@ class _DaftarPengungsianState extends State<DaftarPengungsian> {
   @override
   void initState() {
     super.initState();
-
     getListPengungsian();
   }
 

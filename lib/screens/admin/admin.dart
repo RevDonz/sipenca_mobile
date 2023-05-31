@@ -75,11 +75,6 @@ class _AdminPageState extends State<AdminPage> {
             activeIcon: Icon(Icons.group_rounded),
             label: 'Warga',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.indigoAccent,
