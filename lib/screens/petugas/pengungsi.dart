@@ -175,83 +175,92 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
                         );
                       },
                     ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: dataPengungsiOccupied.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {},
-                          child: Card(
-                            elevation: 0,
-                            shape: const RoundedRectangleBorder(
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        getListReserve();
+                        getListOccupied();
+                      },
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: dataPengungsiOccupied.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {},
+                            child: Card(
+                              elevation: 0,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16))),
+                              child: InkWell(
+                                hoverColor: Colors.transparent,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(16))),
-                            child: InkWell(
-                              hoverColor: Colors.transparent,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(16)),
-                              onTap: () {},
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(dataPengungsiOccupied[index]
-                                            ['full_name']),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 16),
-                                      child: Text(dataPengungsiOccupied[index]
-                                          ['alamat']),
-                                    ),
-                                    if (dataPengungsiOccupied[index]['pulang'])
-                                      FloatingActionButton(
-                                        heroTag: "btnPengungsi$index",
-                                        onPressed: () {
-                                          Map<String, dynamic> data =
-                                              dataPengungsiOccupied[index];
-
-                                          FirebaseFirestore.instance
-                                              .collection('pengungsians')
-                                              .doc(data['occupied'])
-                                              .update({
-                                            'kapasitas_terisi':
-                                                FieldValue.increment(
-                                                    data['keluarga'] * -1)
-                                          });
-
-                                          data['occupied'] = '';
-                                          data['reserve'] = '';
-                                          data['pulang'] = false;
-                                          FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(dataPengungsiOccupied[index]
-                                                  ['id'])
-                                              .update(data);
-                                          setState(() {
-                                            getListOccupied();
-                                          });
-                                        },
-                                        backgroundColor: Colors.indigoAccent,
-                                        elevation: 5,
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(12))),
-                                        child: const Icon(Icons.input),
+                                    const BorderRadius.all(Radius.circular(16)),
+                                onTap: () {},
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(dataPengungsiOccupied[index]
+                                              ['full_name']),
+                                        ],
                                       ),
-                                  ],
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: Text(dataPengungsiOccupied[index]
+                                            ['alamat']),
+                                      ),
+                                      if (dataPengungsiOccupied[index]
+                                          ['pulang'])
+                                        FloatingActionButton(
+                                          heroTag: "btnPengungsi$index",
+                                          onPressed: () {
+                                            Map<String, dynamic> data =
+                                                dataPengungsiOccupied[index];
+
+                                            FirebaseFirestore.instance
+                                                .collection('pengungsians')
+                                                .doc(data['occupied'])
+                                                .update({
+                                              'kapasitas_terisi':
+                                                  FieldValue.increment(
+                                                      data['keluarga'] * -1)
+                                            });
+
+                                            data['occupied'] = '';
+                                            data['reserve'] = '';
+                                            data['pulang'] = false;
+                                            FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(
+                                                    dataPengungsiOccupied[index]
+                                                        ['id'])
+                                                .update(data);
+                                            setState(() {
+                                              getListOccupied();
+                                            });
+                                          },
+                                          backgroundColor: Colors.indigoAccent,
+                                          elevation: 5,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12))),
+                                          child: const Icon(Icons.input),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     )
                   ],
                 ),

@@ -3,20 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DatabaseService {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<String?> addAkun(
-      {required String email,
-      required String role,
-      required String password}) async {
-    try {
-      CollectionReference akun = FirebaseFirestore.instance.collection("akun");
-      await akun.doc(email).set({'role': role, 'password': password});
-
-      return 'Success';
-    } catch (e) {
-      return 'Error register user';
-    }
-  }
-
   static Future<List<Map<String, dynamic>>> getAllUsers() async {
     List<Map<String, dynamic>> listUser = [];
 

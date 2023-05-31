@@ -68,10 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
         await DatabaseService.getVerifiedPengungsian();
 
     if (userData!['occupied'] != '') {
+      Map<String, dynamic> filtered =
+          list.where((element) => element['id'] == userData['occupied']).first;
+      print(filtered);
       setState(() {
-        occupied_pengungsian = list
-            .where((element) => element['id'] == userData['occupied'])
-            .first;
+        occupied_pengungsian = filtered;
         isLoading = false;
       });
     }
