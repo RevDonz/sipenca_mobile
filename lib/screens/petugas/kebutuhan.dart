@@ -29,24 +29,23 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
   bool isLoading = true;
   String kategori = 'primer';
 
-  Future<void> getDataPengungsian() async {
+  Future<Map<String, dynamic>?> getDataPengungsian() async {
     Map<String, dynamic>? data = await DatabaseService.getPengungsianById(
         widget.profileData!['pengungsian']);
 
-    setState(() {
-      dataPengungsi = data;
-      dataPengungsiBaru = data;
-      isLoading = false;
-    });
+    return data;
   }
 
-  void getDataKebutuhan() async {
+  void getDataKebutuhan(Map<String, dynamic>? data) async {
     List<Map<String, dynamic>> list = [];
 
     list = await NeedsService.getAllKebutuhan();
 
     setState(() {
+      dataPengungsi = data;
+      dataPengungsiBaru = data;
       listKebutuhan = list;
+      isLoading = false;
     });
   }
 
@@ -54,7 +53,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
   void initState() {
     super.initState();
     getDataPengungsian().then((value) {
-      getDataKebutuhan();
+      getDataKebutuhan(value);
     });
   }
 
@@ -365,7 +364,9 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                                     'Data berhasil dihapus!'),
                                               ),
                                             );
-                                            getDataKebutuhan();
+                                            getDataPengungsian().then((value) {
+                                              getDataKebutuhan(value);
+                                            });
                                           },
                                           child: const Text('OK'),
                                         ),
@@ -450,7 +451,9 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                                 docId, data);
                                             kebutuhanController.text = "";
                                             kategoriController.text = "";
-                                            getDataKebutuhan();
+                                            getDataPengungsian().then((value) {
+                                              getDataKebutuhan(value);
+                                            });
                                           },
                                           child: const Text('OK'),
                                         ),
@@ -532,7 +535,9 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                           kebutuhanController.text, kategori);
                                       kebutuhanController.text = "";
                                       kategoriController.text = "";
-                                      getDataKebutuhan();
+                                      getDataPengungsian().then((value) {
+                                        getDataKebutuhan(value);
+                                      });
                                       Navigator.pop(context, 'OK');
                                     },
                                     child: const Text('Tambah'),
