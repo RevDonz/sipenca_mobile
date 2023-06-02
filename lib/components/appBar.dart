@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
-import 'package:sipenca_mobile/screens/Auth/login.dart';
+import 'package:sipenca_mobile/screens/auth/login.dart';
+
 
 class AppBarSipenca extends StatefulWidget {
   final String role;

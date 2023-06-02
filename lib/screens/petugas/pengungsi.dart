@@ -96,85 +96,93 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
               Expanded(
                 child: TabBarView(
                   children: <Widget>[
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: dataPengungsiReserve.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {},
-                          child: Card(
-                            elevation: 0,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16))),
-                            child: InkWell(
-                              hoverColor: Colors.transparent,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(16)),
-                              onTap: () {},
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(dataPengungsiReserve[index]
-                                            ['full_name']),
-                                        // Text(jarak),
-                                        // Text("${dataPengungsi[index]['member']}orang"),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 16),
-                                      child: Text(dataPengungsiReserve[index]
-                                          ['alamat']),
-                                    ),
-                                    FloatingActionButton(
-                                      heroTag: "btnPengungsi$index",
-                                      onPressed: () {
-                                        Map<String, dynamic> data =
-                                            dataPengungsiReserve[index];
-                                        data['occupied'] = data['reserve'];
-                                        data['reserve'] = '';
+                    dataPengungsiReserve.isEmpty
+                        ? const Center(
+                            child: Text("Tidak ada data untuk ditampilkan!"),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: dataPengungsiReserve.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {},
+                                child: Card(
+                                  elevation: 0,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16))),
+                                  child: InkWell(
+                                    hoverColor: Colors.transparent,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(16)),
+                                    onTap: () {},
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(dataPengungsiReserve[index]
+                                                  ['full_name']),
+                                              // Text(jarak),
+                                              // Text("${dataPengungsi[index]['member']}orang"),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 16),
+                                            child: Text(
+                                                dataPengungsiReserve[index]
+                                                    ['alamat']),
+                                          ),
+                                          FloatingActionButton(
+                                            heroTag: "btnPengungsi$index",
+                                            onPressed: () {
+                                              Map<String, dynamic> data =
+                                                  dataPengungsiReserve[index];
+                                              data['occupied'] =
+                                                  data['reserve'];
+                                              data['reserve'] = '';
 
-                                        FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(dataPengungsiReserve[index]
-                                                ['id'])
-                                            .update(data);
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(dataPengungsiReserve[
+                                                      index]['id'])
+                                                  .update(data);
 
-                                        FirebaseFirestore.instance
-                                            .collection('pengungsians')
-                                            .doc(data['occupied'])
-                                            .update({
-                                          'kapasitas_terisi':
-                                              FieldValue.increment(
-                                                  data['keluarga'])
-                                        });
-                                        setState(() {
-                                          getListReserve();
-                                          getListOccupied();
-                                        });
-                                      },
-                                      backgroundColor: Colors.indigoAccent,
-                                      elevation: 5,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12))),
-                                      child: const Icon(Icons.input),
+                                              FirebaseFirestore.instance
+                                                  .collection('pengungsians')
+                                                  .doc(data['occupied'])
+                                                  .update({
+                                                'kapasitas_terisi':
+                                                    FieldValue.increment(
+                                                        data['keluarga'])
+                                              });
+                                              setState(() {
+                                                getListReserve();
+                                                getListOccupied();
+                                              });
+                                            },
+                                            backgroundColor:
+                                                Colors.indigoAccent,
+                                            elevation: 5,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(12))),
+                                            child: const Icon(Icons.input),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                     RefreshIndicator(
                       onRefresh: () async {
                         getListReserve();
