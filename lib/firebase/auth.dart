@@ -94,4 +94,16 @@ class AuthService {
       return e.code;
     }
   }
+
+  static Future<void> deleteUserById(String docId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(docId)
+          .delete();
+    } catch (e) {
+      // Handle error jika terjadi kesalahan
+      print(e.toString());
+    }
+  }
 }

@@ -174,4 +174,16 @@ class DatabaseService {
       print(e.toString());
     }
   }
+
+  static Future<void> deletePengungsianById(String docId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("pengungsians")
+          .doc(docId)
+          .delete();
+    } catch (e) {
+      // Handle error jika terjadi kesalahan
+      print(e.toString());
+    }
+  }
 }

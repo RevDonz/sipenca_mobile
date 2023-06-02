@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sipenca_mobile/components/appBar.dart';
+import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/firebase/pengungsian.dart';
 
 class DaftarPengungsian extends StatefulWidget {
@@ -94,54 +94,88 @@ class _DaftarPengungsianState extends State<DaftarPengungsian> {
                                         ),
                                       ],
                                     ),
-                                    FloatingActionButton(
-                                      heroTag: "btnPengungsian$index",
-                                      onPressed: () {
-                                        listPengungsian[index]['rescueData']
-                                            ['verified'] = true;
+                                    Wrap(
+                                      spacing: 10,
+                                      children: [
+                                        FloatingActionButton(
+                                          heroTag: "btnPengungsian$index",
+                                          onPressed: () {
+                                            listPengungsian[index]['rescueData']
+                                                ['verified'] = true;
 
-                                        DatabaseService.updatePengungsian(
-                                            listPengungsian[index]
-                                                ['pengungsian'],
-                                            listPengungsian[index]
-                                                ['rescueData']);
-                                        getListPengungsian();
-                                      },
-                                      backgroundColor: Colors.indigoAccent,
-                                      elevation: 5,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12))),
-                                      child: const Icon(Icons.check),
-                                    ),
-                                    FloatingActionButton(
-                                      heroTag: "btnPengungsian$index",
-                                      onPressed: () async {
-                                        String docId = await DatabaseService
-                                            .getDocumentIdFromQuery(
-                                                'users',
-                                                'email',
+                                            DatabaseService.updatePengungsian(
                                                 listPengungsian[index]
-                                                    ['email']);
-                                        FirebaseFirestore.instance
-                                            .collection('pengungsians')
-                                            .doc(listPengungsian[index]
-                                                ['pengungsian'])
-                                            .delete();
+                                                    ['pengungsian'],
+                                                listPengungsian[index]
+                                                    ['rescueData']);
+                                            getListPengungsian();
+                                          },
+                                          backgroundColor: Colors.indigoAccent,
+                                          elevation: 5,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12))),
+                                          child: const Icon(Icons.check),
+                                        ),
+                                        FloatingActionButton(
+                                          heroTag: "btnPengungsian$index",
+                                          onPressed: () {
+                                            showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title:
+                                                    const Text('Peringatan!'),
+                                                content: const Text(
+                                                    'Apakah anda yakin ingin menghapus pengungsian?'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            context, 'Cancel'),
+                                                    child: const Text('Batal'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      String docId =
+                                                          await DatabaseService
+                                                              .getDocumentIdFromQuery(
+                                                                  'users',
+                                                                  'email',
+                                                                  listPengungsian[
+                                                                          index]
+                                                                      [
+                                                                      'email']);
+                                                      DatabaseService
+                                                          .deletePengungsianById(
+                                                              listPengungsian[
+                                                                      index][
+                                                                  'pengungsian']);
 
-                                        FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(docId)
-                                            .delete();
+                                                      AuthService
+                                                              .deleteUserById(
+                                                                  docId)
+                                                          .then((value) {
+                                                        Navigator.pop(
+                                                            context, 'OK');
+                                                      });
 
-                                        getListPengungsian();
-                                      },
-                                      backgroundColor: Colors.red,
-                                      elevation: 5,
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(12))),
-                                      child: const Icon(Icons.cancel),
+                                                      getListPengungsian();
+                                                    },
+                                                    child: const Text('Hapus'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          backgroundColor: Colors.red,
+                                          elevation: 5,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(12))),
+                                          child: const Icon(Icons.cancel),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

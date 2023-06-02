@@ -23,16 +23,24 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // checkLogin();
+    super.initState();
+    checkLogin();
   }
 
   void checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? isLogin = prefs.getBool('isLogin');
-    Map<String, dynamic>? profile = jsonDecode(prefs.getString('ProfileUser')!);
+    bool isLogin = prefs.getBool('isLogin') ?? false;
+    Map<String, dynamic>? profile;
+
+    String data = prefs.getString('ProfileUser') ?? "";
+    if (data != "") {
+      profile = jsonDecode(data);
+    }
 
     // ignore: use_build_context_synchronously
-    isLogin! ? Navigator.pushNamed(context, "/${profile!['role']}") : '';
+    isLogin
+        ? Navigator.pushReplacementNamed(context, "/${profile!['role']}")
+        : '';
   }
 
   void _toggleObscure() {
@@ -52,9 +60,20 @@ class _LoginPageState extends State<LoginPage> {
           await DatabaseService.getDetailUsers(userId);
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
+      if (userData!['role'] == 'petugas') {
+        Map<String, dynamic>? dataPengungsian =
+            await DatabaseService.getPengungsianById(userData['pengungsian']);
+        if (dataPengungsian!['verified']) {
+          _showSuccessLogin(userData);
+        } else {
+          _showFailedLogin("Akun anda belum diverifikasi");
+        }
+      } else {
+        _showSuccessLogin(userData);
+      }
+
       prefs.setString('ProfileUser', jsonEncode(userData));
       prefs.setBool('isLogin', true);
-      _showSuccessLogin(userData);
     } else {
       // User gagal login
       _showFailedLogin();
@@ -121,26 +140,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _showFailedLogin() async {
+  Future<void> _showFailedLogin([String message = "Anda gagal masuk"]) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(
             child: Column(
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   Icons.check_circle_rounded,
                   color: Colors.red,
                   size: 50,
                 ),
-                SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   "Gagal !",
                   style: TextStyle(color: Colors.red, fontSize: 20),
                 ),
                 Text(
-                  "Anda gagal masuk",
+                  message,
                   style: TextStyle(color: Color(0xFF5C5C5C), fontSize: 18),
                 )
               ],
