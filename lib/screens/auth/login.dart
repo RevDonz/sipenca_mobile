@@ -37,8 +37,8 @@ class _LoginPageState extends State<LoginPage> {
       profile = jsonDecode(data);
     }
 
-    // ignore: use_build_context_synchronously
     isLogin
+    // ignore: use_build_context_synchronously
         ? Navigator.pushReplacementNamed(context, "/${profile!['role']}")
         : '';
   }
