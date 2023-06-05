@@ -15,7 +15,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> dataPengungsian = [];
   Map<String, dynamic>? profileUser = {};
-  Map<String, dynamic>? occupiedPengungsian = {};
+  Map<String, dynamic> occupiedPengungsian = {};
   bool isLoading = true;
 
   int _selectedIndex = 0;
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _updateOccupied() async {
+  Future<void> _updateOccupied() async {
     Map<String, dynamic>? userData =
         await DatabaseService.getDetailUsers(AuthService.getCurrentUserID());
 
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       setState(() {
         occupiedPengungsian = filtered;
-        isLoading = false;
+        // isLoading = false;
       });
     }
   }
@@ -84,11 +84,12 @@ class _MyHomePageState extends State<MyHomePage> {
     getProfile();
     getListPengungsian();
     checkProfile().then((value) {
-      setState(() {
-        isLoading = false;
+      _updateOccupied().then((value) {
+        setState(() {
+          isLoading = false;
+        });
       });
     });
-    _updateOccupied();
   }
 
   @override
@@ -101,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
           : profileUser!['occupied'] == ''
               ? HomePage(listPengungsian: dataPengungsian, profile: profileUser)
               : DetailPengungsian(
-                  data: occupiedPengungsian!,
+                  data: occupiedPengungsian,
                   profile: profileUser,
                 ),
       // HomePage(listPengungsian: dataPengungsian, profile: profileUser),
