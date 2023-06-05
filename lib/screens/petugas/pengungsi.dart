@@ -132,40 +132,77 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
                                               // Text("${dataPengungsi[index]['member']}orang"),
                                             ],
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 16),
-                                            child: Text(
-                                                dataPengungsiReserve[index]
-                                                    ['alamat']),
-                                          ),
+                                          // Padding(
+                                          //   padding:
+                                          //       const EdgeInsets.only(left: 16),
+                                          //   child: Text(
+                                          //       dataPengungsiReserve[index]
+                                          //           ['alamat']),
+                                          // ),
                                           FloatingActionButton(
                                             heroTag: "btnPengungsi$index",
                                             onPressed: () {
-                                              Map<String, dynamic> data =
-                                                  dataPengungsiReserve[index];
-                                              data['occupied'] =
-                                                  data['reserve'];
-                                              data['reserve'] = '';
+                                              showDialog<String>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AlertDialog(
+                                                  title:
+                                                      const Text('Konfirmasi'),
+                                                  content: const Text(
+                                                      'Apakah anda yakin ingin menerima pengungsi?'),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () => {
+                                                        Navigator.pop(
+                                                            context, 'Cancel'),
+                                                      },
+                                                      child:
+                                                          const Text('Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Map<String, dynamic>
+                                                            data =
+                                                            dataPengungsiReserve[
+                                                                index];
+                                                        data['occupied'] =
+                                                            data['reserve'];
+                                                        data['reserve'] = '';
 
-                                              FirebaseFirestore.instance
-                                                  .collection('users')
-                                                  .doc(dataPengungsiReserve[
-                                                      index]['id'])
-                                                  .update(data);
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection('users')
+                                                            .doc(
+                                                                dataPengungsiReserve[
+                                                                        index]
+                                                                    ['id'])
+                                                            .update(data);
 
-                                              FirebaseFirestore.instance
-                                                  .collection('pengungsians')
-                                                  .doc(data['occupied'])
-                                                  .update({
-                                                'kapasitas_terisi':
-                                                    FieldValue.increment(
-                                                        data['keluarga'])
-                                              });
-                                              setState(() {
-                                                getListReserve();
-                                                getListOccupied();
-                                              });
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'pengungsians')
+                                                            .doc(data[
+                                                                'occupied'])
+                                                            .update({
+                                                          'kapasitas_terisi':
+                                                              FieldValue
+                                                                  .increment(data[
+                                                                      'keluarga'])
+                                                        });
+                                                        setState(() {
+                                                          getListReserve();
+                                                          getListOccupied();
+                                                        });
+                                                        Navigator.pop(
+                                                            context, 'Cancel');
+                                                      },
+                                                      child: const Text('OK'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
                                             },
                                             backgroundColor:
                                                 Colors.indigoAccent,
@@ -173,7 +210,7 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
                                             shape: const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(12))),
-                                            child: const Icon(Icons.input),
+                                            child: const Icon(Icons.check),
                                           ),
                                         ],
                                       ),
@@ -218,41 +255,70 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
                                               ['full_name']),
                                         ],
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16),
-                                        child: Text(dataPengungsiOccupied[index]
-                                            ['alamat']),
-                                      ),
+                                      // Padding(
+                                      //   padding:
+                                      //       const EdgeInsets.only(left: 16),
+                                      //   child: Text(dataPengungsiOccupied[index]
+                                      //       ['alamat']),
+                                      // ),
                                       if (dataPengungsiOccupied[index]
                                           ['pulang'])
                                         FloatingActionButton(
                                           heroTag: "btnPengungsi$index",
                                           onPressed: () {
-                                            Map<String, dynamic> data =
-                                                dataPengungsiOccupied[index];
+                                            showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const Text('Konfirmasi'),
+                                                content: const Text(
+                                                    'Apakah anda yakin ingin menerima pengajuan pengungsi?'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () => {
+                                                      Navigator.pop(
+                                                          context, 'Cancel'),
+                                                    },
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Map<String, dynamic>
+                                                          data =
+                                                          dataPengungsiOccupied[
+                                                              index];
 
-                                            FirebaseFirestore.instance
-                                                .collection('pengungsians')
-                                                .doc(data['occupied'])
-                                                .update({
-                                              'kapasitas_terisi':
-                                                  FieldValue.increment(
-                                                      data['keluarga'] * -1)
-                                            });
+                                                      FirebaseFirestore.instance
+                                                          .collection(
+                                                              'pengungsians')
+                                                          .doc(data['occupied'])
+                                                          .update({
+                                                        'kapasitas_terisi':
+                                                            FieldValue.increment(
+                                                                data['keluarga'] *
+                                                                    -1)
+                                                      });
 
-                                            data['occupied'] = '';
-                                            data['reserve'] = '';
-                                            data['pulang'] = false;
-                                            FirebaseFirestore.instance
-                                                .collection('users')
-                                                .doc(
-                                                    dataPengungsiOccupied[index]
-                                                        ['id'])
-                                                .update(data);
-                                            setState(() {
-                                              getListOccupied();
-                                            });
+                                                      data['occupied'] = '';
+                                                      data['reserve'] = '';
+                                                      data['pulang'] = false;
+                                                      FirebaseFirestore.instance
+                                                          .collection('users')
+                                                          .doc(
+                                                              dataPengungsiOccupied[
+                                                                  index]['id'])
+                                                          .update(data);
+                                                      setState(() {
+                                                        getListOccupied();
+                                                      });
+                                                      Navigator.pop(
+                                                          context, 'Cancel');
+                                                    },
+                                                    child: const Text('OK'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
                                           },
                                           backgroundColor: Colors.indigoAccent,
                                           elevation: 5,

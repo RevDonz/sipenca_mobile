@@ -252,21 +252,52 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                         IconButton(
                           iconSize: 30,
                           splashRadius: 25,
-                          onPressed: () {
-                            var data = widget.profile;
-                            data!['pulang'] = true;
-                            FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(widget.profile!['id'])
-                                .update(data);
-                            const snackBar = SnackBar(
-                              content: Text('Izin meninggalkan pengungsian'),
-                            );
-                            Navigator.pushNamed(context, '/warga');
+                          onPressed: widget.data["id"] != "" &&
+                                  widget.data['id'] ==
+                                      widget.profile!['reserve']
+                              ? () {}
+                              : widget.profile!['occupied'] != ""
+                                  ? () {
+                                      showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: const Text('Konfirmasi'),
+                                          content: const Text(
+                                              'Apakah anda yakin ingin meninggalkan pengungsian?'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => {
+                                                Navigator.pop(
+                                                    context, 'Cancel'),
+                                              },
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                var data = widget.profile;
+                                                data!['pulang'] = true;
+                                                FirebaseFirestore.instance
+                                                    .collection('users')
+                                                    .doc(widget.profile!['id'])
+                                                    .update(data);
+                                                const snackBar = SnackBar(
+                                                  content: Text(
+                                                      'Izin meninggalkan pengungsian'),
+                                                );
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                          },
+                                                Navigator.pop(context, 'OK');
+
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  : () {},
                           icon: widget.data["id"] != "" &&
                                   widget.data['id'] ==
                                       widget.profile!['reserve']
@@ -274,10 +305,14 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                                   // Icons.notifications_none_rounded,
                                   Icons.home,
                                   color: Colors.indigoAccent)
-                              : const Icon(
-                                  // Icons.notifications_none_rounded,
-                                  Icons.exit_to_app,
-                                  color: Colors.redAccent),
+                              : (widget.profile!['occupied'] != ""
+                                  ? const Icon(Icons.exit_to_app,
+                                      color: Colors.redAccent)
+                                  : const Icon(
+                                      // Icons.notifications_none_rounded,
+
+                                      Icons.home_outlined,
+                                      color: Colors.indigoAccent)),
                         ),
                       ],
                     ),

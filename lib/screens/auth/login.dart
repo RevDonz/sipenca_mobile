@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     isLogin
-    // ignore: use_build_context_synchronously
+        // ignore: use_build_context_synchronously
         ? Navigator.pushReplacementNamed(context, "/${profile!['role']}")
         : '';
   }
@@ -64,11 +64,21 @@ class _LoginPageState extends State<LoginPage> {
         Map<String, dynamic>? dataPengungsian =
             await DatabaseService.getPengungsianById(userData['pengungsian']);
         if (dataPengungsian!['verified']) {
+          Navigator.pushReplacementNamed(context, "/petugas", arguments: user);
+
           _showSuccessLogin(userData);
         } else {
           _showFailedLogin("Akun anda belum diverifikasi");
         }
       } else {
+        if (userData['role'] == 'warga') {
+          Navigator.pushReplacementNamed(context, "/warga");
+        } else if (userData['role'] == 'petugas') {
+          // Navigator.pushNamed(context, "/petugas", arguments: user);
+          Navigator.pushReplacementNamed(context, "/warga", arguments: user);
+        } else if (userData['role'] == 'admin') {
+          Navigator.pushReplacementNamed(context, "/admin");
+        }
         _showSuccessLogin(userData);
       }
 
@@ -110,14 +120,7 @@ class _LoginPageState extends State<LoginPage> {
             Center(
               child: TextButton(
                 onPressed: () {
-                  // print(user);
-                  if (user!['role'] == 'warga') {
-                    Navigator.pushNamed(context, "/warga");
-                  } else if (user['role'] == 'petugas') {
-                    Navigator.pushNamed(context, "/petugas", arguments: user);
-                  } else if (user['role'] == 'admin') {
-                    Navigator.pushNamed(context, "/admin");
-                  }
+                  Navigator.pop(context, 'OK');
                 },
                 style: TextButton.styleFrom(
                   shape: RoundedRectangleBorder(
