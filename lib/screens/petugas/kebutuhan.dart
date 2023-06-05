@@ -467,6 +467,7 @@ class _DetailPengungsianState extends State<DetailPengungsian> {
                         ),
                       ),
                       floatingActionButton: FloatingActionButton(
+                        heroTag: "TombolTambahKebutuhan",
                           onPressed: () {
                             showDialog<String>(
                               context: context,

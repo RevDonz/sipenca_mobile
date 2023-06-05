@@ -98,7 +98,7 @@ class _DaftarPengungsianState extends State<DaftarPengungsian> {
                                       spacing: 10,
                                       children: [
                                         FloatingActionButton(
-                                          heroTag: "btnPengungsian$index",
+                                          heroTag: "btnPengungsianAcc$index",
                                           onPressed: () {
                                             listPengungsian[index]['rescueData']
                                                 ['verified'] = true;
@@ -118,7 +118,7 @@ class _DaftarPengungsianState extends State<DaftarPengungsian> {
                                           child: const Icon(Icons.check),
                                         ),
                                         FloatingActionButton(
-                                          heroTag: "btnPengungsian$index",
+                                          heroTag: "btnPengungsianReject$index",
                                           onPressed: () {
                                             showDialog<String>(
                                               context: context,
