@@ -60,102 +60,69 @@ class _KeluargaPageState extends State<KeluargaPage> {
                   itemCount: dataKeluarga.length,
                   itemBuilder: (BuildContext context, int index) {
                     final member = dataKeluarga[index];
-                    return Dismissible(
-                      key: UniqueKey(),
-                      onDismissed: (direction) async {
-                        final userid = AuthService.getCurrentUserID();
-                        Map<String, dynamic>? userData =
-                            await DatabaseService.getDetailUsers(userid);
-                        QuerySnapshot snap = await FirebaseFirestore.instance
-                            .collection('keluarga')
-                            .where('akun', isEqualTo: userid)
-                            .get();
+                    return ListTile(
+                      title: Text(member["nama"] ?? 'unknown'),
+                      subtitle: Text(
+                          'NIK: ${member['nik']}, TTL: ${member['tanggal']}'),
+                      trailing: IconButton(
+                        color: Color.fromARGB(255, 244, 96, 85),
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Hapus Data Keluarga"),
+                                content: Text(
+                                    "Anda yakin ingin menghapus data keluarga ini?"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text("Tidak"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      final userid =
+                                          AuthService.getCurrentUserID();
+                                      Map<String, dynamic>? userData =
+                                          await DatabaseService.getDetailUsers(
+                                              userid);
+                                      QuerySnapshot snap =
+                                          await FirebaseFirestore.instance
+                                              .collection('keluarga')
+                                              .where('akun', isEqualTo: userid)
+                                              .get();
 
-                        var keluargaId = snap.docs.first.id;
+                                      var keluargaId = snap.docs.first.id;
 
-                        FirebaseFirestore.instance
-                            .collection('keluarga')
-                            .doc(keluargaId)
-                            .delete();
+                                      FirebaseFirestore.instance
+                                          .collection('keluarga')
+                                          .doc(keluargaId)
+                                          .delete();
 
-                        userData!['keluarga'] -= 1;
+                                      userData!['keluarga'] -= 1;
 
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(userid)
-                            .update(userData);
+                                      FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(userid)
+                                          .update(userData);
 
-                        getDataKeluarga();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("Data keluarga telah dihapus"),
-                        ));
-                        Navigator.pop(context);
-                      },
-                      child: ListTile(
-                        title: Text(member["nama"] ?? 'unknown'),
-                        subtitle: Text(
-                            'NIK: ${member['nik']}, TTL: ${member['tanggal']}'),
-                        trailing: IconButton(
-                          color: Color.fromARGB(255, 244, 96, 85),
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Hapus Data Keluarga"),
-                                  content: Text(
-                                      "Anda yakin ingin menghapus data keluarga ini?"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: Text("Tidak"),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        final userid =
-                                            AuthService.getCurrentUserID();
-                                        Map<String, dynamic>? userData =
-                                            await DatabaseService
-                                                .getDetailUsers(userid);
-                                        QuerySnapshot snap =
-                                            await FirebaseFirestore.instance
-                                                .collection('keluarga')
-                                                .where('akun',
-                                                    isEqualTo: userid)
-                                                .get();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content:
+                                            Text("Data keluarga telah dihapus"),
+                                      ));
+                                      getDataKeluarga();
 
-                                        var keluargaId = snap.docs.first.id;
-
-                                        FirebaseFirestore.instance
-                                            .collection('keluarga')
-                                            .doc(keluargaId)
-                                            .delete();
-
-                                        userData!['keluarga'] -= 1;
-
-                                        FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(userid)
-                                            .update(userData);
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              "Data keluarga telah dihapus"),
-                                        ));
-                                        getDataKeluarga();
-
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text("Ya"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("Ya"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                       ),
                     );
                   },
