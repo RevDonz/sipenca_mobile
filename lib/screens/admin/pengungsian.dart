@@ -95,9 +95,9 @@ class _DaftarPengungsianState extends State<DaftarPengungsian> {
                                       ],
                                     ),
                                     Wrap(
-                                      spacing: 10,
                                       children: [
                                         FloatingActionButton(
+                                          mini: true,
                                           heroTag: "btnPengungsianAcc$index",
                                           onPressed: () {
                                             listPengungsian[index]['rescueData']
@@ -119,6 +119,7 @@ class _DaftarPengungsianState extends State<DaftarPengungsian> {
                                         ),
                                         FloatingActionButton(
                                           heroTag: "btnPengungsianReject$index",
+                                          mini: true,
                                           onPressed: () {
                                             showDialog<String>(
                                               context: context,
