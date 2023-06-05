@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sipenca_mobile/firebase/auth.dart';
 import 'package:sipenca_mobile/screens/auth/login.dart';
 
-
 class AppBarSipenca extends StatefulWidget {
   final String role;
   const AppBarSipenca({super.key, required this.role});
@@ -13,7 +12,6 @@ class AppBarSipenca extends StatefulWidget {
 }
 
 class _AppBarSipencaState extends State<AppBarSipenca> {
-  
   void clearData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -67,15 +65,14 @@ class _AppBarSipencaState extends State<AppBarSipenca> {
               iconSize: 30,
               splashRadius: 25,
               onPressed: () async {
-                AuthService.signOut();
-
-                Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (BuildContext context) {
-                    return const LoginPage();
-                  },
-                ));
-
-                clearData();
+                AuthService.signOut().then((value) {
+                  Navigator.push(context, MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return const LoginPage();
+                    },
+                  ));
+                  clearData();
+                });
               },
               icon: const Icon(Icons.login),
             ),

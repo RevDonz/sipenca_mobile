@@ -13,9 +13,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Map<String, dynamic>> DataPengungsian = [];
+  List<Map<String, dynamic>> dataPengungsian = [];
   Map<String, dynamic>? profileUser = {};
-  Map<String, dynamic>? occupied_pengungsian;
+  Map<String, dynamic>? occupiedPengungsian = {};
   bool isLoading = true;
 
   int _selectedIndex = 0;
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
         await DatabaseService.getVerifiedPengungsian();
 
     setState(() {
-      DataPengungsian = list;
+      dataPengungsian = list;
     });
   }
 
@@ -70,9 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (userData!['occupied'] != '') {
       Map<String, dynamic> filtered =
           list.where((element) => element['id'] == userData['occupied']).first;
-      print(filtered);
+
       setState(() {
-        occupied_pengungsian = filtered;
+        occupiedPengungsian = filtered;
         isLoading = false;
       });
     }
@@ -99,12 +99,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: CircularProgressIndicator(),
             )
           : profileUser!['occupied'] == ''
-              ? HomePage(listPengungsian: DataPengungsian, profile: profileUser)
+              ? HomePage(listPengungsian: dataPengungsian, profile: profileUser)
               : DetailPengungsian(
-                  data: occupied_pengungsian!,
+                  data: occupiedPengungsian!,
                   profile: profileUser,
                 ),
-      // HomePage(listPengungsian: DataPengungsian, profile: profileUser),
+      // HomePage(listPengungsian: dataPengungsian, profile: profileUser),
       KeluargaPage(profileWarga: profileUser),
       ProfilePage(profileWarga: profileUser),
     ];
