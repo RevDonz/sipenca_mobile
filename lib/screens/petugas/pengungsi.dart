@@ -96,245 +96,290 @@ class _PengungsiWargaState extends State<PengungsiWarga> {
               Expanded(
                 child: TabBarView(
                   children: <Widget>[
-                    dataPengungsiReserve.isEmpty
-                        ? const Center(
-                            child: Text("Tidak ada data untuk ditampilkan!"),
-                          )
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: dataPengungsiReserve.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {},
-                                child: Card(
-                                  elevation: 0,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(16))),
-                                  child: InkWell(
-                                    hoverColor: Colors.transparent,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(16)),
-                                    onTap: () {},
-                                    child: Container(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(dataPengungsiReserve[index]
-                                                  ['full_name']),
-                                              // Text(jarak),
-                                              // Text("${dataPengungsi[index]['member']}orang"),
-                                            ],
-                                          ),
-                                          // Padding(
-                                          //   padding:
-                                          //       const EdgeInsets.only(left: 16),
-                                          //   child: Text(
-                                          //       dataPengungsiReserve[index]
-                                          //           ['alamat']),
-                                          // ),
-                                          FloatingActionButton(
-                                            heroTag: "btnPengungsi$index",
-                                            onPressed: () {
-                                              showDialog<String>(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        AlertDialog(
-                                                  title:
-                                                      const Text('Konfirmasi'),
-                                                  content: const Text(
-                                                      'Apakah anda yakin ingin menerima pengungsi?'),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () => {
-                                                        Navigator.pop(
-                                                            context, 'Cancel'),
-                                                      },
-                                                      child:
-                                                          const Text('Cancel'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Map<String, dynamic>
-                                                            data =
-                                                            dataPengungsiReserve[
-                                                                index];
-                                                        data['occupied'] =
-                                                            data['reserve'];
-                                                        data['reserve'] = '';
-
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection('users')
-                                                            .doc(
-                                                                dataPengungsiReserve[
-                                                                        index]
-                                                                    ['id'])
-                                                            .update(data);
-
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'pengungsians')
-                                                            .doc(data[
-                                                                'occupied'])
-                                                            .update({
-                                                          'kapasitas_terisi':
-                                                              FieldValue
-                                                                  .increment(data[
-                                                                      'keluarga'])
-                                                        });
-                                                        setState(() {
-                                                          getListReserve();
-                                                          getListOccupied();
-                                                        });
-                                                        Navigator.pop(
-                                                            context, 'Cancel');
-                                                      },
-                                                      child: const Text('OK'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                            backgroundColor:
-                                                Colors.indigoAccent,
-                                            elevation: 5,
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(12))),
-                                            child: const Icon(Icons.check),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
                     RefreshIndicator(
                       onRefresh: () async {
                         getListReserve();
                         getListOccupied();
                       },
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: dataPengungsiOccupied.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {},
-                            child: Card(
-                              elevation: 0,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16))),
-                              child: InkWell(
-                                hoverColor: Colors.transparent,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(16)),
-                                onTap: () {},
-                                child: Container(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(dataPengungsiOccupied[index]
-                                              ['full_name']),
-                                        ],
-                                      ),
-                                      // Padding(
-                                      //   padding:
-                                      //       const EdgeInsets.only(left: 16),
-                                      //   child: Text(dataPengungsiOccupied[index]
-                                      //       ['alamat']),
-                                      // ),
-                                      if (dataPengungsiOccupied[index]
-                                          ['pulang'])
-                                        FloatingActionButton(
-                                          heroTag: "btnPengungsi$index",
-                                          onPressed: () {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                title: const Text('Konfirmasi'),
-                                                content: const Text(
-                                                    'Apakah anda yakin ingin menerima pengajuan pengungsi?'),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () => {
-                                                      Navigator.pop(
-                                                          context, 'Cancel'),
-                                                    },
-                                                    child: const Text('Cancel'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Map<String, dynamic>
-                                                          data =
-                                                          dataPengungsiOccupied[
-                                                              index];
+                      child: dataPengungsiReserve.isEmpty
+                          ? ListView.builder(
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                return const Center(
+                                  child:
+                                      Text("Tidak ada data untuk ditampilkan!"),
+                                );
+                              },
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: dataPengungsiReserve.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {},
+                                  child: Card(
+                                    elevation: 0,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(16))),
+                                    child: InkWell(
+                                      hoverColor: Colors.transparent,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(16)),
+                                      onTap: () {},
+                                      child: Container(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(dataPengungsiReserve[index]
+                                                    ['full_name']),
+                                                // Text(jarak),
+                                                // Text("${dataPengungsi[index]['member']}orang"),
+                                              ],
+                                            ),
+                                            // Padding(
+                                            //   padding:
+                                            //       const EdgeInsets.only(left: 16),
+                                            //   child: Text(
+                                            //       dataPengungsiReserve[index]
+                                            //           ['alamat']),
+                                            // ),
+                                            FloatingActionButton(
+                                              heroTag: "btnPengungsi$index",
+                                              onPressed: () {
+                                                showDialog<String>(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const Text(
+                                                        'Konfirmasi'),
+                                                    content: const Text(
+                                                        'Apakah anda yakin ingin menerima pengungsi?'),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () => {
+                                                          Navigator.pop(context,
+                                                              'Cancel'),
+                                                        },
+                                                        child: const Text(
+                                                            'Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Map<String, dynamic>
+                                                              data =
+                                                              dataPengungsiReserve[
+                                                                  index];
+                                                          data['occupied'] =
+                                                              data['reserve'];
+                                                          data['reserve'] = '';
 
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                              'pengungsians')
-                                                          .doc(data['occupied'])
-                                                          .update({
-                                                        'kapasitas_terisi':
-                                                            FieldValue.increment(
-                                                                data['keluarga'] *
-                                                                    -1)
-                                                      });
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'users')
+                                                              .doc(
+                                                                  dataPengungsiReserve[
+                                                                          index]
+                                                                      ['id'])
+                                                              .update(data);
 
-                                                      data['occupied'] = '';
-                                                      data['reserve'] = '';
-                                                      data['pulang'] = false;
-                                                      FirebaseFirestore.instance
-                                                          .collection('users')
-                                                          .doc(
-                                                              dataPengungsiOccupied[
-                                                                  index]['id'])
-                                                          .update(data);
-                                                      setState(() {
-                                                        getListOccupied();
-                                                      });
-                                                      Navigator.pop(
-                                                          context, 'Cancel');
-                                                    },
-                                                    child: const Text('OK'),
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'pengungsians')
+                                                              .doc(data[
+                                                                  'occupied'])
+                                                              .update({
+                                                            'kapasitas_terisi':
+                                                                FieldValue
+                                                                    .increment(data[
+                                                                        'keluarga'])
+                                                          });
+                                                          setState(() {
+                                                            getListReserve();
+                                                            getListOccupied();
+                                                          });
+                                                          Navigator.pop(context,
+                                                              'Cancel');
+                                                        },
+                                                        child: const Text('OK'),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                          backgroundColor: Colors.indigoAccent,
-                                          elevation: 5,
-                                          shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(12))),
-                                          child: const Icon(Icons.input),
+                                                );
+                                              },
+                                              backgroundColor:
+                                                  Colors.indigoAccent,
+                                              elevation: 5,
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  12))),
+                                              child: const Icon(Icons.check),
+                                            ),
+                                          ],
                                         ),
-                                    ],
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
+                    ),
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        getListReserve();
+                        getListOccupied();
+                      },
+                      child: dataPengungsiOccupied.isEmpty
+                          ? ListView.builder(
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                return const Center(
+                                  child:
+                                      Text("Tidak ada data untuk ditampilkan!"),
+                                );
+                              },
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: dataPengungsiOccupied.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {},
+                                  child: Card(
+                                    elevation: 0,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(16))),
+                                    child: InkWell(
+                                      hoverColor: Colors.transparent,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(16)),
+                                      onTap: () {},
+                                      child: Container(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    dataPengungsiOccupied[index]
+                                                        ['full_name']),
+                                              ],
+                                            ),
+                                            // Padding(
+                                            //   padding:
+                                            //       const EdgeInsets.only(left: 16),
+                                            //   child: Text(dataPengungsiOccupied[index]
+                                            //       ['alamat']),
+                                            // ),
+                                            if (dataPengungsiOccupied[index]
+                                                ['pulang'])
+                                              FloatingActionButton(
+                                                heroTag: "btnPengungsi$index",
+                                                onPressed: () {
+                                                  showDialog<String>(
+                                                    context: context,
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        AlertDialog(
+                                                      title: const Text(
+                                                          'Konfirmasi'),
+                                                      content: const Text(
+                                                          'Apakah anda yakin ingin menerima pengajuan pengungsi?'),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          onPressed: () => {
+                                                            Navigator.pop(
+                                                                context,
+                                                                'Cancel'),
+                                                          },
+                                                          child: const Text(
+                                                              'Cancel'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Map<String, dynamic>
+                                                                data =
+                                                                dataPengungsiOccupied[
+                                                                    index];
+
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'pengungsians')
+                                                                .doc(data[
+                                                                    'occupied'])
+                                                                .update({
+                                                              'kapasitas_terisi':
+                                                                  FieldValue
+                                                                      .increment(
+                                                                          data['keluarga'] *
+                                                                              -1)
+                                                            });
+
+                                                            data['occupied'] =
+                                                                '';
+                                                            data['reserve'] =
+                                                                '';
+                                                            data['pulang'] =
+                                                                false;
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'users')
+                                                                .doc(dataPengungsiOccupied[
+                                                                        index]
+                                                                    ['id'])
+                                                                .update(data);
+                                                            setState(() {
+                                                              getListOccupied();
+                                                            });
+                                                            Navigator.pop(
+                                                                context,
+                                                                'Cancel');
+                                                          },
+                                                          child:
+                                                              const Text('OK'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                },
+                                                backgroundColor:
+                                                    Colors.indigoAccent,
+                                                elevation: 5,
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    12))),
+                                                child: const Icon(Icons.input),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                     )
                   ],
                 ),

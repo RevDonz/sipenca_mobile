@@ -60,26 +60,29 @@ class _AdminPageState extends State<AdminPage> {
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Center(child: widgetOptions.elementAt(_selectedIndex)),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_work_outlined),
-            activeIcon: Icon(Icons.home_work),
-            label: 'Pengungsian',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group_outlined),
-            activeIcon: Icon(Icons.group_rounded),
-            label: 'Warga',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.indigoAccent,
-        onTap: _onItemTapped,
-      ),
+      //     : Center(child: widgetOptions.elementAt(_selectedIndex)),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home_work_outlined),
+      //       activeIcon: Icon(Icons.home_work),
+      //       label: 'Pengungsian',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.group_outlined),
+      //       activeIcon: Icon(Icons.group_rounded),
+      //       label: 'Warga',
+      //     ),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: Colors.indigoAccent,
+      //   onTap: _onItemTapped,
+      // ),
+      : DaftarPengungsian(
+              profileData: profileData,
+            ),
     );
   }
 }
