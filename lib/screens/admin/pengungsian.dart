@@ -45,8 +45,25 @@ class _DaftarPengungsianState extends State<DaftarPengungsian> {
                   height: 20,
                 ),
                 listPengungsian.isEmpty
-                    ? const Center(
-                        child: Text("Tidak ada data untuk ditampilkan"))
+                    ? RefreshIndicator(
+                        child: SizedBox(
+                          height: 500,
+                          child: ListView.builder(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: 1,
+                            itemBuilder: (context, index) {
+                              return const Center(
+                                child:
+                                    Text("Tidak ada data untuk ditampilkan!"),
+                              );
+                            },
+                          ),
+                        ),
+                        onRefresh: () async {
+                          getListPengungsian();
+                        },
+                      )
                     : RefreshIndicator(
                         onRefresh: () async {
                           getListPengungsian();
