@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sipenca_mobile">
    <application
-        android:label="sipenca_mobile"
+        android:label="Sipenca Mobile"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
